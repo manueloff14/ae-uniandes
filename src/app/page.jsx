@@ -91,7 +91,7 @@ export default function Home() {
                                 {
                                     id: 1,
                                     nombre: "Proyecto Uno",
-                                    autor: "Manuel Cabrera",
+                                    autor: "Administrador",
                                     fecha: "Mar, 30 de Ago del 2023",
                                     categoria: "Innovación",
                                     descripcion:
@@ -101,7 +101,7 @@ export default function Home() {
                                 {
                                     id: 2,
                                     nombre: "Proyecto Dos",
-                                    autor: "Manuel Cabrera",
+                                    autor: "Administrador",
                                     fecha: "Mar, 30 de Ago del 2023",
                                     categoria: "Tecnología",
                                     descripcion:
