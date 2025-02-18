@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function HeaderHome() {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -17,12 +18,11 @@ export default function HeaderHome() {
 
     return (
         <header
-            className="fixed w-full flex items-center justify-between px-20 py-3 z-[100]"
+            className="fixed w-full flex items-center justify-between px-6 lg:px-20 py-3 z-[100]"
             style={{
-                // Cambia el color y quita el blur cuando se ha hecho scroll
                 backgroundColor: isScrolled ? "black" : "",
                 backdropFilter: isScrolled ? "none" : "",
-                WebkitBackdropFilter: isScrolled ? "none" : "", // Safari
+                WebkitBackdropFilter: isScrolled ? "none" : "",
                 transition:
                     "background-color 0.3s ease, backdrop-filter 0.2s ease",
                 top: 0,
@@ -31,43 +31,47 @@ export default function HeaderHome() {
                 height: "70px",
             }}
         >
-            <div className="flex items-center gap-2">
-                <Image src="/logo.png" alt="Logo" width={25} height={25} />
-                <h2 className="text-3xl font-bold font-serif">AE Uniandes</h2>
-            </div>
-            <div className="flex items-center space-x-6 text-sm font-bold">
+            <Link href="/">
+                <div className="flex items-center gap-2">
+                    <Image src="/logo.png" alt="Logo" width={25} height={25} />
+                    {/* El título solo se muestra en pantallas grandes */}
+                    <h2 className="text-2xl sm:text-3xl font-bold font-serif">
+                        AE Uniandes
+                    </h2>
+                </div>
+            </Link>
+
+            {/* Menú de escritorio */}
+            <div className="hidden lg:flex items-center space-x-6 text-sm font-bold">
                 <ul className="flex space-x-6">
                     <li>
-                        <a href="/acerca" className="hover:underline">
+                        <Link href="/acerca-de-ae" className="hover:underline">
                             Acerca de AE
-                        </a>
+                        </Link>
                     </li>
                     <li>
-                        <a href="/proyectos" className="hover:underline">
+                        <Link href="/proyectos" className="hover:underline">
                             Proyectos
-                        </a>
+                        </Link>
                     </li>
                     <li>
-                        <a href="/eventos" className="hover:underline">
+                        <Link href="/eventos" className="hover:underline">
                             Eventos
-                        </a>
+                        </Link>
                     </li>
                     <li>
-                        <a href="/blog" className="hover:underline">
+                        <Link href="/blog" className="hover:underline">
                             Blog
-                        </a>
+                        </Link>
                     </li>
                 </ul>
                 <div className="flex items-center gap-2 bg-[#000000] rounded-full p-1 border border-gray-600">
-                    {/* Botón secundario a la izquierda */}
                     <button
                         type="button"
                         className="bg-[#161616] text-white px-4 py-2 rounded-full"
                     >
                         Contacto
                     </button>
-
-                    {/* Botón principal a la derecha con degradado */}
                     <button
                         type="button"
                         className="bg-gradient-to-r from-blue-500 to-blue-800 text-white px-4 py-2 rounded-full"
@@ -75,6 +79,36 @@ export default function HeaderHome() {
                         Unirme
                     </button>
                 </div>
+            </div>
+
+            {/* Ícono de menú para dispositivos móviles */}
+            <div className="lg:hidden">
+                <button type="button">
+                    <svg
+                        className="w-6 h-6 text-white"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <line
+                            x1="4"
+                            y1="7"
+                            x2="20"
+                            y2="7"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                        />
+                        <line
+                            x1="4"
+                            y1="17"
+                            x2="20"
+                            y2="17"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                        />
+                    </svg>
+                </button>
             </div>
         </header>
     );

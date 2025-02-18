@@ -36,7 +36,7 @@ export default function PreguntasFrecuentes() {
 
     return (
         <section className="py-16 bg-black">
-            <div className="px-48 mx-auto">
+            <div className="px-6 lg:px-48 mx-auto">
                 <h2 className="text-center text-2xl font-bold text-gray-100 mb-6">
                     Preguntas Frecuentes
                 </h2>
@@ -45,7 +45,7 @@ export default function PreguntasFrecuentes() {
                         <div key={index}>
                             <button
                                 onClick={() => toggleFAQ(index)}
-                                className="w-full text-left flex items-center justify-between bg-[#111111] px-6 py-3 rounded-full"
+                                className="w-full text-left flex items-center justify-between bg-[#111111] px-6 py-3 rounded-3xl lg:rounded-full"
                             >
                                 <h3 className="text-lg font-semibold text-gray-200">
                                     {faq.pregunta}

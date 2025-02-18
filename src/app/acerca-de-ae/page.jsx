@@ -1,3 +1,5 @@
+"use client"
+
 import HeaderHome from "@/components/routes/HeaderHome";
 import Footer from "@/components/routes/home/Footer";
 
@@ -7,7 +9,7 @@ export default function AcercaAEPage() {
             <HeaderHome />
 
             <main>
-                <section className="pt-40 pb-24 px-28 bg-black">
+                <section className="py-40 px-28 bg-black">
                     <div className="flex justify-center mb-4">
                         <span className="p-2 px-4 rounded-full border text-xs text-center text-white">
                             Nuestro Equipo

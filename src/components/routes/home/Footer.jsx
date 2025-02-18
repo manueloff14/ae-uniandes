@@ -4,11 +4,11 @@ import Image from "next/image";
 
 export default function Footer() {
     return (
-        <footer className="bg-black text-gray-300 py-12 px-20">
-            <div className="flex justify-between">
+        <footer className="bg-black text-gray-300 py-12 px-6 md:px-8 lg:px-20">
+            <div className="flex flex-col lg:flex-row justify-between gap-8">
                 {/* Logo, descripción y redes sociales */}
-                <div className="mr-4">
-                    <div className="flex items-center gap-2">
+                <div className="mr-4 text-center lg:text-left">
+                    <div className="flex items-center gap-2 justify-center lg:justify-start">
                         <Image
                             src="/logo.png"
                             alt="Logo"
@@ -23,7 +23,7 @@ export default function Footer() {
                         Promoviendo el altruismo eficaz y el impacto social en
                         cada acción.
                     </p>
-                    <div className="mt-4 flex space-x-4">
+                    <div className="mt-4 flex justify-center lg:justify-start space-x-4">
                         <a
                             href="https://www.facebook.com"
                             target="_blank"
@@ -60,12 +60,12 @@ export default function Footer() {
                 </div>
 
                 {/* Enlaces rápidos y contacto */}
-                <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-                    <div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 text-sm">
+                    <div className="text-center sm:text-left">
                         <h3 className="text-xl font-semibold mb-4">
                             Enlaces Rápidos
                         </h3>
-                        <ul className="space-y-2 text-sm">
+                        <ul className="space-y-2">
                             <li>
                                 <a
                                     href="/"
@@ -100,11 +100,11 @@ export default function Footer() {
                             </li>
                         </ul>
                     </div>
-                    <div>
+                    <div className="text-center sm:text-left">
                         <h3 className="text-xl font-semibold mb-4">
                             Contáctanos
                         </h3>
-                        <ul className="space-y-2 text-sm">
+                        <ul className="space-y-2">
                             <li>
                                 <span className="font-semibold">Tel:</span> +57
                                 1234567890
@@ -126,7 +126,7 @@ export default function Footer() {
 
             {/* Barra inferior */}
             <div className="mt-8 border-t border-gray-800 pt-4">
-                <div className="max-w-6xl mx-auto px-4 text-center text-sm">
+                <div className="max-w-6xl mx-auto text-center text-sm">
                     &copy; {new Date().getFullYear()} AE Uniandes. Todos los
                     derechos reservados.
                 </div>

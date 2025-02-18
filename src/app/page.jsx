@@ -1,6 +1,7 @@
 import PreguntasFrecuentes from "@/components/routes/home/sections/FAQ";
 import Footer from "@/components/routes/home/Footer";
 import HeaderHome from "@/components/routes/HeaderHome";
+import Link from "next/link";
 
 export default function Home() {
     return (
@@ -15,7 +16,7 @@ export default function Home() {
                     />
                     <div className="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
                     <div className="absolute bottom-0 left-0 w-full h-[10%] bg-gradient-to-t from-black to-transparent"></div>
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center w-[90%]">
                         <span className="text-xs p-2 px-4 rounded-full border">
                             Unidos para transformar vidas
                         </span>
@@ -44,7 +45,7 @@ export default function Home() {
                     </div>
                 </section>
                 <section className="py-16 bg-black">
-                    <div className="max-w-6xl mx-auto px-28 flex flex-col md:flex-row items-center gap-8">
+                    <div className="max-w-6xl mx-auto px-6 lg:px-28 flex flex-col md:flex-row items-center gap-8">
                         {/* Imagen de placeholder */}
                         <div className="md:w-1/2">
                             <img
@@ -109,62 +110,66 @@ export default function Home() {
                                     imagen: "https://placehold.co/600x400?text=Proyecto+Dos",
                                 },
                             ].map((proyecto) => (
-                                <div
-                                    key={proyecto.id}
-                                    className="mb-6 break-inside-avoid rounded-3xl shadow-lg flex flex-col"
-                                >
-                                    <div className="relative group cursor-pointer overflow-hidden rounded-3xl">
-                                        <img
-                                            src={proyecto.imagen}
-                                            alt={proyecto.nombre}
-                                            className="w-full h-[270px] object-cover"
-                                        />
-                                        <div className="absolute inset-0 bg-black bg-opacity-40 transition-opacity duration-300 group-hover:bg-opacity-60"></div>
-                                        <div className="absolute bottom-0 left-0 w-full p-6 text-white flex items-start justify-between backdrop-blur-sm bg-[#ffffff31] rounded-b-2xl">
-                                            <div>
-                                                <p className="text-sm font-bold">
-                                                    {proyecto.autor}
-                                                </p>
+                                <Link href={"/proyecto"}>
+                                    <div
+                                        key={proyecto.id}
+                                        className="mb-6 break-inside-avoid rounded-3xl shadow-lg flex flex-col"
+                                    >
+                                        <div className="relative group cursor-pointer overflow-hidden rounded-3xl">
+                                            <img
+                                                src={proyecto.imagen}
+                                                alt={proyecto.nombre}
+                                                className="w-full h-[270px] object-cover"
+                                            />
+                                            <div className="absolute inset-0 bg-black bg-opacity-40 transition-opacity duration-300 group-hover:bg-opacity-60"></div>
+                                            <div className="absolute bottom-0 left-0 w-full p-6 text-white flex items-start justify-between backdrop-blur-sm bg-[#ffffff31] rounded-b-2xl">
+                                                <div>
+                                                    <p className="text-sm font-bold">
+                                                        {proyecto.autor}
+                                                    </p>
+                                                    <p className="text-sm opacity-80">
+                                                        {proyecto.fecha}
+                                                    </p>
+                                                </div>
                                                 <p className="text-sm opacity-80">
-                                                    {proyecto.fecha}
+                                                    {proyecto.categoria}
                                                 </p>
                                             </div>
-                                            <p className="text-sm opacity-80">
-                                                {proyecto.categoria}
+                                        </div>
+                                        <div className="mt-2 flex flex-col items-start gap-2">
+                                            <h2 className="text-xl font-semibold text-white">
+                                                {proyecto.nombre}
+                                            </h2>
+                                            <p className="text-sm text-gray-200">
+                                                {proyecto.descripcion}
                                             </p>
+                                            <button className="text-xs p-2 px-4 rounded-full bg-white text-black font-bold mt-1 flex items-center gap-2 hover:bg-gray-100 transition-colors">
+                                                Leer ahora
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    x="0px"
+                                                    y="0px"
+                                                    width="15"
+                                                    height="15"
+                                                    viewBox="0 0 48 48"
+                                                >
+                                                    <path
+                                                        d="M 41.470703 4.9863281 A 1.50015 1.50015 0 0 0 41.308594 5 L 27.5 5 A 1.50015 1.50015 0 1 0 27.5 8 L 37.878906 8 L 22.439453 23.439453 A 1.50015 1.50015 0 1 0 24.560547 25.560547 L 40 10.121094 L 40 20.5 A 1.50015 1.50015 0 1 0 43 20.5 L 43 6.6894531 A 1.50015 1.50015 0 0 0 41.470703 4.9863281 z M 12.5 8 C 8.3754991 8 5 11.375499 5 15.5 L 5 35.5 C 5 39.624501 8.3754991 43 12.5 43 L 32.5 43 C 36.624501 43 40 39.624501 40 35.5 L 40 25.5 A 1.50015 1.50015 0 1 0 37 25.5 L 37 35.5 C 37 38.003499 35.003499 40 32.5 40 L 12.5 40 C 9.9965009 40 8 38.003499 8 35.5 L 8 15.5 C 8 12.996501 9.9965009 11 12.5 11 L 22.5 11 A 1.50015 1.50015 0 1 0 22.5 8 L 12.5 8 z"
+                                                        fill="black"
+                                                    ></path>
+                                                </svg>
+                                            </button>
                                         </div>
                                     </div>
-                                    <div className="mt-2 flex flex-col items-start gap-2">
-                                        <h2 className="text-xl font-semibold text-white">
-                                            {proyecto.nombre}
-                                        </h2>
-                                        <p className="text-sm text-gray-200">
-                                            {proyecto.descripcion}
-                                        </p>
-                                        <button className="text-xs p-2 px-4 rounded-full bg-white text-black font-bold mt-1 flex items-center gap-2 hover:bg-gray-100 transition-colors">
-                                            Leer ahora
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                x="0px"
-                                                y="0px"
-                                                width="15"
-                                                height="15"
-                                                viewBox="0 0 48 48"
-                                            >
-                                                <path
-                                                    d="M 41.470703 4.9863281 A 1.50015 1.50015 0 0 0 41.308594 5 L 27.5 5 A 1.50015 1.50015 0 1 0 27.5 8 L 37.878906 8 L 22.439453 23.439453 A 1.50015 1.50015 0 1 0 24.560547 25.560547 L 40 10.121094 L 40 20.5 A 1.50015 1.50015 0 1 0 43 20.5 L 43 6.6894531 A 1.50015 1.50015 0 0 0 41.470703 4.9863281 z M 12.5 8 C 8.3754991 8 5 11.375499 5 15.5 L 5 35.5 C 5 39.624501 8.3754991 43 12.5 43 L 32.5 43 C 36.624501 43 40 39.624501 40 35.5 L 40 25.5 A 1.50015 1.50015 0 1 0 37 25.5 L 37 35.5 C 37 38.003499 35.003499 40 32.5 40 L 12.5 40 C 9.9965009 40 8 38.003499 8 35.5 L 8 15.5 C 8 12.996501 9.9965009 11 12.5 11 L 22.5 11 A 1.50015 1.50015 0 1 0 22.5 8 L 12.5 8 z"
-                                                    fill="black"
-                                                ></path>
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </div>
+                                </Link>
                             ))}
                         </div>
                         <div className="flex justify-center mt-4">
-                            <button className="text-black bg-white p-3 px-6 rounded-full text-sm font-bold transition-all duration-300 hover:bg-gray-200 active:scale-95 shadow-md">
-                                Ver todos
-                            </button>
+                            <Link href={"/"}>
+                                <button className="text-black bg-white p-3 px-6 rounded-full text-sm font-bold transition-all duration-300 hover:bg-gray-200 active:scale-95 shadow-md">
+                                    Ver todos
+                                </button>
+                            </Link>
                         </div>
                     </div>
                 </section>
