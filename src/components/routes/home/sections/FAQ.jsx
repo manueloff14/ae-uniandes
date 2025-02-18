@@ -35,7 +35,7 @@ export default function PreguntasFrecuentes() {
     };
 
     return (
-        <section className="py-16 bg-black">
+        <section className="py-16">
             <div className="px-6 lg:px-48 mx-auto">
                 <h2 className="text-center text-2xl font-bold text-gray-100 mb-6">
                     Preguntas Frecuentes

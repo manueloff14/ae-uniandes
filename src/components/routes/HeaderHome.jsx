@@ -18,9 +18,9 @@ export default function HeaderHome() {
 
     return (
         <header
-            className="fixed w-full flex items-center justify-between px-6 lg:px-20 py-3 z-[100]"
+            className={`fixed w-full flex items-center justify-between px-6 lg:px-20 py-3 z-[100] ${isScrolled ? "border-b border-gray-700" : ""}`}
             style={{
-                backgroundColor: isScrolled ? "black" : "",
+                backgroundColor: isScrolled ? "#0a0a0a" : "",
                 backdropFilter: isScrolled ? "none" : "",
                 WebkitBackdropFilter: isScrolled ? "none" : "",
                 transition:

@@ -15,7 +15,7 @@ export default function Home() {
                         className="w-full h-screen object-cover"
                     />
                     <div className="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
-                    <div className="absolute bottom-0 left-0 w-full h-[10%] bg-gradient-to-t from-black to-transparent"></div>
+                    <div className="absolute bottom-0 left-0 w-full h-[10%] bg-gradient-to-t from-[#0a0a0a] to-transparent"></div>
                     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center w-[90%]">
                         <span className="text-xs p-2 px-4 rounded-full border">
                             Unidos para transformar vidas
@@ -44,14 +44,15 @@ export default function Home() {
                         <div className="absolute top-[20px] left-1/2 transform -translate-x-1/2 w-full max-w-2xl h-64 bg-gradient-to-r from-[#030303] to-[#030303] opacity-20 rounded-full blur-3xl -z-[20]"></div>
                     </div>
                 </section>
-                <section className="py-16 bg-black">
-                    <div className="max-w-6xl mx-auto px-6 lg:px-28 flex flex-col md:flex-row items-center gap-8">
+
+                <section className="py-16 px-6 lg:px-28">
+                    <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-8 bg-[#111111] p-4 rounded-3xl">
                         {/* Imagen de placeholder */}
-                        <div className="md:w-1/2">
+                        <div className="h-[250px] md:w-1/2">
                             <img
                                 src="https://placehold.co/600x300?text=Imagen%20aquí"
                                 alt="Placeholder"
-                                className="w-full rounded-lg shadow-lg"
+                                className="w-full h-full object-cover rounded-3xl shadow-lg"
                             />
                         </div>
                         {/* Contenido: pregunta y respuesta */}
@@ -71,7 +72,7 @@ export default function Home() {
                     </div>
                 </section>
 
-                <section className="py-16 bg-black">
+                <section className="py-16">
                     <div className="max-w-6xl mx-auto px-6 md:px-28">
                         <div className="flex justify-center mb-4">
                             <span className="p-2 px-4 rounded-full border text-xs text-center text-white">
@@ -93,7 +94,7 @@ export default function Home() {
                                     id: 1,
                                     nombre: "Proyecto Uno",
                                     autor: "Administrador",
-                                    fecha: "Mar, 30 de Ago del 2023",
+                                    fecha: "Mar, 30 de Jul",
                                     categoria: "Innovación",
                                     descripcion:
                                         "Descripción breve del proyecto uno que destaca su innovación.",
@@ -103,7 +104,7 @@ export default function Home() {
                                     id: 2,
                                     nombre: "Proyecto Dos",
                                     autor: "Administrador",
-                                    fecha: "Mar, 30 de Ago del 2023",
+                                    fecha: "Mar, 30 de Jul",
                                     categoria: "Tecnología",
                                     descripcion:
                                         "Proyecto que transforma ideas en soluciones concretas.",
@@ -113,7 +114,7 @@ export default function Home() {
                                 <Link href={"/proyecto"}>
                                     <div
                                         key={proyecto.id}
-                                        className="mb-6 break-inside-avoid rounded-3xl shadow-lg flex flex-col"
+                                        className="mb-6 break-inside-avoid rounded-3xl shadow-xls shadow-[#080808] flex flex-col bg-[#111111] p-5 lg:p-6"
                                     >
                                         <div className="relative group cursor-pointer overflow-hidden rounded-3xl">
                                             <img
@@ -136,7 +137,7 @@ export default function Home() {
                                                 </p>
                                             </div>
                                         </div>
-                                        <div className="mt-2 flex flex-col items-start gap-2">
+                                        <div className="mt-4 flex flex-col items-start gap-2">
                                             <h2 className="text-xl font-semibold text-white">
                                                 {proyecto.nombre}
                                             </h2>
@@ -174,7 +175,7 @@ export default function Home() {
                     </div>
                 </section>
 
-                <section className="py-16 bg-black">
+                <section className="py-16">
                     <div className="max-w-6xl mx-auto px-6 md:px-28">
                         <div className="flex justify-center mb-4">
                             <span className="p-2 px-4 rounded-full border text-xs text-center">
