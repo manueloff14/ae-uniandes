@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function HeaderHome() {
+export default function HeaderHome({ blog }) {
     const [isScrolled, setIsScrolled] = useState(false);
 
     useEffect(() => {
@@ -18,7 +18,9 @@ export default function HeaderHome() {
 
     return (
         <header
-            className={`fixed w-full flex items-center justify-between px-6 lg:px-20 py-3 z-[100] ${isScrolled ? "border-b border-gray-700" : ""}`}
+            className={`fixed w-full flex items-center justify-between px-6 lg:px-20 py-3 z-[100] ${
+                isScrolled ? "border-b border-gray-700" : ""
+            }`}
             style={{
                 backgroundColor: isScrolled ? "#0a0a0a" : "",
                 backdropFilter: isScrolled ? "none" : "",
@@ -37,6 +39,9 @@ export default function HeaderHome() {
                     {/* El título solo se muestra en pantallas grandes */}
                     <h2 className="text-2xl sm:text-3xl font-bold font-serif">
                         AE Uniandes
+                        {
+                            blog ? " Blog" : ""
+                        }
                     </h2>
                 </div>
             </Link>

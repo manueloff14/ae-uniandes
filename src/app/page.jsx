@@ -1,5 +1,5 @@
 import PreguntasFrecuentes from "@/components/routes/home/sections/FAQ";
-import Footer from "@/components/routes/home/Footer";
+import Footer from "@/components/routes/Footer";
 import HeaderHome from "@/components/routes/HeaderHome";
 import Link from "next/link";
 
