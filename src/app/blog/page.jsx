@@ -18,7 +18,7 @@ export default function BlogPage() {
                                 className="w-full h-[400px] object-cover"
                             />
                             {/* Capa oscura al hover */}
-                            <div className="absolute inset-0 bg-black bg-opacity-40 transition-opacity duration-300 group-hover:bg-opacity-60"></div>
+                            <div className="absolute inset-0 bg-black bg-opacity-0 transition-opacity duration-300 group-hover:bg-opacity-60"></div>
                             {/* Información del post */}
                             <div
                                 className="absolute bottom-0 left-0 w-full p-6 text-white flex flex-col items-start gap-2 
