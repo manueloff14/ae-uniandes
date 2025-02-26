@@ -1,49 +1,44 @@
-// hooks/useAuth.js
-import { useEffect, useState } from "react";
+"use client";
+import useSWR from "swr";
 import { useRouter } from "next/navigation";
 
+// Función para obtener los datos del usuario a partir del token.
+const fetchUser = async (token) => {
+    const response = await fetch(
+        "https://aeuniandes.pythonanywhere.com/api/obtener_usuario",
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ token }),
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error("Token inválido o error al obtener el usuario");
+    }
+    return response.json();
+};
+
 export function useAuth() {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
     const router = useRouter();
 
-    useEffect(() => {
-        const verifyAuth = async () => {
-            const token = localStorage.getItem("token");
-            if (!token) {
-                router.push("/admin/login");
-                return;
-            }
+    // Lectura síncrona del token (disponible en el navegador).
+    const token =
+        typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
-            try {
-                const response = await fetch(
-                    "http://127.0.0.1:5000/api/obtener_usuario",
-                    {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ token }),
-                    }
-                );
+    // Si no existe token, redirigimos inmediatamente.
+    if (!token) {
+        router.push("/admin/login");
+        return { user: null, loading: false, error: "No token" };
+    }
 
-                if (response.ok) {
-                    const userData = await response.json();
-                    setUser(userData);
-                } else {
-                    // Token inválido o sesión cerrada
-                    localStorage.removeItem("token");
-                    router.push("/admin/login");
-                }
-            } catch (error) {
-                console.error("Error al verificar autenticación:", error);
-                localStorage.removeItem("token");
-                router.push("/admin/login");
-            } finally {
-                setLoading(false);
-            }
-        };
+    // Si el token existe, usamos SWR para obtener los datos del usuario.
+    const { data, error } = useSWR(token, fetchUser);
 
-        verifyAuth();
-    }, [router]);
+    // En caso de error (por ejemplo, token inválido), redirigimos.
+    if (error) {
+        router.push("/admin/login");
+    }
 
-    return { user, loading };
+    return { user: data, loading: !data && !error, error };
 }

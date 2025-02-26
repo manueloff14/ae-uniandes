@@ -19,7 +19,7 @@ export default function LoginPage() {
                 // Espera 1 segundo antes de verificar el token.
                 await new Promise((resolve) => setTimeout(resolve, 1000));
                 try {
-                    const response = await fetch("http://127.0.0.1:5000/api/check-auth", {
+                    const response = await fetch("https://aeuniandes.pythonanywhere.com/api/check-auth", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
@@ -52,7 +52,7 @@ export default function LoginPage() {
         setLoading(true);
 
         try {
-            const response = await fetch("http://127.0.0.1:5000/api/login", {
+            const response = await fetch("https://aeuniandes.pythonanywhere.com/api/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
