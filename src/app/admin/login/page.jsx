@@ -1,20 +1,58 @@
-"use client"
+"use client";
 
 import Link from "next/link";
 import Footer from "@/components/routes/Footer";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
     const router = useRouter();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(true);
+
+    // Verificamos si existe un token y, de ser así, comprobamos su validez.
+    useEffect(() => {
+        const checkExistingToken = async () => {
+            const token = localStorage.getItem("token");
+            if (token) {
+                // Espera 1 segundo antes de verificar el token.
+                await new Promise((resolve) => setTimeout(resolve, 1000));
+                try {
+                    const response = await fetch("http://127.0.0.1:5000/api/check-auth", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ token }),
+                    });
+                    if (response.ok) {
+                        router.push("/admin");
+                        return;
+                    } else {
+                        localStorage.removeItem("token");
+                        setLoading(false);
+                    }
+                } catch (error) {
+                    console.error("Error al verificar el token:", error);
+                    localStorage.removeItem("token");
+                    setLoading(false);
+                }
+            } else {
+                // No hay token, dejamos de cargar.
+                setLoading(false);
+            }
+        };
+
+        checkExistingToken();
+    }, [router]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
 
         try {
-            const response = await fetch("https://aeuniandes.pythonanywhere.com/api/login", {
+            const response = await fetch("http://127.0.0.1:5000/api/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -28,18 +66,26 @@ export default function LoginPage() {
             const data = await response.json();
 
             if (response.ok) {
-                // Guardamos el token directamente en localStorage
                 localStorage.setItem("token", data.token);
-                // Navegamos a /admin usando Next.js navigation
                 router.push("/admin");
             } else {
                 alert(data.mensaje || data.error);
+                setLoading(false);
             }
         } catch (error) {
             console.error("Error en el login:", error);
             alert("Ocurrió un error. Inténtalo de nuevo.");
+            setLoading(false);
         }
     };
+
+    if (loading) {
+        return (
+            <div className="flex h-screen justify-center items-center bg-[#111111]">
+                <p className="text-white text-2xl">Cargando...</p>
+            </div>
+        );
+    }
 
     return (
         <>
@@ -64,15 +110,9 @@ export default function LoginPage() {
                         <h2 className="text-3xl font-bold text-center text-white mb-6">
                             Iniciar sesión como Administrador
                         </h2>
-                        <form
-                            className="flex flex-col gap-6"
-                            onSubmit={handleSubmit}
-                        >
+                        <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
                             <div>
-                                <label
-                                    htmlFor="email"
-                                    className="text-sm text-gray-300"
-                                >
+                                <label htmlFor="email" className="text-sm text-gray-300">
                                     Correo electrónico
                                 </label>
                                 <input
@@ -87,19 +127,14 @@ export default function LoginPage() {
                             </div>
 
                             <div>
-                                <label
-                                    htmlFor="password"
-                                    className="text-sm text-gray-300"
-                                >
+                                <label htmlFor="password" className="text-sm text-gray-300">
                                     Contraseña
                                 </label>
                                 <input
                                     id="password"
                                     type="password"
                                     value={password}
-                                    onChange={(e) =>
-                                        setPassword(e.target.value)
-                                    }
+                                    onChange={(e) => setPassword(e.target.value)}
                                     className="w-full p-3 mt-2 text-sm rounded-lg bg-gray-800 text-white border border-transparent focus:outline-none focus:ring-2 focus:ring-blue-600"
                                     placeholder="******"
                                     required
