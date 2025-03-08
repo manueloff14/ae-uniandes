@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function HeaderHome({ blog }) {
+export default function HeaderHome() {
     const [isScrolled, setIsScrolled] = useState(false);
 
     useEffect(() => {
@@ -18,79 +18,91 @@ export default function HeaderHome({ blog }) {
 
     return (
         <header
-            className={`fixed w-full flex items-center justify-between px-6 lg:px-20 py-3 z-[100] ${
-                isScrolled ? "border-b border-gray-700" : ""
+            className={`fixed w-full flex items-center justify-between px-6 lg:px-16 z-[100] transition-all duration-300 ${
+                isScrolled ? "bg-white shadow-md" : "bg-transparent"
             }`}
-            style={{
-                backgroundColor: isScrolled ? "#0a0a0a" : "",
-                backdropFilter: isScrolled ? "none" : "",
-                WebkitBackdropFilter: isScrolled ? "none" : "",
-                transition:
-                    "background-color 0.3s ease, backdrop-filter 0.2s ease",
-                top: 0,
-                left: 0,
-                right: 0,
-                height: "70px",
-            }}
         >
-            <Link href="/">
-                <div className="flex items-center gap-2">
-                    <Image src="/logo.png" alt="Logo" width={25} height={25} />
-                    {/* El título solo se muestra en pantallas grandes */}
-                    <h2 className="text-2xl sm:text-3xl font-bold font-serif">
-                        AE Uniandes
-                        {
-                            blog ? " Blog" : ""
-                        }
-                    </h2>
+            {/* LOGO */}
+            <Link href="/" className="flex-grow basis-0">
+                <div className="flex items-center">
+                    <img src="/ae-logo.svg" className="w-[200px] lg:w-[220px]" alt="" />
                 </div>
             </Link>
 
-            {/* Menú de escritorio */}
-            <div className="hidden lg:flex items-center space-x-6 text-sm font-bold">
-                <ul className="flex space-x-6">
-                    <li>
-                        <Link href="/acerca-de-ae" className="hover:underline">
-                            Acerca de AE
-                        </Link>
-                    </li>
-                    <li>
-                        <Link href="/proyectos" className="hover:underline">
-                            Proyectos
-                        </Link>
-                    </li>
-                    <li>
-                        <Link href="/eventos" className="hover:underline">
-                            Eventos
-                        </Link>
-                    </li>
-                    <li>
-                        <Link href="/blog" className="hover:underline">
-                            Blog
-                        </Link>
-                    </li>
-                </ul>
-                <div className="flex items-center gap-2 bg-[#000000] rounded-full p-1 border border-gray-600">
-                    <button
-                        type="button"
-                        className="bg-[#161616] text-white px-4 py-2 rounded-full"
+            {/* MENÚ DE NAVEGACIÓN */}
+            <nav className="hidden lg:flex items-center space-x-4">
+                <Link
+                    href="/acerca-de-ae"
+                    className="px-4 py-2 text-sm font-semibold text-black border rounded-full hover:bg-gray-100 font-serif"
+                >
+                    Acerca de AE
+                </Link>
+                <Link
+                    href="/proyectos"
+                    className="px-4 py-2 text-sm font-semibold text-black border rounded-full hover:bg-gray-100 font-serif"
+                >
+                    Proyectos
+                </Link>
+                <Link
+                    href="/eventos"
+                    className="px-4 py-2 text-sm font-semibold text-black border rounded-full hover:bg-gray-100 font-serif"
+                >
+                    Eventos
+                </Link>
+                <Link
+                    href="/blog"
+                    className="px-4 py-2 text-sm font-semibold text-black border rounded-full hover:bg-gray-100 font-serif"
+                >
+                    Blog
+                </Link>
+            </nav>
+
+            {/* BOTONES DE ACCIÓN */}
+            <div className="hidden lg:flex items-center justify-end space-x-4 flex-grow basis-0">
+                <Link
+                    href="/contacto"
+                    className="text-sm font-medium text-black font-serif mr-2"
+                >
+                    Contacto
+                </Link>
+                <Link
+                    href="/contact"
+                    className="flex items-center gap-2 px-5 py-2 text-sm font-semibold text-white border-2 border-[#06869B] bg-[#06869B] rounded-full transition-all font-serif 
+               hover:bg-white hover:text-[#06869B]"
+                >
+                    ¡Unirme!
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-5 h-5"
                     >
-                        Contacto
-                    </button>
-                    <button
-                        type="button"
-                        className="bg-gradient-to-r from-blue-500 to-blue-800 text-white px-4 py-2 rounded-full"
-                    >
-                        Unirme
-                    </button>
-                </div>
+                        <path
+                            d="M7 17L17 7M17 7H8M17 7V16"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        />
+                    </svg>
+                </Link>
+                <button className="p-2 border-2 rounded-full flex items-center gap-2 hover:bg-gray-200 transition-all duration-200">
+                    <div className="w-5 h-5 overflow-hidden rounded-full">
+                        <img
+                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Flag_of_Spain_%28Civil%29_alternate_colours.svg/2560px-Flag_of_Spain_%28Civil%29_alternate_colours.svg.png"
+                            alt="Placeholder"
+                            className="w-full h-full object-cover"
+                        />
+                    </div>
+                    <img className="w-[14px] rotate-90" src="https://icons.veryicon.com/png/o/miscellaneous/linktrip/forward-arrow-1.png" alt="" />
+                </button>
             </div>
 
-            {/* Ícono de menú para dispositivos móviles */}
+            {/* MENÚ MÓVIL */}
             <div className="lg:hidden">
                 <button type="button">
                     <svg
-                        className="w-6 h-6 text-white"
+                        className="w-6 h-6 text-black"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"

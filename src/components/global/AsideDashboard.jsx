@@ -4,7 +4,7 @@ export default function AsideDashboard() {
     const url_base = "/admin";
 
     return (
-        <header className="flex flex-col justify-between items-start fixed top-0 left-0 w-[15%] h-full text-white p-8 bg-[#111111]">
+        <header className="flex flex-col justify-between items-start fixed top-0 left-0 w-[15%] h-full text-white p-8 bg-[#111111] font-bold">
             <div className="w-full text-[17px]">
                 <div className="logo mb-14">
                     <img

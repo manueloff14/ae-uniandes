@@ -5,7 +5,7 @@ import { useAuth } from "@/app/hooks/useAuth";
 import AsideDashboard from "@/components/global/AsideDashboard";
 import HeaderDashboard from "@/components/global/HeaderDashboard";
 
-// Lista de miembros como objetos
+// Lista de miembros como objetos (para la tabla)
 const miembros = [
     {
         foto: "https://placehold.co/40x40",
@@ -23,45 +23,58 @@ const miembros = [
     },
 ];
 
-// COMPONENTE DEL MODAL
+// --- Modal para editar usuario (se mantiene igual) ---
 function EditUserModal({ user, onClose }) {
     const [nombre, setNombre] = useState(user.nombre);
     const [correo, setCorreo] = useState(user.correo);
     const [rol, setRol] = useState(user.rol);
+    const [foto, setFoto] = useState(user.foto);
+    const [nuevaContrasena, setNuevaContrasena] = useState("");
     const [isOpen, setIsOpen] = useState(false);
 
-    // Al montar, activamos la animación de entrada
     useEffect(() => {
         setIsOpen(true);
     }, []);
 
-    // Función para cerrar con animación
     const handleClose = () => {
         setIsOpen(false);
         setTimeout(() => onClose(), 300);
     };
 
-    // Función para guardar cambios (lógica real a implementar)
     const handleSave = () => {
         alert(
-            `Guardando cambios:\nNombre: ${nombre}\nCorreo: ${correo}\nRol: ${rol}`
+            `Guardando cambios:\nNombre: ${nombre}\nCorreo: ${correo}\nRol: ${rol}\nNueva Contraseña: ${nuevaContrasena}`
         );
         handleClose();
     };
 
-    // Función para eliminar usuario (lógica real a implementar)
     const handleDelete = () => {
-        const confirmDelete = confirm(
-            "¿Estás seguro de eliminar este usuario?"
-        );
-        if (confirmDelete) {
+        if (confirm("¿Estás seguro de eliminar este usuario?")) {
             alert(`Eliminando a: ${nombre}`);
             handleClose();
         }
     };
 
+    const generarContrasena = () => {
+        const caracteres =
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+        let contrasena = "";
+        for (let i = 0; i < 20; i++) {
+            contrasena += caracteres.charAt(
+                Math.floor(Math.random() * caracteres.length)
+            );
+        }
+        setNuevaContrasena(contrasena);
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setFoto(URL.createObjectURL(file));
+        }
+    };
+
     return (
-        // Contenedor oscuro (overlay) con transición de opacidad
         <div
             className={`
         fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50
@@ -72,83 +85,74 @@ function EditUserModal({ user, onClose }) {
                 : "opacity-0 pointer-events-none"
         }
       `}
-            // Cierra el modal si se hace clic en el overlay
             onClick={(e) => {
                 if (e.target === e.currentTarget) handleClose();
             }}
         >
-            {/* Contenedor del modal con transición de escala */}
             <div
                 className={`
-          bg-[#111111] w-[400px] max-w-full p-6 rounded-md shadow-lg relative
+          bg-[#111111] w-[500px] max-w-full p-6 rounded-2xl shadow-lg relative
           transform transition-transform duration-300 ease-out
           ${isOpen ? "scale-100" : "scale-95"}
         `}
-                // Evita cerrar el modal al hacer clic dentro de él
                 onClick={(e) => e.stopPropagation()}
             >
-                {/* Botón de cerrar (esquina superior derecha) */}
-                <button
-                    className="absolute top-3 right-3 text-gray-400 hover:text-gray-200"
-                    onClick={handleClose}
-                >
-                    ✕
-                </button>
-
-                <h2 className="text-xl font-bold mb-4 text-white">
-                    Editar Usuario
-                </h2>
-
-                {/* Foto de perfil */}
-                <div className="flex items-center mb-4">
+                {/* Cabecera con datos del usuario */}
+                <div className="flex flex-col items-start gap-3 mb-8">
                     <img
                         src={user.foto}
                         alt="Foto del usuario"
                         className="rounded-full w-14 h-14 mr-4"
                     />
                     <div>
-                        <p className="font-semibold text-white">
+                        <p className="text-xl font-semibold text-white mb-2">
                             {user.nombre}
                         </p>
-                        <p className="text-sm text-gray-400">{user.correo}</p>
+                        <p className="text-xs text-gray-400">{user.correo}</p>
                     </div>
                 </div>
 
                 {/* Campos editables */}
-                <div className="space-y-4">
-                    {/* Nombre */}
+                <div className="space-y-4 text-sm">
                     <div>
-                        <label className="block text-sm text-gray-300 mb-1">
+                        <label className="block text-sm text-gray-300 mb-2">
+                            Foto de Perfil
+                        </label>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            className="w-full p-3 bg-[#222222] text-white rounded-xl focus:outline-none"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm text-gray-300 mb-3">
                             Nombre Completo
                         </label>
                         <input
-                            className="w-full px-3 py-2 bg-[#222222] text-white rounded focus:outline-none"
+                            className="w-full p-3 bg-[#222222] text-white rounded-xl focus:outline-none"
                             type="text"
                             value={nombre}
                             onChange={(e) => setNombre(e.target.value)}
                         />
                     </div>
-
-                    {/* Correo */}
                     <div>
-                        <label className="block text-sm text-gray-300 mb-1">
+                        <label className="block text-sm text-gray-300 mb-2">
                             Correo
                         </label>
                         <input
-                            className="w-full px-3 py-2 bg-[#222222] text-white rounded focus:outline-none"
+                            className="w-full p-3 bg-[#222222] text-white rounded-xl focus:outline-none"
                             type="email"
                             value={correo}
                             onChange={(e) => setCorreo(e.target.value)}
                         />
                     </div>
-
-                    {/* Rol */}
                     <div>
-                        <label className="block text-sm text-gray-300 mb-1">
+                        <label className="block text-sm text-gray-300 mb-2">
                             Rol
                         </label>
                         <select
-                            className="w-full px-3 py-2 bg-[#222222] text-white rounded focus:outline-none"
+                            className="w-full p-3 bg-[#222222] text-white rounded-xl focus:outline-none"
                             value={rol}
                             onChange={(e) => setRol(e.target.value)}
                         >
@@ -157,29 +161,54 @@ function EditUserModal({ user, onClose }) {
                             <option value="Invitado">Invitado</option>
                         </select>
                     </div>
+                    <div>
+                        <label className="block text-sm text-gray-300 mb-2">
+                            Nueva Contraseña
+                        </label>
+                        <input
+                            className="w-full p-3 bg-[#222222] text-white rounded-xl focus:outline-none"
+                            type="text"
+                            value={nuevaContrasena}
+                            onChange={(e) => setNuevaContrasena(e.target.value)}
+                        />
+                        <button
+                            onClick={generarContrasena}
+                            className="mt-2 text-sm text-blue-400 underline"
+                        >
+                            Generar contraseña aleatoria
+                        </button>
+                    </div>
                 </div>
 
                 {/* Botones de acción */}
-                <div className="mt-6 flex justify-between">
-                    {/* Botón de eliminar */}
+                <div className="mt-6 flex justify-between text-sm font-bold">
                     <button
                         onClick={handleDelete}
-                        className="text-red-500 hover:text-red-400"
+                        className="flex items-center gap-2 p-3 border-2 border-transparent bg-red-950 rounded-xl hover:border-[red] transition-all duration-200"
                     >
-                        Eliminar usuario
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 48 48"
+                        >
+                            <path
+                                d="M24 4c-3.5 0-6.4 2.6-6.9 6h-6.8a1.5 1.5 0 000 3h2.1l2.5 26.7c.3 2.8 2.7 5 5.6 5h14.7c2.9 0 5.3-2.2 5.6-5L37.4 13h2.1a1.5 1.5 0 000-3h-6.8C30.4 6.6 27.5 4 24 4z"
+                                fill="red"
+                            ></path>
+                        </svg>
+                        <span className="text-[red]">Eliminar usuario</span>
                     </button>
-
-                    {/* Botones Guardar / Cancelar */}
-                    <div className="space-x-2">
+                    <div className="space-x-2 flex items-center">
                         <button
                             onClick={handleClose}
-                            className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-500"
+                            className="p-3 border-2 border-gray-600 rounded-xl hover:border-gray-400 transition-all duration-200"
                         >
                             Cancelar
                         </button>
                         <button
                             onClick={handleSave}
-                            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500"
+                            className="text-black p-3 bg-white rounded-xl border-2 border-white hover:border-gray-400 hover:bg-gray-100 transition-all duration-200"
                         >
                             Guardar cambios
                         </button>
@@ -190,19 +219,197 @@ function EditUserModal({ user, onClose }) {
     );
 }
 
-// COMPONENTE PRINCIPAL
+// --- Modal para agregar nuevo usuario (nueva función) ---
+function AddUserModal({ onClose, onAddUser }) {
+    const [nombre, setNombre] = useState("");
+    const [correo, setCorreo] = useState("");
+    const [rol, setRol] = useState("Usuario");
+    const [foto, setFoto] = useState("https://placehold.co/40x40");
+    const [nuevaContrasena, setNuevaContrasena] = useState("");
+    const [isOpen, setIsOpen] = useState(false);
+
+    useEffect(() => {
+        setIsOpen(true);
+    }, []);
+
+    const handleClose = () => {
+        setIsOpen(false);
+        setTimeout(() => onClose(), 300);
+    };
+
+    const handleAddUser = () => {
+        // Aquí implementarías la lógica real para agregar el usuario
+        alert(
+            `Agregando usuario:\nNombre: ${nombre}\nCorreo: ${correo}\nRol: ${rol}\nContraseña: ${nuevaContrasena}`
+        );
+        if (onAddUser) {
+            onAddUser({ nombre, correo, rol, foto, nuevaContrasena });
+        }
+        handleClose();
+    };
+
+    const generarContrasena = () => {
+        const caracteres =
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+        let contrasena = "";
+        for (let i = 0; i < 20; i++) {
+            contrasena += caracteres.charAt(
+                Math.floor(Math.random() * caracteres.length)
+            );
+        }
+        setNuevaContrasena(contrasena);
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setFoto(URL.createObjectURL(file));
+        }
+    };
+
+    return (
+        <div
+            className={`
+        fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50
+        transition-opacity duration-300 ease-out
+        ${
+            isOpen
+                ? "opacity-100 pointer-events-auto"
+                : "opacity-0 pointer-events-none"
+        }
+      `}
+            onClick={(e) => {
+                if (e.target === e.currentTarget) handleClose();
+            }}
+        >
+            <div
+                className={`
+          bg-[#111111] w-[500px] max-w-full p-6 rounded-2xl shadow-lg relative
+          transform transition-transform duration-300 ease-out
+          ${isOpen ? "scale-100" : "scale-95"}
+        `}
+                onClick={(e) => e.stopPropagation()}
+            >
+                <h2 className="text-xl font-semibold text-white mb-4">
+                    Agregar Nuevo Miembro
+                </h2>
+
+                <div className="space-y-4 text-sm">
+                    {/* Campo para foto de perfil */}
+                    <div>
+                        <label className="block text-sm text-gray-300 mb-2">
+                            Foto de Perfil
+                        </label>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            className="w-full p-3 bg-[#222222] text-white rounded-xl focus:outline-none"
+                        />
+                    </div>
+
+                    {/* Campo para nombre */}
+                    <div>
+                        <label className="block text-sm text-gray-300 mb-3">
+                            Nombre Completo
+                        </label>
+                        <input
+                            className="w-full p-3 bg-[#222222] text-white rounded-xl focus:outline-none"
+                            type="text"
+                            value={nombre}
+                            onChange={(e) => setNombre(e.target.value)}
+                        />
+                    </div>
+
+                    {/* Campo para correo */}
+                    <div>
+                        <label className="block text-sm text-gray-300 mb-2">
+                            Correo
+                        </label>
+                        <input
+                            className="w-full p-3 bg-[#222222] text-white rounded-xl focus:outline-none"
+                            type="email"
+                            value={correo}
+                            onChange={(e) => setCorreo(e.target.value)}
+                        />
+                    </div>
+
+                    {/* Campo para rol */}
+                    <div>
+                        <label className="block text-sm text-gray-300 mb-2">
+                            Rol
+                        </label>
+                        <select
+                            className="w-full p-3 bg-[#222222] text-white rounded-xl focus:outline-none"
+                            value={rol}
+                            onChange={(e) => setRol(e.target.value)}
+                        >
+                            <option value="Administrador">Administrador</option>
+                            <option value="Usuario">Usuario</option>
+                            <option value="Invitado">Invitado</option>
+                        </select>
+                    </div>
+
+                    {/* Campo para contraseña */}
+                    <div>
+                        <label className="block text-sm text-gray-300 mb-2">
+                            Contraseña
+                        </label>
+                        <input
+                            className="w-full p-3 bg-[#222222] text-white rounded-xl focus:outline-none"
+                            type="text"
+                            value={nuevaContrasena}
+                            onChange={(e) => setNuevaContrasena(e.target.value)}
+                        />
+                        <button
+                            onClick={generarContrasena}
+                            className="mt-2 text-sm text-blue-400 underline"
+                        >
+                            Generar contraseña aleatoria
+                        </button>
+                    </div>
+                </div>
+
+                {/* Botones: Solo Cancelar y Agregar usuario */}
+                <div className="mt-6 flex justify-end space-x-2 text-sm font-bold">
+                    <button
+                        onClick={handleClose}
+                        className="p-3 border-2 border-gray-600 rounded-xl hover:border-gray-400 transition-all duration-200"
+                    >
+                        Cancelar
+                    </button>
+                    <button
+                        onClick={handleAddUser}
+                        className="text-black p-3 bg-white rounded-xl border-2 border-white hover:border-gray-400 hover:bg-gray-100 transition-all duration-200"
+                    >
+                        Agregar usuario
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+// --- Componente principal ---
 export default function MiembrosPanel() {
     const { user, loading } = useAuth();
-
-    // Estado para abrir/cerrar el modal
     const [selectedUser, setSelectedUser] = useState(null);
+    const [showAddModal, setShowAddModal] = useState(false);
 
-    const handleOpenModal = (miembro) => {
+    const handleOpenEditModal = (miembro) => {
         setSelectedUser(miembro);
     };
 
-    const handleCloseModal = () => {
+    const handleCloseEditModal = () => {
         setSelectedUser(null);
+    };
+
+    const handleOpenAddModal = () => {
+        setShowAddModal(true);
+    };
+
+    const handleCloseAddModal = () => {
+        setShowAddModal(false);
     };
 
     // Si no hay usuario, no renderizamos nada.
@@ -214,7 +421,7 @@ export default function MiembrosPanel() {
         <div>
             <AsideDashboard />
 
-            <main className="flex-1 mx-6 pl-[250px]">
+            <main className="flex-1 mx-6 pl-[280px]">
                 {loading ? (
                     <div className="flex justify-center items-center h-full">
                         <p className="text-white text-xl">Cargando...</p>
@@ -230,7 +437,10 @@ export default function MiembrosPanel() {
                                     <span className="text-lg font-bold text-white">
                                         Todos los miembros de AE Uniandes
                                     </span>
-                                    <button className="bg-[#111111] hover:bg-[#1b1b1b] text-white px-4 py-2 rounded-full flex items-center gap-2 border border-gray-800">
+                                    <button
+                                        onClick={handleOpenAddModal}
+                                        className="bg-[#111111] hover:bg-[#1b1b1b] text-white px-4 py-2 rounded-full flex items-center gap-2 border border-gray-800"
+                                    >
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             x="0px"
@@ -240,7 +450,7 @@ export default function MiembrosPanel() {
                                             viewBox="0 0 48 48"
                                         >
                                             <path
-                                                d="M 23.970703 4.9726562 A 2.0002 2.0002 0 0 0 22 7 L 22 22 L 7 22 A 2.0002 2.0002 0 1 0 7 26 L 22 26 L 22 41 A 2.0002 2.0002 0 1 0 26 41 L 26 26 L 41 26 A 2.0002 2.0002 0 1 0 41 22 L 26 22 L 26 7 A 2.0002 2.0002 0 0 0 23.970703 4.9726562 z"
+                                                d="M23.970703 4.9726562A2.0002 2.0002 0 0 0 22 7L22 22L7 22A2.0002 2.0002 0 1 0 7 26L22 26L22 41A2.0002 2.0002 0 1 0 26 41L26 26L41 26A2.0002 2.0002 0 1 0 41 22L26 22L26 7A2.0002 2.0002 0 0 0 23.970703 4.9726562z"
                                                 fill="white"
                                             ></path>
                                         </svg>
@@ -354,11 +564,7 @@ export default function MiembrosPanel() {
                                                 <td className="py-2 px-4">
                                                     {/* Botón para abrir el modal */}
                                                     <button
-                                                        onClick={() =>
-                                                            handleOpenModal(
-                                                                miembro
-                                                            )
-                                                        }
+                                                        onClick={() => handleOpenEditModal(miembro)}
                                                     >
                                                         <svg
                                                             xmlns="http://www.w3.org/2000/svg"
@@ -420,10 +626,16 @@ export default function MiembrosPanel() {
                 )}
             </main>
 
-            {/* Renderiza el modal solo si hay un usuario seleccionado */}
+            {/* Renderiza el modal de edición si hay un usuario seleccionado */}
             {selectedUser && (
-                <EditUserModal user={selectedUser} onClose={handleCloseModal} />
+                <EditUserModal
+                    user={selectedUser}
+                    onClose={handleCloseEditModal}
+                />
             )}
+
+            {/* Renderiza el modal para agregar nuevo usuario */}
+            {showAddModal && <AddUserModal onClose={handleCloseAddModal} />}
         </div>
     );
 }

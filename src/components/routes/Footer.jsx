@@ -3,51 +3,62 @@ import Image from "next/image";
 
 export default function Footer() {
     return (
-        <footer className="text-gray-400 py-8 px-2 md:px-20">
-            <div className="p-4 md:p-6 rounded-3xl bg-[#181818]">
+        <footer className="text-black py-8 px-4 md:px-20">
+            <div className="mx-auto p-6 rounded-3xl bg-[#f1f1f1] shadow-lg">
                 <div className="space-y-8">
                     {/* Sección: Título, descripción y CTA */}
                     <div className="flex flex-col md:flex-row items-start md:items-center justify-between">
                         <div>
-                            <h2 className="text-xl md:text-2xl font-bold text-white mb-1">
+                            <h2 className="text-xl md:text-2xl font-semibold text-gray-800 mb-1 font-serif">
                                 ¿Quieres hacer parte del cambio?
                             </h2>
-                            <p className="text-sm mb-4">
+                            <p className="text-sm text-gray-600 mb-4 font-serif">
                                 Únete ahora para aportar
                             </p>
                         </div>
-                        <button className="bg-white text-black px-4 py-2 rounded-md hover:bg-gray-200 transition">
-                            Unirme
+                        <button className="flex items-center gap-2 text-sm font-bold mt-6 bg-gradient-to-r from-[#06869B] via-[#11809D] to-[#1B607A] text-white px-6 py-3 rounded-full whitespace-nowrap hover:bg-red-600 hover:shadow-2xl shadow-black">
+                            ¡Unirme ahora!
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="w-5 h-5"
+                            >
+                                <path
+                                    d="M7 17L17 7M17 7H8M17 7V16"
+                                    stroke="#ffffff"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                />
+                            </svg>
                         </button>
                     </div>
 
                     {/* Sección: Logo, tagline y enlaces */}
-                    <div className="flex flex-col md:flex-row md:justify-between md:items-center space-y-4 md:space-y-0">
+                    <div className="flex flex-col gap-4 md:flex-row md:justify-between md:items-center space-y-6 md:space-y-0">
                         {/* Logo y tagline */}
                         <div>
-                            <div className="flex items-center gap-2 mb-1">
+                            <div className="flex items-center gap-3 mb-0">
                                 <Image
-                                    src="/logo.png"
+                                    src="/ae-logo.svg"
                                     alt="Logo"
-                                    width={25}
-                                    height={25}
+                                    width={210}
+                                    height={40}
                                 />
-                                <span className="text-lg font-bold text-white">
-                                    AE Uniandes
-                                </span>
                             </div>
-                            <span className="text-xs text-gray-500">
+                            <span className="text-xs text-gray-500 font-serif">
                                 ¿Cómo podemos ayudar a otros de la manera más
                                 efectiva posible?
                             </span>
                         </div>
 
                         {/* Enlaces de navegación */}
-                        <ul className="flex flex-col items-start md:flex-row md:items-center gap-4">
+                        <ul className="flex flex-col items-start md:flex-row md:items-center gap-6 text-sm text-gray-700 [&>li>a]:font-serif">
                             <li>
                                 <a
                                     href="#"
-                                    className="text-xs hover:text-white transition"
+                                    className="hover:text-black transition"
                                 >
                                     Inicio
                                 </a>
@@ -55,7 +66,7 @@ export default function Footer() {
                             <li>
                                 <a
                                     href="#"
-                                    className="text-xs hover:text-white transition"
+                                    className="hover:text-black transition"
                                 >
                                     Acerca de AE
                                 </a>
@@ -63,7 +74,7 @@ export default function Footer() {
                             <li>
                                 <a
                                     href="#"
-                                    className="text-xs hover:text-white transition"
+                                    className="hover:text-black transition"
                                 >
                                     Proyectos
                                 </a>
@@ -71,7 +82,7 @@ export default function Footer() {
                             <li>
                                 <a
                                     href="#"
-                                    className="text-xs hover:text-white transition"
+                                    className="hover:text-black transition"
                                 >
                                     Eventos
                                 </a>
@@ -79,7 +90,7 @@ export default function Footer() {
                             <li>
                                 <a
                                     href="#"
-                                    className="text-xs hover:text-white transition"
+                                    className="hover:text-black transition"
                                 >
                                     Blog
                                 </a>
@@ -87,7 +98,7 @@ export default function Footer() {
                             <li>
                                 <a
                                     href="#"
-                                    className="text-xs hover:text-white transition"
+                                    className="hover:text-black transition"
                                 >
                                     Contacto
                                 </a>
@@ -97,39 +108,80 @@ export default function Footer() {
                 </div>
 
                 {/* Sección inferior: Copyright y redes */}
-                <div className="max-w-7xl mx-auto mt-8 flex flex-col md:flex-row items-center justify-between border-t border-gray-800 pt-4 text-xs">
-                    <span>
+                <div className="mt-8 pt-4 border-t border-gray-300 text-xs flex flex-col md:flex-row items-center justify-between">
+                    <span className="text-gray-500 font-serif">
                         &copy; {new Date().getFullYear()} AE Uniandes, Todos los
                         derechos reservados.
                     </span>
-                    <div className="flex gap-4 mt-4 md:mt-0">
+                    <div className="flex gap-6 mt-4 md:mt-0">
+                        {/* Redes sociales */}
                         <a
                             href="#"
                             aria-label="Facebook"
-                            className="hover:text-white transition"
+                            className="hover:text-black hover:scale-[1.2] transition-all duration-200"
                         >
-                            <i className="fab fa-facebook-f"></i>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="30"
+                                height="30"
+                                viewBox="0 0 30 30"
+                            >
+                                <path
+                                    d="M15,3C8.373,3,3,8.373,3,15c0,6.016,4.432,10.984,10.206,11.852V18.18h-2.969v-3.154h2.969v-2.099c0-3.475,1.693-5,4.581-5 c1.383,0,2.115,0.103,2.461,0.149v2.753h-1.97c-1.226,0-1.654,1.163-1.654,2.473v1.724h3.593L19.73,18.18h-3.106v8.697 C22.481,26.083,27,21.075,27,15C27,8.373,21.627,3,15,3z"
+                                    fill="#11809D"
+                                ></path>
+                            </svg>
                         </a>
                         <a
                             href="#"
                             aria-label="Twitter"
-                            className="hover:text-white transition"
+                            className="hover:text-black hover:scale-[1.2] transition-all duration-200"
                         >
-                            <i className="fab fa-twitter"></i>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="30"
+                                height="30"
+                                viewBox="0 0 50 50"
+                            >
+                                <path
+                                    d="M 11 4 C 7.134 4 4 7.134 4 11 L 4 39 C 4 42.866 7.134 46 11 46 L 39 46 C 42.866 46 46 42.866 46 39 L 46 11 C 46 7.134 42.866 4 39 4 L 11 4 z M 13.085938 13 L 21.023438 13 L 26.660156 21.009766 L 33.5 13 L 36 13 L 27.789062 22.613281 L 37.914062 37 L 29.978516 37 L 23.4375 27.707031 L 15.5 37 L 13 37 L 22.308594 26.103516 L 13.085938 13 z M 16.914062 15 L 31.021484 35 L 34.085938 35 L 19.978516 15 L 16.914062 15 z"
+                                    fill="#11809D"
+                                ></path>
+                            </svg>
                         </a>
                         <a
                             href="#"
                             aria-label="Instagram"
-                            className="hover:text-white transition"
+                            className="hover:text-black hover:scale-[1.2] transition-all duration-200"
                         >
-                            <i className="fab fa-instagram"></i>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="30"
+                                height="30"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    d="M 8 3 C 5.243 3 3 5.243 3 8 L 3 16 C 3 18.757 5.243 21 8 21 L 16 21 C 18.757 21 21 18.757 21 16 L 21 8 C 21 5.243 18.757 3 16 3 L 8 3 z M 8 5 L 16 5 C 17.654 5 19 6.346 19 8 L 19 16 C 19 17.654 17.654 19 16 19 L 8 19 C 6.346 19 5 17.654 5 16 L 5 8 C 5 6.346 6.346 5 8 5 z M 17 6 A 1 1 0 0 0 16 7 A 1 1 0 0 0 17 8 A 1 1 0 0 0 18 7 A 1 1 0 0 0 17 6 z M 12 7 C 9.243 7 7 9.243 7 12 C 7 14.757 9.243 17 12 17 C 14.757 17 17 14.757 17 12 C 17 9.243 14.757 7 12 7 z M 12 9 C 13.654 9 15 10.346 15 12 C 15 13.654 13.654 15 12 15 C 10.346 15 9 13.654 9 12 C 9 10.346 10.346 9 12 9 z"
+                                    fill="#11809D"
+                                ></path>
+                            </svg>
                         </a>
                         <a
                             href="#"
                             aria-label="LinkedIn"
-                            className="hover:text-white transition"
+                            className="hover:text-black hover:scale-[1.2] transition-all duration-200"
                         >
-                            <i className="fab fa-linkedin-in"></i>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="30"
+                                height="30"
+                                viewBox="0 0 50 50"
+                            >
+                                <path
+                                    d="M41,4H9C6.24,4,4,6.24,4,9v32c0,2.76,2.24,5,5,5h32c2.76,0,5-2.24,5-5V9C46,6.24,43.76,4,41,4z M17,20v19h-6V20H17z M11,14.47c0-1.4,1.2-2.47,3-2.47s2.93,1.07,3,2.47c0,1.4-1.12,2.53-3,2.53C12.2,17,11,15.87,11,14.47z M39,39h-6c0,0,0-9.26,0-10 c0-2-1-4-3.5-4.04h-0.08C27,24.96,26,27.02,26,29c0,0.91,0,10,0,10h-6V20h6v2.56c0,0,1.93-2.56,5.81-2.56 c3.97,0,7.19,2.73,7.19,8.26V39z"
+                                    fill="#11809D"
+                                ></path>
+                            </svg>
                         </a>
                     </div>
                 </div>

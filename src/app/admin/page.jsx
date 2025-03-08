@@ -21,7 +21,7 @@ export default function AdminDashboard() {
             <AsideDashboard />
 
             {/* Contenido dinámico */}
-            <main className="flex-1 mx-6 pl-[250px]">
+            <main className="flex-1 mx-6 pl-[280px]">
                 {loading ? (
                     <div className="flex justify-center items-center h-full">
                         <p className="text-white text-xl">Cargando...</p>

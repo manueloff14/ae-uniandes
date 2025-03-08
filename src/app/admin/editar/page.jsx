@@ -27,7 +27,7 @@ export default function EditarPanel() {
     return (
         <div>
             <AsideDashboard />
-            <main className="flex-1 mx-6 pl-[250px]">
+            <main className="flex-1 mx-6 pl-[280px]">
                 <HeaderDashboard title="Editar" user={user} />
 
                 <div className="mt-6 text-white space-y-8">
