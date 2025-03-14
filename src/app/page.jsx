@@ -46,13 +46,13 @@ export default function Home() {
                                 <img
                                     src="/text-effect-2.svg"
                                     alt="Efecto decorativo"
-                                    className="absolute z-[-1] left-1/2 -translate-x-1/2 top-full mt-[-35px] md:mt-[-30px] sm:mt-[-30px] w-[80%] h-auto rotate-[-2.5deg] scale-x-[-1]"
+                                    className="absolute z-[-1] left-1/2 -translate-x-1/2 top-full mt-[-20px] md:mt-[-30px] sm:mt-[-30px] w-[80%] h-auto rotate-[-2.5deg] scale-x-[-1]"
                                 />
                             </span>
                             ?
                         </h1>
 
-                        <p className="mb-8 text-base md:text-lg mx-auto w-[80%] md:w-[60%] lg:w-[40%] text-gray-300 font-serif">
+                        <p className="mb-8 text-base md:text-lg mx-auto w-[80%] md:w-[60%] lg:w-[40%] text-gray-100 font-serif">
                             Nuestra misión es impulsar el altruismo eficaz,
                             aplicando estrategias basadas en evidencia para
                             maximizar nuestro impacto.
@@ -83,7 +83,7 @@ export default function Home() {
                 <section className="max-w-6xl mx-auto px-6 md:px-28 pt-20 pb-16">
                     <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-8 bg-[#f1f1f1] p-4 rounded-3xl">
                         {/* Imagen de placeholder */}
-                        <div className="h-[250px] md:w-1/2">
+                        <div className="h-[250px] w-full md:w-1/2">
                             <img
                                 src="/img/ae-grupo.jpg"
                                 alt="Placeholder"
