@@ -67,7 +67,7 @@ export default function HeaderHome() {
                     Blog
                 </Link>
                 <Link
-                    href="/blog"
+                    href="/galeria"
                     className="px-4 py-2 text-sm font-semibold text-black border rounded-full bg-white hover:bg-gray-100 font-serif"
                 >
                     Galeria
