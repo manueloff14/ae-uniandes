@@ -29,34 +29,32 @@ export default function Galeria() {
     ];
 
     const [selectedImage, setSelectedImage] = useState(null);
-
-    function openModal(url) {
-        setSelectedImage(url);
-    }
-
-    function closeModal() {
-        setSelectedImage(null);
-    }
-
     const [modalAnimation, setModalAnimation] = useState(false);
+    const [isGalleryVisible, setIsGalleryVisible] = useState(false);
 
-    // Al abrir el modal, primero setea la imagen, luego activa la animación
+    // Retrasar la visualización de las imágenes
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsGalleryVisible(true);
+        }, 500); // 1 segundo de delay para cargar las imágenes
+        return () => clearTimeout(timer);
+    }, []);
+
+    // Modal Animations
     function openModal(url) {
         setSelectedImage(url);
         setTimeout(() => {
             setModalAnimation(true);
-        }, 50); // Un pequeñísimo delay para activar la animación después de renderizar
+        }, 50);
     }
 
-    // Al cerrar, desactiva la animación primero, y luego remueve la imagen
     function closeModal() {
         setModalAnimation(false);
         setTimeout(() => {
             setSelectedImage(null);
-        }, 300); // Debe coincidir con duration-300 o el tiempo de animación que uses
+        }, 300);
     }
 
-    // Si quieres cerrar el modal al presionar "Esc"
     useEffect(() => {
         function handleKeyDown(e) {
             if (e.key === "Escape") closeModal();
@@ -69,7 +67,7 @@ export default function Galeria() {
 
     return (
         <div>
-            <HeaderHome />
+            <HeaderHome black={true} />
 
             <section className="max-w-6xl mx-auto px-4 py-8 pt-32 mb-10">
                 <div className="flex justify-center mb-4">
@@ -87,14 +85,40 @@ export default function Galeria() {
                     positivo a través del altruismo eficaz.
                 </p>
 
+                {/* Loader mientras espera mostrar la galería */}
+                {!isGalleryVisible && (
+                    <div className="flex justify-center items-center py-32">
+                        <div className="flex flex-col items-center gap-4">
+                            {/* Spinner */}
+                            <div className="w-12 h-12 border-4 border-black border-dotted rounded-full animate-spin"></div>
+                            <p className="text-gray-600 font-serif">
+                                Cargando imágenes...
+                            </p>
+                        </div>
+                    </div>
+                )}
+
                 {/* Layout tipo Masonry con CSS columns */}
-                <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4">
+                <div
+                    className={`columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 ${
+                        isGalleryVisible
+                            ? "opacity-100 transition-opacity duration-500"
+                            : "opacity-0 pointer-events-none"
+                    }`}
+                >
                     {images.map((url, index) => (
-                        <div key={index} className="mb-4 break-inside-avoid">
+                        <div
+                            key={index}
+                            className={`mb-4 break-inside-avoid transition-transform duration-500 ${
+                                isGalleryVisible
+                                    ? "scale-100 opacity-100"
+                                    : "scale-95 opacity-0"
+                            }`}
+                        >
                             <img
                                 src={url}
                                 alt={`Imagen de la galería ${index}`}
-                                className="w-full h-auto rounded-3xl shadow hover:opacity-90 transition-opacity cursor-pointer"
+                                className={`w-full h-auto rounded-3xl shadow hover:opacity-90 transition-opacity cursor-pointer`}
                                 onClick={() => openModal(url)}
                             />
                         </div>
@@ -112,7 +136,6 @@ export default function Galeria() {
                     }`}
                     onClick={closeModal}
                 >
-                    {/* Contenedor que evita el cierre si se hace click dentro de él */}
                     <div
                         className={`relative p-4 ${
                             modalAnimation
@@ -121,14 +144,12 @@ export default function Galeria() {
                         }`}
                         onClick={(e) => e.stopPropagation()}
                     >
-                        {/* Imagen con borde redondeado y ajuste al contenedor */}
                         <img
                             src={selectedImage}
                             alt="Imagen ampliada"
                             className="max-w-full max-h-[80vh] object-contain rounded-3xl shadow-xl shadow-gray-600"
                         />
 
-                        {/* Botón de cierre */}
                         <button
                             className="absolute top-4 right-4 m-5 text-white bg-black rounded-full p-2 hover:bg-opacity-60"
                             onClick={closeModal}

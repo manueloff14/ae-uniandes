@@ -166,7 +166,7 @@ export default function AcercaAEPage() {
 
     return (
         <div>
-            <HeaderHome />
+            <HeaderHome black={true} />
 
             <main>
                 <section className="pt-28 pb-16 px-4 sm:py-28 sm:px-8 md:py-32 md:px-16 lg:py-40 lg:px-28">
@@ -191,7 +191,7 @@ export default function AcercaAEPage() {
                             <div
                                 key={member.id}
                                 className="flex flex-col items-center cursor-pointer transform transition hover:scale-105"
-                                onClick={() => openModal(member)}
+                                /* onClick={() => openModal(member)} */
                             >
                                 <img
                                     src={member.image}
@@ -201,7 +201,7 @@ export default function AcercaAEPage() {
                                 <h3 className="text-xl font-semibold text-black">
                                     {member.name}
                                 </h3>
-                                <p className="text-gray-500">{member.role}</p>
+                                {/* <p className="text-gray-500">{member.role}</p> */}
                             </div>
                         ))}
                     </div>
@@ -217,10 +217,10 @@ export default function AcercaAEPage() {
                         Voluntarios
                     </h2>
                     <p className="text-center text-gray-800 mt-4 mb-12 max-w-3xl mx-auto">
-                        Conoce a las mentes creativas y comprometidas que
-                        transforman ideas en soluciones innovadoras, trabajando
-                        juntas para generar un impacto real en nuestra
-                        comunidad.
+                        Descubre a las personas comprometidas que dedican su
+                        tiempo y habilidades para marcar la diferencia,
+                        impulsando cambios positivos y llevando esperanza a cada
+                        rincón de nuestra comunidad.
                     </p>
 
                     {/* Contenedor de integrantes */}
@@ -229,7 +229,7 @@ export default function AcercaAEPage() {
                             <div
                                 key={member.id}
                                 className="flex flex-col items-center cursor-pointer transform transition hover:scale-105"
-                                onClick={() => openModal(member)}
+                                /* onClick={() => openModal(member)} */
                             >
                                 <img
                                     src={member.image}
@@ -239,7 +239,7 @@ export default function AcercaAEPage() {
                                 <h3 className="text-xl font-semibold text-black">
                                     {member.name}
                                 </h3>
-                                <p className="text-gray-500">{member.role}</p>
+                                {/* <p className="text-gray-500">{member.role}</p> */}
                             </div>
                         ))}
                     </div>
@@ -436,21 +436,26 @@ export default function AcercaAEPage() {
                                 <img
                                     src="https://images.squarespace-cdn.com/content/v1/6159d5d6bdaf2c6fb47aa0ce/04ca8f36-49cb-4b29-9ea9-40aaa1099c5e/_MG_2879.jpg"
                                     alt="Foto grupal de la comunidad"
-                                    className="object-cover object-center"
+                                    className="w-full h-full object-cover object-center"
                                 />
-                                {/* Capa de gradiente */}
-                                <div className="absolute inset-0 bg-gradient-to-r from-transparent to-gray-100" />
+                                {/* Capa de gradiente: móvil hacia arriba, tablet/PC hacia la derecha */}
+                                <div className="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-transparent to-gray-100" />
                             </div>
 
                             {/* Contenido textual */}
                             <div className="w-full md:w-1/2 p-8 flex flex-col items-start gap-2 md:text-left">
-                                <img className="w-[150px]" src="/ea-logo.svg" alt="" />
+                                <img
+                                    className="w-[150px]"
+                                    src="/ea-logo.svg"
+                                    alt="Logo EA"
+                                />
                                 <p className="text-gray-600 mt-2 text-lg md:text-xl font-serif">
                                     Una comunidad global
                                 </p>
                                 <a
                                     href="https://www.effectivealtruism.org"
-                                    target="_black"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     className="cursor-pointer p-4 px-5 flex items-center gap-2 bg-gradient-to-r from-[#06869b] via-[#11809D] to-[#1B607A] mt-4 text-sm font-serif font-bold rounded-full hover:scale-110 transition-all duration-200"
                                 >
                                     Effective Altruism

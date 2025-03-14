@@ -67,11 +67,12 @@ export default function Eventos() {
                     <div className="absolute inset-0 bg-[#0000003a] backdrop-blur-[10px] z-[-10]" />
                 </div>
 
-                <div className="absolute top-0 left-0 w-full h-screen bg-[#00000044] backdrop-blur-[2px]" />
+                {/* Overlay adicional para oscurecer y aplicar un blur suave */}
+                <div className="absolute inset-0 bg-[#00000044] backdrop-blur-[2px]" />
 
-                {/* Figuras decorativas en el fondo */}
-                <div className="absolute top-[180px] left-1/2 transform -translate-x-1/2 w-full max-w-2xl h-64 bg-gradient-to-r from-[#a7a7a7] to-[#a1a1a1] opacity-20 rounded-full blur-3xl z-[-20]" />
-                <div className="absolute top-0 left-0 transform -translate-x-1/2 w-full max-w-2xl h-64 bg-gradient-to-r from-[#000000] via-[#000000] to-[#1B607A] opacity-20 rounded-full blur-3xl z-[-20]" />
+                {/* Figuras decorativas */}
+                <div className="absolute top-[180px] left-1/2 transform -translate-x-1/2 w-full max-w-2xl h-64 bg-gradient-to-r from-[#a7a7a7] to-[#a1a1a1] opacity-20 rounded-full blur-3xl" />
+                <div className="absolute top-0 left-0 transform -translate-x-1/2 w-full max-w-2xl h-64 bg-gradient-to-r from-[#000000] via-[#000000] to-[#1B607A] opacity-20 rounded-full blur-3xl" />
 
                 {/* Contenido principal */}
                 <div className="relative z-10 px-6 md:px-12 lg:px-20 xl:px-56 pt-32 pb-32">

@@ -33,7 +33,6 @@ export default function Proyectos() {
         <div>
             <HeaderHome />
 
-            {/* Sección Hero (primera sección) */}
             <section className="relative w-full min-h-screen flex flex-col justify-center text-center">
                 {/* Fondo e imagen */}
                 <div className="absolute inset-0 z-[-20] overflow-hidden">
@@ -45,11 +44,12 @@ export default function Proyectos() {
                     <div className="absolute inset-0 bg-[#0000003a] backdrop-blur-[10px] z-[-10]" />
                 </div>
 
-                <div className="absolute top-0 left-0 w-full h-screen bg-[#00000044] backdrop-blur-[2px]" />
+                {/* Overlay adicional para oscurecer y aplicar un blur suave */}
+                <div className="absolute inset-0 bg-[#00000044] backdrop-blur-[2px]" />
 
-                {/* Figuras decorativas en el fondo */}
-                <div className="absolute top-[180px] left-1/2 transform -translate-x-1/2 w-full max-w-2xl h-64 bg-gradient-to-r from-[#a7a7a7] to-[#a1a1a1] opacity-20 rounded-full blur-3xl z-[-20]" />
-                <div className="absolute top-0 left-0 transform -translate-x-1/2 w-full max-w-2xl h-64 bg-gradient-to-r from-[#000000] via-[#000000] to-[#1B607A] opacity-20 rounded-full blur-3xl z-[-20]" />
+                {/* Figuras decorativas */}
+                <div className="absolute top-[180px] left-1/2 transform -translate-x-1/2 w-full max-w-2xl h-64 bg-gradient-to-r from-[#a7a7a7] to-[#a1a1a1] opacity-20 rounded-full blur-3xl" />
+                <div className="absolute top-0 left-0 transform -translate-x-1/2 w-full max-w-2xl h-64 bg-gradient-to-r from-[#000000] via-[#000000] to-[#1B607A] opacity-20 rounded-full blur-3xl" />
 
                 {/* Contenido principal */}
                 <div className="relative z-10 px-6 md:px-12 lg:px-20 xl:px-56 pt-32 pb-32">
@@ -158,7 +158,7 @@ export default function Proyectos() {
                 </div>
             </section>
 
-            <section className="bg-white mb-20 mt-16">
+            <section className="bg-white mb-36">
                 <div className="flex justify-center mb-4">
                     <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black font-serif">
                         Proyectos externos
@@ -168,7 +168,8 @@ export default function Proyectos() {
                     ¡Demuestra tu altruismo!
                 </h2>
                 <p className="text-center text-gray-700 mb-12 font-serif">
-                    En Altruismo Eficaz estamos dispuestos a escuchar a los demás.
+                    En Altruismo Eficaz estamos dispuestos a escuchar a los
+                    demás.
                 </p>
                 <div className="max-w-6xl mx-auto px-4 py-12">
                     <div className="flex flex-col md:flex-row items-center rounded-[2.5rem] overflow-hidden shadow-md bg-gray-100">
@@ -177,10 +178,10 @@ export default function Proyectos() {
                             <img
                                 src="https://images.squarespace-cdn.com/content/v1/6159d5d6bdaf2c6fb47aa0ce/04ca8f36-49cb-4b29-9ea9-40aaa1099c5e/_MG_2879.jpg"
                                 alt="Foto grupal de la comunidad"
-                                className="object-cover object-center"
+                                className="w-full h-full object-cover object-center"
                             />
-                            {/* Capa de gradiente */}
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent to-gray-100" />
+                            {/* Capa de gradiente: móvil hacia arriba, tablet/PC hacia la derecha */}
+                            <div className="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-transparent to-gray-100" />
                         </div>
 
                         {/* Contenido textual */}
