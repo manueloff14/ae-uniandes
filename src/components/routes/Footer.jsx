@@ -41,7 +41,7 @@ export default function Footer() {
                         <div>
                             <div className="flex items-center gap-3 mb-0">
                                 <Image
-                                    src="/ae-logo.svg"
+                                    src="/ae-logo-black.svg"
                                     alt="Logo"
                                     width={210}
                                     height={40}
@@ -115,7 +115,7 @@ export default function Footer() {
                     </span>
                     <div className="flex gap-6 mt-4 md:mt-0">
                         {/* Redes sociales */}
-                        <a
+                        {/* <a
                             href="#"
                             aria-label="Facebook"
                             className="hover:text-black hover:scale-[1.2] transition-all duration-200"
@@ -131,8 +131,8 @@ export default function Footer() {
                                     fill="#11809D"
                                 ></path>
                             </svg>
-                        </a>
-                        <a
+                        </a> */}
+                        {/* <a
                             href="#"
                             aria-label="Twitter"
                             className="hover:text-black hover:scale-[1.2] transition-all duration-200"
@@ -148,9 +148,9 @@ export default function Footer() {
                                     fill="#11809D"
                                 ></path>
                             </svg>
-                        </a>
+                        </a> */}
                         <a
-                            href="#"
+                            href="https://www.instagram.com/aeuniandes/"
                             aria-label="Instagram"
                             className="hover:text-black hover:scale-[1.2] transition-all duration-200"
                         >
@@ -167,7 +167,7 @@ export default function Footer() {
                             </svg>
                         </a>
                         <a
-                            href="#"
+                            href="https://www.linkedin.com/company/aeuniandes"
                             aria-label="LinkedIn"
                             className="hover:text-black hover:scale-[1.2] transition-all duration-200"
                         >
@@ -182,6 +182,12 @@ export default function Footer() {
                                     fill="#11809D"
                                 ></path>
                             </svg>
+                        </a>
+                        <a href="mailto:altruismoeficaz@uniandes.edu.co" className="hover:text-black hover:scale-[1.2] transition-all duration-200">
+                            <img
+                                className="w-[30px] h-[30px]"
+                                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAACkElEQVR4nO1Yz2sTURDeVq0i0cxL2oM/UEQQQYrgQbwIHvRP8OrRg2g9FY/zkirWY0GE3cykBW/5D7QH8dKaQ6h4EA8iiAgiomirUKqNTLIx6Wa3u/mxyRbfB3MJb2a+772ZWTKWZWBgYGBg4IPjOL8PkKdAcxmQ1pTm6iANkNbquXlKuFidIHN34YjStDJo0irQaCWLdDgaeyyNKaSXwyfNbSKEWyh/0HRr+GQ5oKwKNyMI4HJiBWheDheA/DTBAp5EaoMM8uUk9QEgv87k6KrVERBHxUkhvxvijX9QyNetUmlXdOKewzKDlaZphfx1YORRctF02/yPIiToudL3HylAngWkX/GRp3XQZKfu8URQWYcKaHm+ZcgVL7YHco5KEqV5o4/k/wByKT3jnGjPVzivND9rnI0soCmEFlW+OOk9l8X505K09zqnRcjzWW/8cXRO1eIjbbae71iAaxty636f8ww6F5Tm5100aDmNhUveeFI+UqpSTn5+3QpoJP1ZCz5rpwNq9FUoceQ39R6rjrT6T+DDlNJ0B5B/bOffk4DmlKAvkqxtSiCOAvI10PzRx+czaLptIe7e4mPbe2RUAvKnKLn7I6Bp7/3m9CG094tApekbaF6VV8s+oANbM1VH6t8ZettJzn4LcI0qmVzhijdWCu1xMe/vclZ8VBe5YhLQnChpLJ4LjJ13zvQ6uaw4Bbi1vikkD84snPwXE+1jtW8H0u9e41uxC2iW1brS9Ng135Goki0gHrOMAG1eoGpKaDvs+CYGzavDJqkCDDR9DxeA9CKxApCXdvhii26ECrDm5vYmay/KrlEl0moxocvdSvTlbgNYGpNdpNTdMBob6v8jlmplE/XmDQwMDAz+O/wFYobOTTvqX58AAAAASUVORK5CYII="
+                            />
                         </a>
                     </div>
                 </div>
