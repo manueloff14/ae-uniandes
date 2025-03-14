@@ -24,10 +24,10 @@ export default function Home() {
                             src="/img/uniandes.jpg"
                             alt="Fondo Uniandes"
                         />
-                        <div className="absolute inset-0 bg-[#00000060] backdrop-blur-[10px] z-[-10]" />
+                        <div className="absolute inset-0 bg-[#0000003a] backdrop-blur-[10px] z-[-10]" />
                     </div>
 
-                    <div className="absolute top-0 left-0 w-full h-screen bg-[#0000007a] backdrop-blur-[10px]"></div>
+                    <div className="absolute top-0 left-0 w-full h-screen bg-[#00000044] backdrop-blur-[2px]"></div>
 
                     {/* Figuras decorativas en el fondo */}
                     <div className="absolute top-[180px] left-1/2 transform -translate-x-1/2 w-full max-w-2xl h-64 bg-gradient-to-r from-[#a7a7a7] to-[#a1a1a1] opacity-20 rounded-full blur-3xl z-[-20]" />
@@ -79,8 +79,6 @@ export default function Home() {
                         </div>
                     </div>
                 </section>
-
-                <IdentidadSection />
 
                 <section className="max-w-6xl mx-auto px-6 md:px-28 pt-20 pb-16">
                     <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-8 bg-[#f1f1f1] p-4 rounded-3xl">
@@ -192,18 +190,18 @@ export default function Home() {
                                 {
                                     id: 1,
                                     nombre: "Reimaginando el Futuro",
-                                    autor: "Administrador",
-                                    fecha: "Mar, 30 de Jul",
-                                    categoria: "Innovación",
+                                    autor: "Santiago Ramírez",
+                                    fecha: "Proyecto vigente",
+                                    categoria: "Impacto social",
                                     descripcion: `El Semillero de Impacto Social ha permitido a estudiantes de primeros semestres desarrollar habilidades clave a través de proyectos reales y mentoría personalizada.<br/><br/>Gracias a este espacio, han podido transformar su pasión por el impacto social en acciones concretas, conectando con una comunidad comprometida con el cambio.`,
                                     imagen: "/img/proyecto-1.jpg",
                                 },
                                 {
                                     id: 2,
                                     nombre: "Reencuentro de Alumni de Altruismo Eficaz",
-                                    autor: "Administrador",
-                                    fecha: "Mar, 30 de Jul",
-                                    categoria: "Tecnología",
+                                    autor: "Deiver Romero",
+                                    fecha: "Proyecto vigente",
+                                    categoria: "Networking",
                                     descripcion: `Este encuentro hace parte de una iniciativa en desarrollo que busca fortalecer los lazos entre profesionales altruistas y miembros altamente involucrados de la comunidad en etapas avanzadas de su carrera, creando oportunidades de mentoría y colaboración.  
 <br/>A través de este espacio, queremos compartir experiencias, intercambiar ideas y explorar formas de generar un impacto aún mayor dentro y fuera de nuestra comunidad.`,
                                     imagen: "/img/proyecto-2.jpg",

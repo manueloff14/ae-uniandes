@@ -89,7 +89,7 @@ export default function HeaderHome() {
                         className="cursor-pointer flex items-center gap-2 px-5 py-2 text-sm font-semibold text-white border-2 border-[#06869B] bg-[#06869B] rounded-full transition-all font-serif hover:bg-white hover:text-[#06869B]"
                     >
                         ¡Unirme!
-                        <svg
+                        {/* <svg
                             viewBox="0 0 24 24"
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"
@@ -102,7 +102,7 @@ export default function HeaderHome() {
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
                             />
-                        </svg>
+                        </svg> */}
                     </div>
                     <div className="absolute right-0 top-full p-2 mt-2 w-56 bg-white border rounded-2xl shadow-lg invisible opacity-0 group-hover:visible group-hover:opacity-100 hover:visible hover:opacity-100 transition-all duration-300">
                         <Link

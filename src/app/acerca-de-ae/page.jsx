@@ -1,9 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import HeaderHome from "@/components/routes/HeaderHome";
 import Footer from "@/components/routes/Footer";
 import ReactMarkdown from "react-markdown";
+import IdentidadSection from "@/components/routes/home/sections/IdentidadSection";
 
 export default function AcercaAEPage() {
     const [selectedMember, setSelectedMember] = useState(null);
@@ -21,9 +23,9 @@ export default function AcercaAEPage() {
     const members = [
         {
             id: 1,
-            name: "Juan Pérez",
+            name: "Deiver Romero Páramo",
             role: "Administración",
-            image: "https://placehold.co/400x400?text=Juan+P%C3%A9rez",
+            image: "https://media.licdn.com/dms/image/v2/D4E03AQEpvToMmGP6DA/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1674686037593?e=2147483647&v=beta&t=2a7Gwr1G8USDYZ9zs_ApNiUu6gvrtwt_Dcll7vkMq9w",
             bio: `# Biografía de Juan Pérez\n**Juan Pérez** es un profesional apasionado por la administración y las finanzas, comprometido con la innovación social y el impacto positivo. Desde sus inicios, ha demostrado una gran habilidad para identificar oportunidades de mejora en entornos complejos, utilizando un enfoque basado en datos y análisis riguroso para optimizar procesos y generar valor.\n## Formación y Estudios\n- **Carrera:** Administración de Empresas  \n- **Especialización:** Finanzas y Gestión Estratégica\n## Experiencia Profesional\n\n- **Gestión de Proyectos:** Implementación de estrategias para optimizar recursos y mejorar la eficiencia operativa.  \n- **Análisis Financiero:** Desarrollo de modelos predictivos que facilitan la identificación de oportunidades de inversión y ahorro.  \n- **Innovación Social:** Participación en iniciativas que promueven la transparencia y el impacto social.\n## Compromiso\nJuan se compromete a aplicar el altruismo eficaz en cada proyecto, buscando siempre el mayor impacto positivo en la comunidad.`,
             dob: "12 de enero, 1985",
             studies: "Administración de Empresas",
@@ -36,9 +38,9 @@ export default function AcercaAEPage() {
         },
         {
             id: 2,
-            name: "María García",
+            name: "Santiago Ramírez",
             role: "Administración",
-            image: "https://placehold.co/400x400?text=Mar%C3%ADa+Garc%C3%ADa",
+            image: "/img/coordinadores/santiago_ramirez.jpg",
             bio: `# Biografía de María García\n**María García** es una economista comprometida con la transformación social y la justicia económica. Su pasión por el servicio comunitario se refleja en su trabajo, donde combina conocimientos teóricos con prácticas innovadoras.\n## Formación y Estudios\n- **Carrera:** Economía  \n- **Enfoque:** Análisis y políticas públicas para el desarrollo social\n## Experiencia y Logros\n- **Investigación Social:** Desarrollo de estudios que ayudan a entender y resolver problemas de desigualdad.  \n- **Proyectos Comunitarios:** Implementación de iniciativas que mejoran la calidad de vida en comunidades vulnerables.\n## Filosofía Profesional\nMaría cree en el poder del altruismo eficaz, utilizando el análisis riguroso para maximizar el impacto de sus acciones.`,
             dob: "5 de marzo, 1990",
             studies: "Economía",
@@ -51,9 +53,9 @@ export default function AcercaAEPage() {
         },
         {
             id: 3,
-            name: "Carlos Ramírez",
+            name: "Camilo Eduardo Castro",
             role: "Administración",
-            image: "https://placehold.co/400x400?text=Carlos+Ram%C3%ADrez",
+            image: "/img/coordinadores/camilo_eduardo_castro.jpg",
             bio: `# Biografía de Carlos Ramírez\n**Carlos Ramírez** es un profesional con amplia experiencia en la gestión de proyectos, reconocido por su capacidad de transformar ideas en estrategias efectivas que impulsan el cambio social.\n## Formación y Estudios\n- **Carrera:** Ingeniería Industrial  \n- **Especialización:** Gestión de Proyectos y Optimización de Procesos\n## Experiencia Profesional\n- **Innovación en Proyectos:** Liderazgo en iniciativas que integran tecnología y estrategias de impacto social.  \n- **Eficiencia Operacional:** Implementación de sistemas de gestión que mejoran la productividad y la transparencia.\n## Visión\nCarlos cree en la sinergia entre la tecnología y el altruismo eficaz para crear soluciones sostenibles que beneficien a la sociedad.`,
             dob: "22 de julio, 1988",
             studies: "Ingeniería Industrial",
@@ -66,9 +68,9 @@ export default function AcercaAEPage() {
         },
         {
             id: 4,
-            name: "Ana López",
+            name: "Valeria Zuluaga",
             role: "Administración",
-            image: "https://placehold.co/400x400?text=Ana+L%C3%B3pez",
+            image: "/img/coordinadores/valeria_zuluaga.jpg",
             bio: `# Biografía de Ana López\n**Ana López** es una defensora incansable de la justicia social, con una sólida formación en Derecho y Ciencias Políticas. Su trabajo se centra en promover la equidad y generar impacto a través de políticas inclusivas.\n## Formación y Estudios\n- **Carrera:** Derecho y Ciencias Políticas  \n- **Enfoque:** Justicia Social y Políticas Públicas\n## Trayectoria Profesional\n- **Liderazgo en Proyectos Sociales:** Coordinación y gestión de iniciativas que fomentan la participación ciudadana.  \n- **Defensa de los Derechos Humanos:** Activismo y asesoramiento en políticas de equidad e inclusión.\n## Filosofía\nAna utiliza su conocimiento para empoderar a comunidades y transformar realidades, aplicando el altruismo eficaz como herramienta fundamental.
       `,
             dob: "10 de octubre, 1992",
@@ -82,9 +84,9 @@ export default function AcercaAEPage() {
         },
         {
             id: 5,
-            name: "Luis Fernández",
+            name: "Natalia Niño",
             role: "Administración",
-            image: "https://placehold.co/400x400?text=Luis+Fern%C3%A1ndez",
+            image: "/img/coordinadores/natalia_niño.jpg",
             bio: `# Biografía de Luis Fernández\n**Luis Fernández** es un estratega social con un enfoque analítico, dedicado a impulsar proyectos que generan impacto y mejoran la eficiencia en la gestión de recursos.\n## Formación y Estudios\n- **Carrera:** Sociología  \n- **Enfoque:** Análisis Social y Estrategias de Cambio\n## Experiencia y Contribuciones\n- **Estrategia y Planificación:** Diseño e implementación de proyectos que optimizan el uso de recursos.  \n- **Análisis Crítico:** Investigación y desarrollo de modelos que facilitan la toma de decisiones estratégicas.\n## Compromiso\nLuis está comprometido con el altruismo eficaz, buscando siempre maximizar el impacto positivo a través de soluciones basadas en datos.`,
             dob: "3 de mayo, 1987",
             studies: "Sociología",
@@ -95,19 +97,52 @@ export default function AcercaAEPage() {
                 x: "https://x.com/luisfernandez",
             },
         },
+    ];
+
+    const voluntarios = [
         {
-            id: 6,
-            name: "Sofía Martínez",
+            id: 1,
+            name: "Tomás Antolinez",
             role: "Administración",
-            image: "https://placehold.co/400x400?text=Sof%C3%ADa+Mart%C3%ADnez",
-            bio: `# Biografía de Sofía Martínez\n**Sofía Martínez** es una comunicadora social comprometida con el desarrollo comunitario, especializada en estrategias que amplifican el mensaje del altruismo eficaz.\n## Formación y Estudios\n- **Carrera:** Comunicación Social  \n- **Especialización:** Estrategias de Comunicación y Desarrollo Comunitario\n## Experiencia Profesional\n- **Comunicación Estratégica:** Implementación de campañas que conectan comunidades y fomentan el cambio social.  \n- **Desarrollo Comunitario:** Proyectos que fortalecen la participación ciudadana y promueven el bienestar colectivo.\n## Filosofía\nSofía utiliza la comunicación como herramienta para generar un impacto duradero y positivo, creyendo firmemente en la eficacia del altruismo para transformar realidades.`,
-            dob: "17 de diciembre, 1995",
-            studies: "Comunicación Social",
+            image: "/img/voluntarios/tomas_antolinez.jpg",
+            bio: `# Biografía de Juan Pérez\n**Juan Pérez** es un profesional apasionado por la administración y las finanzas, comprometido con la innovación social y el impacto positivo. Desde sus inicios, ha demostrado una gran habilidad para identificar oportunidades de mejora en entornos complejos, utilizando un enfoque basado en datos y análisis riguroso para optimizar procesos y generar valor.\n## Formación y Estudios\n- **Carrera:** Administración de Empresas  \n- **Especialización:** Finanzas y Gestión Estratégica\n## Experiencia Profesional\n\n- **Gestión de Proyectos:** Implementación de estrategias para optimizar recursos y mejorar la eficiencia operativa.  \n- **Análisis Financiero:** Desarrollo de modelos predictivos que facilitan la identificación de oportunidades de inversión y ahorro.  \n- **Innovación Social:** Participación en iniciativas que promueven la transparencia y el impacto social.\n## Compromiso\nJuan se compromete a aplicar el altruismo eficaz en cada proyecto, buscando siempre el mayor impacto positivo en la comunidad.`,
+            dob: "12 de enero, 1985",
+            studies: "Administración de Empresas",
             social: {
-                facebook: "https://facebook.com/sofiamartinez",
-                instagram: "https://instagram.com/sofiamartinez",
-                linkedin: "https://linkedin.com/in/sofiamartinez",
-                x: "https://x.com/sofiamartinez",
+                facebook: "https://facebook.com/juanperez",
+                instagram: "https://instagram.com/juanperez",
+                linkedin: "https://linkedin.com/in/juanperez",
+                x: "https://x.com/juanperez",
+            },
+        },
+        {
+            id: 2,
+            name: "Isabela Archbold",
+            role: "Administración",
+            image: "/img/voluntarios/isabela_archbold.jpg",
+            bio: `# Biografía de María García\n**María García** es una economista comprometida con la transformación social y la justicia económica. Su pasión por el servicio comunitario se refleja en su trabajo, donde combina conocimientos teóricos con prácticas innovadoras.\n## Formación y Estudios\n- **Carrera:** Economía  \n- **Enfoque:** Análisis y políticas públicas para el desarrollo social\n## Experiencia y Logros\n- **Investigación Social:** Desarrollo de estudios que ayudan a entender y resolver problemas de desigualdad.  \n- **Proyectos Comunitarios:** Implementación de iniciativas que mejoran la calidad de vida en comunidades vulnerables.\n## Filosofía Profesional\nMaría cree en el poder del altruismo eficaz, utilizando el análisis riguroso para maximizar el impacto de sus acciones.`,
+            dob: "5 de marzo, 1990",
+            studies: "Economía",
+            social: {
+                facebook: "https://facebook.com/mariagarcia",
+                instagram: "https://instagram.com/mariagarcia",
+                linkedin: "https://linkedin.com/in/mariagarcia",
+                x: "https://x.com/mariagarcia",
+            },
+        },
+        {
+            id: 3,
+            name: "Sofía Botia",
+            role: "Administración",
+            image: "/img/voluntarios/sofia_botia.jpg",
+            bio: `# Biografía de Carlos Ramírez\n**Carlos Ramírez** es un profesional con amplia experiencia en la gestión de proyectos, reconocido por su capacidad de transformar ideas en estrategias efectivas que impulsan el cambio social.\n## Formación y Estudios\n- **Carrera:** Ingeniería Industrial  \n- **Especialización:** Gestión de Proyectos y Optimización de Procesos\n## Experiencia Profesional\n- **Innovación en Proyectos:** Liderazgo en iniciativas que integran tecnología y estrategias de impacto social.  \n- **Eficiencia Operacional:** Implementación de sistemas de gestión que mejoran la productividad y la transparencia.\n## Visión\nCarlos cree en la sinergia entre la tecnología y el altruismo eficaz para crear soluciones sostenibles que beneficien a la sociedad.`,
+            dob: "22 de julio, 1988",
+            studies: "Ingeniería Industrial",
+            social: {
+                facebook: "https://facebook.com/carlosramirez",
+                instagram: "https://instagram.com/carlosramirez",
+                linkedin: "https://linkedin.com/in/carlosramirez",
+                x: "https://x.com/carlosramirez",
             },
         },
     ];
@@ -141,7 +176,7 @@ export default function AcercaAEPage() {
                         </span>
                     </div>
                     <h2 className="text-2xl sm:text-3xl font-bold text-center text-black mb-2">
-                        Expertos que impulsan el cambio
+                        Coordinadores
                     </h2>
                     <p className="text-center text-gray-800 mt-4 mb-12 max-w-3xl mx-auto">
                         Conoce a las mentes creativas y comprometidas que
@@ -151,7 +186,7 @@ export default function AcercaAEPage() {
                     </p>
 
                     {/* Contenedor de integrantes */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8">
                         {members.map((member) => (
                             <div
                                 key={member.id}
@@ -161,7 +196,45 @@ export default function AcercaAEPage() {
                                 <img
                                     src={member.image}
                                     alt={`Integrante ${member.name}`}
-                                    className="w-32 h-32 rounded-full object-cover mb-4"
+                                    className="w-[280px] h-[280px] rounded-3xl object-cover mb-4"
+                                />
+                                <h3 className="text-xl font-semibold text-black">
+                                    {member.name}
+                                </h3>
+                                <p className="text-gray-500">{member.role}</p>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                <section className="pt-10 pb-16 px-4 sm:py-28 sm:px-8 md:py-32 md:px-16 lg:py-40 lg:pt-10 lg:px-96">
+                    <div className="flex justify-center mb-4">
+                        {/* <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black">
+                            Nuestro Equipo
+                        </span> */}
+                    </div>
+                    <h2 className="text-2xl sm:text-3xl font-bold text-center text-black mb-2">
+                        Voluntarios
+                    </h2>
+                    <p className="text-center text-gray-800 mt-4 mb-12 max-w-3xl mx-auto">
+                        Conoce a las mentes creativas y comprometidas que
+                        transforman ideas en soluciones innovadoras, trabajando
+                        juntas para generar un impacto real en nuestra
+                        comunidad.
+                    </p>
+
+                    {/* Contenedor de integrantes */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+                        {voluntarios.map((member) => (
+                            <div
+                                key={member.id}
+                                className="flex flex-col items-center cursor-pointer transform transition hover:scale-105"
+                                onClick={() => openModal(member)}
+                            >
+                                <img
+                                    src={member.image}
+                                    alt={`Integrante ${member.name}`}
+                                    className="w-[280px] h-[280px] rounded-3xl object-cover mb-4"
                                 />
                                 <h3 className="text-xl font-semibold text-black">
                                     {member.name}
@@ -205,7 +278,7 @@ export default function AcercaAEPage() {
                                     <img
                                         src={selectedMember.image}
                                         alt={`Integrante ${selectedMember.name}`}
-                                        className="w-24 h-24 rounded-full object-cover mb-4"
+                                        className="w-[150px] h-[150px] rounded-3xl object-cover mb-4"
                                     />
                                     <h3 className="text-2xl font-bold text-center mb-2 text-black">
                                         {selectedMember.name}
@@ -326,7 +399,9 @@ export default function AcercaAEPage() {
                     </div>
                 )}
 
-                <section className="pt-10 pb-16 px-4 sm:py-28 sm:px-8 md:py-32 md:px-16 lg:pb-40 lg:pt-20 lg:px-28">
+                <IdentidadSection />
+
+                <section className="pt-10 pb-16 px-4 sm:py-28 sm:px-8 md:py-32 md:px-16 lg:pb-40 lg:pt-28 lg:px-28">
                     <div className="flex justify-center mb-4">
                         <span className="p-2 px-4 rounded-full border text-xs text-center text-black">
                             Nuestra Historia y Valores
@@ -351,6 +426,52 @@ export default function AcercaAEPage() {
                         la mano con expertos y voluntarios para construir un
                         futuro más justo y sostenible.
                     </p>
+                </section>
+
+                <section className="bg-white mb-36">
+                    <div className="max-w-6xl mx-auto px-4 py-12">
+                        <div className="flex flex-col md:flex-row items-center rounded-[2.5rem] overflow-hidden shadow-md bg-gray-100">
+                            {/* Imagen con gradiente */}
+                            <div className="relative w-full md:w-1/2 h-64 md:h-auto">
+                                <img
+                                    src="https://images.squarespace-cdn.com/content/v1/6159d5d6bdaf2c6fb47aa0ce/04ca8f36-49cb-4b29-9ea9-40aaa1099c5e/_MG_2879.jpg"
+                                    alt="Foto grupal de la comunidad"
+                                    className="object-cover object-center"
+                                />
+                                {/* Capa de gradiente */}
+                                <div className="absolute inset-0 bg-gradient-to-r from-transparent to-gray-100" />
+                            </div>
+
+                            {/* Contenido textual */}
+                            <div className="w-full md:w-1/2 p-8 flex flex-col items-start gap-2 md:text-left">
+                                <img className="w-[150px]" src="/ea-logo.svg" alt="" />
+                                <p className="text-gray-600 mt-2 text-lg md:text-xl font-serif">
+                                    Una comunidad global
+                                </p>
+                                <a
+                                    href="https://www.effectivealtruism.org"
+                                    target="_black"
+                                    className="cursor-pointer p-4 px-5 flex items-center gap-2 bg-gradient-to-r from-[#06869b] via-[#11809D] to-[#1B607A] mt-4 text-sm font-serif font-bold rounded-full hover:scale-110 transition-all duration-200"
+                                >
+                                    Effective Altruism
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="w-5 h-5"
+                                    >
+                                        <path
+                                            d="M7 17L17 7M17 7H8M17 7V16"
+                                            stroke="currentColor"
+                                            strokeWidth="2"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                        />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </section>
 
                 <Footer />
