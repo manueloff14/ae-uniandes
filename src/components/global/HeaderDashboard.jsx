@@ -1,9 +1,9 @@
 export default function HeaderDashboard({ title, user }) {
     return (
         <header className="py-5 flex items-center justify-between">
-            <h1 className="text-3xl font-extrabold">{title}</h1>
+            <h1 className="text-3xl font-extrabold text-black font-serif">{title}</h1>
             <div className="flex gap-3">
-                <div className="flex items-center justify-center bg-[#111111] rounded-full">
+                <div className="flex items-center justify-center bg-[#ffffff] rounded-full">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         x="0px"
@@ -19,7 +19,7 @@ export default function HeaderDashboard({ title, user }) {
                         ></path>
                     </svg>
                 </div>
-                <div className="flex items-center gap-3 bg-[#111111] p-3 rounded-full">
+                <div className="flex items-center gap-3 bg-[#e0e0e0] p-3 rounded-full">
                     <div className="w-[30px] h-[30px] rounded-full">
                         <img
                             src="https://cdn-icons-png.flaticon.com/512/147/147144.png"
@@ -27,7 +27,7 @@ export default function HeaderDashboard({ title, user }) {
                             className="w-full h-full object-cover"
                         />
                     </div>
-                    <span className="font-bold pr-1">
+                    <span className="font-bold pr-1 text-black font-serif">
                         {user.nombres} {user.apellidos}
                     </span>
                 </div>

@@ -1,46 +1,64 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
 import HeaderHome from "@/components/routes/HeaderHome";
 import Footer from "@/components/routes/Footer";
 
 export default function Galeria() {
-    const images = [
-        "/img/galeria/image_1.jpg",
-        "/img/galeria/image_2.jpg",
-        "/img/galeria/image_3.jpg",
-        "/img/galeria/image_4.jpg",
-        "/img/galeria/image_5.jpg",
-        "/img/galeria/image_6.jpg",
-        "/img/galeria/image_7.jpg",
-        "/img/galeria/image_8.jpg",
-        "/img/galeria/image_9.jpg",
-        "/img/galeria/image_10.jpg",
-        "/img/galeria/image_11.jpg",
-        "/img/galeria/image_12.jpg",
-        "/img/galeria/image_13.jpg",
-        "/img/galeria/image_14.jpg",
-        "/img/galeria/image_15.jpg",
-        "/img/galeria/image_16.jpg",
-        "/img/galeria/image_17.jpg",
-        "/img/galeria/image_18.jpg",
-        "/img/galeria/image_19.jpg",
-        "/img/galeria/image_20.jpg",
-    ];
-
     const [selectedImage, setSelectedImage] = useState(null);
     const [modalAnimation, setModalAnimation] = useState(false);
     const [isGalleryVisible, setIsGalleryVisible] = useState(false);
 
-    // Retrasar la visualización de las imágenes
+    const { language } = useParams(); // Se espera que la URL tenga /[language]/page.jsx, por ejemplo, /en
+    const [loading, setLoading] = useState(true);
+    const [translatedData, setTranslatedData] = useState(null);
+
+    // Hook para cargar los datos traducidos
+    useEffect(() => {
+        const savedLanguage =
+            language || localStorage.getItem("language") || "es"; // Usa language de la URL o el valor guardado
+        localStorage.setItem("language", savedLanguage);
+
+        fetch("https://aeuniandes.pythonanywhere.com/traducir", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                lang: savedLanguage,
+                section: "Galeria", // Asegúrate de que la sección sea la correcta
+            }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                setTranslatedData(data.translated_json);
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.error("Error al traducir:", error);
+                setLoading(false);
+            });
+    }, [language]);
+
+    // Retrasar la visualización de las imágenes (mover este hook antes de los retornos condicionales)
     useEffect(() => {
         const timer = setTimeout(() => {
             setIsGalleryVisible(true);
-        }, 500); // 1 segundo de delay para cargar las imágenes
+        }, 500); // 0.5 segundos de delay para cargar las imágenes
         return () => clearTimeout(timer);
     }, []);
 
-    // Modal Animations
+    // Modal: Manejo del evento de tecla Escape
+    useEffect(() => {
+        function handleKeyDown(e) {
+            if (e.key === "Escape") closeModal();
+        }
+        if (selectedImage) {
+            window.addEventListener("keydown", handleKeyDown);
+        }
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [selectedImage]);
+
+    // Funciones para controlar el modal
     function openModal(url) {
         setSelectedImage(url);
         setTimeout(() => {
@@ -55,45 +73,71 @@ export default function Galeria() {
         }, 300);
     }
 
-    useEffect(() => {
-        function handleKeyDown(e) {
-            if (e.key === "Escape") closeModal();
-        }
-        if (selectedImage) {
-            window.addEventListener("keydown", handleKeyDown);
-        }
-        return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [selectedImage]);
+    // Render condicional en base al estado de carga y datos traducidos
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-screen flex-col">
+                <img
+                    src="/ae-icon.svg"
+                    alt="Logo"
+                    className="w-[55px] h-[55px]" // Tamaño de la imagen a 55px
+                />
+                <p className="mt-4 text-sm font-bold font-serif text-black">
+                    Cargando...
+                </p>
+
+                <style jsx>{`
+                    img {
+                        animation: scale-up-down 0.5s ease-in-out infinite;
+                    }
+
+                    @keyframes scale-up-down {
+                        0% {
+                            transform: scale(1);
+                        }
+                        50% {
+                            transform: scale(1.2);
+                        }
+                        100% {
+                            transform: scale(1);
+                        }
+                    }
+                `}</style>
+            </div>
+        );
+    }
+
+    if (!translatedData) {
+        return <div>Error al cargar datos traducidos.</div>;
+    }
 
     return (
         <div>
-            <HeaderHome black={true} />
+            <HeaderHome black={true} data={translatedData} />
 
             <section className="max-w-6xl mx-auto px-4 py-8 pt-32 mb-10">
                 <div className="flex justify-center mb-4">
                     <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black font-serif">
-                        Galería AE Uniandes
+                        {translatedData.tagline}
                     </span>
                 </div>
 
                 <h2 className="text-3xl font-bold text-center text-black mb-2 font-serif">
-                    Unidos para Transformar Vidas
+                    {translatedData.title}
                 </h2>
 
                 <p className="text-center text-gray-700 mb-12 font-serif">
-                    Explora cómo nuestra comunidad está generando un impacto
-                    positivo a través del altruismo eficaz.
+                    {translatedData.description}
                 </p>
 
                 {/* Loader mientras espera mostrar la galería */}
                 {!isGalleryVisible && (
                     <div className="flex justify-center items-center py-32">
                         <div className="flex flex-col items-center gap-4">
-                            {/* Spinner */}
                             <div className="w-12 h-12 border-4 border-black border-dotted rounded-full animate-spin"></div>
-                            <p className="text-gray-600 font-serif">
+                            {/* <p className="text-gray-600 font-serif">
                                 Cargando imágenes...
-                            </p>
+                            </p> */}
                         </div>
                     </div>
                 )}
@@ -106,7 +150,7 @@ export default function Galeria() {
                             : "opacity-0 pointer-events-none"
                     }`}
                 >
-                    {images.map((url, index) => (
+                    {translatedData.fields.map((image, index) => (
                         <div
                             key={index}
                             className={`mb-4 break-inside-avoid transition-transform duration-500 ${
@@ -116,17 +160,17 @@ export default function Galeria() {
                             }`}
                         >
                             <img
-                                src={url}
+                                src={image.imageLink}
                                 alt={`Imagen de la galería ${index}`}
-                                className={`w-full h-auto rounded-3xl shadow hover:opacity-90 transition-opacity cursor-pointer`}
-                                onClick={() => openModal(url)}
+                                className="w-full h-auto rounded-3xl shadow hover:opacity-90 transition-opacity cursor-pointer"
+                                onClick={() => openModal(image.imageLink)}
                             />
                         </div>
                     ))}
                 </div>
             </section>
 
-            <Footer />
+            <Footer data={translatedData} />
 
             {/* Modal para la imagen ampliada */}
             {selectedImage && (

@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 
-export default function Footer() {
+export default function Footer({ data }) {
     return (
         <footer className="text-black py-8 px-4 md:px-20">
             <div className="mx-auto p-6 rounded-3xl bg-[#f1f1f1] shadow-lg">
@@ -10,14 +10,14 @@ export default function Footer() {
                     <div className="flex flex-col md:flex-row items-start md:items-center justify-between">
                         <div>
                             <h2 className="text-xl md:text-2xl font-semibold text-gray-800 mb-1 font-serif">
-                                ¿Quieres hacer parte del cambio?
+                                {data.Footer.heading}
                             </h2>
                             <p className="text-sm text-gray-600 mb-4 font-serif">
-                                Únete ahora para aportar
+                                {data.Footer.description}
                             </p>
                         </div>
                         <button className="flex items-center gap-2 text-sm font-bold mt-6 bg-gradient-to-r from-[#06869B] via-[#11809D] to-[#1B607A] text-white px-6 py-3 rounded-full whitespace-nowrap hover:bg-red-600 hover:shadow-2xl shadow-black">
-                            ¡Unirme ahora!
+                            {data.Footer.buttonText}
                             <svg
                                 viewBox="0 0 24 24"
                                 fill="none"
@@ -48,61 +48,22 @@ export default function Footer() {
                                 />
                             </div>
                             <span className="text-xs text-gray-500 font-serif">
-                                ¿Cómo podemos ayudar a otros de la manera más
-                                efectiva posible?
+                                {data.Footer.question}
                             </span>
                         </div>
 
                         {/* Enlaces de navegación */}
                         <ul className="flex flex-col items-start md:flex-row md:items-center gap-6 text-sm text-gray-700 [&>li>a]:font-serif">
-                            <li>
-                                <a
-                                    href="#"
-                                    className="hover:text-black transition"
-                                >
-                                    Inicio
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="hover:text-black transition"
-                                >
-                                    Acerca de AE
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="hover:text-black transition"
-                                >
-                                    Proyectos
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="hover:text-black transition"
-                                >
-                                    Eventos
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="hover:text-black transition"
-                                >
-                                    Blog
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="hover:text-black transition"
-                                >
-                                    Contacto
-                                </a>
-                            </li>
+                            {data.Footer.navItems.map((link, index) => (
+                                <li key={index}>
+                                    <a
+                                        href={link.link}
+                                        className="hover:text-black transition"
+                                    >
+                                        {link.label}
+                                    </a>
+                                </li>
+                            ))}
                         </ul>
                     </div>
                 </div>
@@ -110,8 +71,8 @@ export default function Footer() {
                 {/* Sección inferior: Copyright y redes */}
                 <div className="mt-8 pt-4 border-t border-gray-300 text-xs flex flex-col md:flex-row items-center justify-between">
                     <span className="text-gray-500 font-serif">
-                        &copy; {new Date().getFullYear()} AE Uniandes, Todos los
-                        derechos reservados.
+                        &copy; {new Date().getFullYear()} AE Uniandes,{" "}
+                        {data.Footer.copyRight}
                     </span>
                     <div className="flex gap-6 mt-4 md:mt-0">
                         {/* Redes sociales */}
@@ -183,7 +144,10 @@ export default function Footer() {
                                 ></path>
                             </svg>
                         </a>
-                        <a href="mailto:altruismoeficaz@uniandes.edu.co" className="hover:text-black hover:scale-[1.2] transition-all duration-200">
+                        <a
+                            href="mailto:altruismoeficaz@uniandes.edu.co"
+                            className="hover:text-black hover:scale-[1.2] transition-all duration-200"
+                        >
                             <img
                                 className="w-[30px] h-[30px]"
                                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAACkElEQVR4nO1Yz2sTURDeVq0i0cxL2oM/UEQQQYrgQbwIHvRP8OrRg2g9FY/zkirWY0GE3cykBW/5D7QH8dKaQ6h4EA8iiAgiomirUKqNTLIx6Wa3u/mxyRbfB3MJb2a+772ZWTKWZWBgYGBg4IPjOL8PkKdAcxmQ1pTm6iANkNbquXlKuFidIHN34YjStDJo0irQaCWLdDgaeyyNKaSXwyfNbSKEWyh/0HRr+GQ5oKwKNyMI4HJiBWheDheA/DTBAp5EaoMM8uUk9QEgv87k6KrVERBHxUkhvxvijX9QyNetUmlXdOKewzKDlaZphfx1YORRctF02/yPIiToudL3HylAngWkX/GRp3XQZKfu8URQWYcKaHm+ZcgVL7YHco5KEqV5o4/k/wByKT3jnGjPVzivND9rnI0soCmEFlW+OOk9l8X505K09zqnRcjzWW/8cXRO1eIjbbae71iAaxty636f8ww6F5Tm5100aDmNhUveeFI+UqpSTn5+3QpoJP1ZCz5rpwNq9FUoceQ39R6rjrT6T+DDlNJ0B5B/bOffk4DmlKAvkqxtSiCOAvI10PzRx+czaLptIe7e4mPbe2RUAvKnKLn7I6Bp7/3m9CG094tApekbaF6VV8s+oANbM1VH6t8ZettJzn4LcI0qmVzhijdWCu1xMe/vclZ8VBe5YhLQnChpLJ4LjJ13zvQ6uaw4Bbi1vikkD84snPwXE+1jtW8H0u9e41uxC2iW1brS9Ng135Goki0gHrOMAG1eoGpKaDvs+CYGzavDJqkCDDR9DxeA9CKxApCXdvhii26ECrDm5vYmay/KrlEl0moxocvdSvTlbgNYGpNdpNTdMBob6v8jlmplE/XmDQwMDAz+O/wFYobOTTvqX58AAAAASUVORK5CYII="

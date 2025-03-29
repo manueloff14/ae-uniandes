@@ -2,36 +2,111 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-export default function HeaderHome({ black }) {
+export default function HeaderHome({ black, data }) {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isJoinMenuOpen, setIsJoinMenuOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+    const [isMobileLanguageOpen, setIsMobileLanguageOpen] = useState(false);
 
-    // Detectar scroll inicial y cuando el usuario se mueve
+    // Manejo del idioma actual (por defecto "es")
+    const [currentLanguage, setCurrentLanguage] = useState("es");
+
+    // Obtener el idioma desde localStorage si existe
+    useEffect(() => {
+        const savedLanguage = localStorage.getItem("language");
+        if (savedLanguage) {
+            setCurrentLanguage(savedLanguage);
+        }
+    }, []);
+
+    const router = useRouter();
+
+    // Efecto para detectar scroll y aplicar estilos
     useEffect(() => {
         const handleScroll = () => {
-            const scrollPosition = window.scrollY;
-            setIsScrolled(scrollPosition > 0);
+            setIsScrolled(window.scrollY > 0);
         };
-
-        handleScroll(); // <-- Detecta scroll inicial al cargar
         window.addEventListener("scroll", handleScroll);
+        handleScroll(); // Para chequear al cargar
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+    // Función para cambiar de idioma y redirigir
+    const handleLanguageChange = (langCode) => {
+        setCurrentLanguage(langCode);
+        setIsDropdownOpen(false);
+
+        // Obtén la URL actual
+        const currentUrl = window.location.href;
+
+        // Crea una expresión regular para encontrar el primer segmento de la URL que corresponde al código de idioma
+        const updatedUrl = currentUrl.replace(
+            /(^https?:\/\/[^\/]+\/)([a-z]{2})/,
+            `$1${langCode}`
+        );
+
+        // Redirige a la nueva URL con el idioma cambiado
+        router.push(updatedUrl);
+    };
+
+    // Datos del header (si vienen de un JSON traducido)
+    const headerData = data?.Header || {};
+    const {
+        logo = {}, // { src: "...", alt: "..." }
+        navItems = [], // [{ label: "...", link: "..." }, ...]
+        ctaButton = {}, // { text: "...", subItems: [...] }
+    } = headerData;
+
+    // Opciones de idioma (ajusta banderas/rutas)
+    const languageOptions = [
+        {
+            code: "es",
+            label: "Español",
+            flag: "https://laflamencadeborgona.es/cdn/shop/articles/Bandera-Espana-La-Flamenca-de-Borgona_-Bandera-de-Espana_-Cruz-de-Borgona_-Patricia-Munoz_-VOX_-Santiago-Abascal--1685742924_7e67cc76-acee-43fc-9a43-5e0fc0b59a19.png?v=1685744221",
+        },
+        {
+            code: "en",
+            label: "English",
+            flag: "https://upload.wikimedia.org/wikipedia/commons/a/a5/Flag_of_the_United_Kingdom_%281-2%29.svg",
+        },
+        {
+            code: "fr",
+            label: "Français",
+            flag: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Flag_of_France.svg/1024px-Flag_of_France.svg.png",
+        },
+        {
+            code: "de",
+            label: "Deutsch",
+            flag: "https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Germany.svg",
+        },
+        {
+            code: "it",
+            label: "Italiano",
+            flag: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Flag_of_Italy.svg/255px-Flag_of_Italy.svg.png",
+        },
+        {
+            code: "pt",
+            label: "Português",
+            flag: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Flag_of_Portugal.svg/640px-Flag_of_Portugal.svg.png",
+        },
+    ];
+
+    // Datos del idioma actual (para mostrar la bandera y el código)
+    const currentLangData =
+        languageOptions.find((lang) => lang.code === currentLanguage) ||
+        languageOptions[0];
+
+    // Menú móvil
     const toggleMobileMenu = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
-        setIsJoinMenuOpen(false);
     };
-
+    const openJoinMenu = () => setIsJoinMenuOpen(true);
     const closeMobileMenu = () => {
         setIsMobileMenuOpen(false);
-        setIsJoinMenuOpen(false);
-    };
-
-    const openJoinMenu = () => {
-        setIsJoinMenuOpen(true);
     };
 
     const backToMainMenu = () => {
@@ -45,8 +120,8 @@ export default function HeaderHome({ black }) {
             }`}
         >
             {/* LOGO */}
-            <Link href="/" className="flex-grow basis-0">
-                <div className="flex items-center">
+            <div className="flex flex-grow basis-0 justify-start">
+                <Link href="/" className="inline-flex items-center">
                     <img
                         src={
                             black
@@ -55,65 +130,95 @@ export default function HeaderHome({ black }) {
                                 ? "/ae-logo-black.svg"
                                 : "/ae-logo.svg"
                         }
-                        className="w-[200px] lg:w-[220px]"
+                        className="w-[160px] lg:w-[200px]"
                         alt="AE Logo"
                     />
-                </div>
-            </Link>
+                </Link>
+            </div>
 
             {/* MENÚ NAVEGACIÓN (Desktop) */}
-            <nav className="hidden lg:flex items-center space-x-4">
-                <Link
-                    href="/acerca-de-ae"
-                    className="px-4 py-2 text-sm font-semibold text-black border rounded-full bg-white hover:bg-gray-100 font-serif"
-                >
-                    Acerca de AE
-                </Link>
-                <Link
-                    href="/proyectos"
-                    className="px-4 py-2 text-sm font-semibold text-black border rounded-full bg-white hover:bg-gray-100 font-serif"
-                >
-                    Proyectos
-                </Link>
-                <Link
-                    href="/eventos"
-                    className="px-4 py-2 text-sm font-semibold text-black border rounded-full bg-white hover:bg-gray-100 font-serif"
-                >
-                    Eventos
-                </Link>
-                <Link
-                    href="/galeria"
-                    className="px-4 py-2 text-sm font-semibold text-black border rounded-full bg-white hover:bg-gray-100 font-serif"
-                >
-                    Galería
-                </Link>
+            <nav className="hidden xl:flex items-center space-x-4">
+                {navItems.map((item, idx) => (
+                    <Link
+                        key={idx}
+                        href={`/${currentLanguage}/${item.link}`}
+                        className="px-4 py-2 text-xs xl:text-sm font-semibold text-black border rounded-full bg-white hover:bg-gray-100 font-serif"
+                    >
+                        {item.label}
+                    </Link>
+                ))}
             </nav>
 
-            {/* BOTONES DE ACCIÓN (Desktop) */}
-            <div className="hidden lg:flex items-center justify-end space-x-4 flex-grow basis-0">
+            {/* BOTÓN DE ACCIÓN (Desktop) */}
+            <div className="hidden xl:flex items-center justify-end space-x-4 flex-grow basis-0">
                 <div className="relative group">
-                    <div className="cursor-pointer flex items-center gap-2 px-5 py-2 text-sm font-semibold text-white border-2 border-[#06869B] bg-[#06869B] rounded-full transition-all font-serif hover:bg-white hover:text-[#06869B]">
-                        ¡Unirme!
+                    <div className="cursor-pointer flex items-center gap-2 px-5 py-2 text-xs xl:text-sm font-semibold text-white border-2 border-[#06869B] bg-[#06869B] rounded-full transition-all font-serif hover:bg-white hover:text-[#06869B]">
+                        {ctaButton.text || "¡Unirme!"}
                     </div>
-                    <div className="absolute right-0 top-full p-2 mt-2 w-56 bg-white border rounded-2xl shadow-lg invisible opacity-0 group-hover:visible group-hover:opacity-100 hover:visible hover:opacity-100 transition-all duration-300">
-                        <Link
-                            href="/join/fellowship"
-                            className="rounded-xl block px-4 py-2 text-sm text-black hover:bg-gray-100"
-                        >
-                            Intro (Arete) Fellowship
-                        </Link>
-                        <Link
-                            href="/join/newsletter"
-                            className="rounded-xl block px-4 py-2 text-sm text-black hover:bg-gray-100"
-                        >
-                            Unirse a nuestra lista de correos
-                        </Link>
-                    </div>
+                    {ctaButton.subItems && (
+                        <div className="absolute right-0 top-full p-2 mt-2 w-56 bg-white border rounded-2xl shadow-lg invisible opacity-0 group-hover:visible group-hover:opacity-100 hover:visible hover:opacity-100 transition-all duration-300">
+                            {ctaButton.subItems.map((item, idx) => (
+                                <Link
+                                    key={idx}
+                                    href={item.link}
+                                    className="rounded-xl block px-4 py-2 text-sm text-black hover:bg-gray-100"
+                                >
+                                    {item.label}
+                                </Link>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                {/* Selector de idioma (Desktop) */}
+                <div className="relative">
+                    <button
+                        className="cursor-pointer flex items-center gap-2 bg-white border p-[5px] px-3 pl-2 rounded-full"
+                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    >
+                        <img
+                            src={currentLangData.flag}
+                            alt={currentLangData.code}
+                            className="w-7 h-7 rounded-full object-cover"
+                        />
+                        <span className="text-black font-serif text-xs">
+                            {currentLangData.code.toUpperCase()}
+                        </span>
+                        <img
+                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAqklEQVR4nO3ZQQrCQBBE0e8JDdJDFvHsLgwKQW8QQQmM4MLsq5t6ILhM8SeQKJhJacATuAEDSR2AB/DunxUYSWr5GZJ6zKlffIkx8WfMCziTUHiMqHAZUeEyosJlRLmMKpdR5TKqSpUZd17OBoqMmSky5EoyJY5W27nZJxLxCBUuocIlVLiECpdQ4RIqmh8ARbQKJY5V/gydK4zY3CuM+B6t7UeCS/9uVtUHEhTs/ZXHkMQAAAAASUVORK5CYII="
+                            alt="forward--v1"
+                            className={`w-[10px] transition-transform duration-300 ${
+                                isDropdownOpen
+                                    ? "rotate-[270deg]"
+                                    : "rotate-[90deg]"
+                            }`}
+                        />
+                    </button>
+                    {isDropdownOpen && (
+                        <div className="absolute right-0 top-full p-2 mt-4 w-56 bg-white border rounded-2xl shadow-lg transition-all duration-300">
+                            {languageOptions.map((lang, idx) => (
+                                <div
+                                    key={idx}
+                                    className="rounded-xl flex items-center gap-2 px-4 py-2 text-sm text-black hover:bg-gray-100 cursor-pointer"
+                                    onClick={() =>
+                                        handleLanguageChange(lang.code)
+                                    }
+                                >
+                                    <img
+                                        src={lang.flag}
+                                        alt={lang.code}
+                                        className="w-6 h-6 rounded-full object-cover"
+                                    />
+                                    <span>{lang.label}</span>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
 
             {/* BOTÓN DEL MENÚ MÓVIL */}
-            <div className="lg:hidden">
+            <div className="xl:hidden">
                 <button
                     type="button"
                     onClick={toggleMobileMenu}
@@ -148,7 +253,7 @@ export default function HeaderHome({ black }) {
                 </button>
             </div>
 
-            {/* MENÚ MÓVIL ANIMADO */}
+            {/* MENÚ MÓVIL */}
             <div
                 className={`fixed inset-0 z-[99] bg-black bg-opacity-50 transition-opacity duration-300 ${
                     isMobileMenuOpen
@@ -160,10 +265,10 @@ export default function HeaderHome({ black }) {
                 <div
                     className={`absolute top-0 right-0 h-full w-64 bg-white shadow-xl transition-transform duration-300 ${
                         isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
-                    } flex flex-col justify-between`} // <-- Panel y contenido sincronizado
+                    } flex flex-col justify-between overflow-y-auto`}
                     onClick={(e) => e.stopPropagation()}
                 >
-                    {/* CABECERA del menú */}
+                    {/* CABECERA DEL MENÚ */}
                     <div className="flex justify-end p-4">
                         <button
                             onClick={closeMobileMenu}
@@ -196,44 +301,90 @@ export default function HeaderHome({ black }) {
                         </button>
                     </div>
 
-                    {/* CONTENIDO DEL MENÚ */}
-                    <div className="flex-1 p-6">
+                    {/* CONTENIDO DEL MENÚ MÓVIL */}
+                    <div className="flex-1 p-6 pt-2">
                         {!isJoinMenuOpen ? (
-                            <div className="flex flex-col space-y-4">
-                                <Link
-                                    href="/acerca-de-ae"
-                                    onClick={closeMobileMenu}
-                                    className="block text-black py-2 px-4 rounded hover:bg-gray-100 font-serif"
-                                >
-                                    Acerca de AE
-                                </Link>
-                                <Link
-                                    href="/proyectos"
-                                    onClick={closeMobileMenu}
-                                    className="block text-black py-2 px-4 rounded hover:bg-gray-100 font-serif"
-                                >
-                                    Proyectos
-                                </Link>
-                                <Link
-                                    href="/eventos"
-                                    onClick={closeMobileMenu}
-                                    className="block text-black py-2 px-4 rounded hover:bg-gray-100 font-serif"
-                                >
-                                    Eventos
-                                </Link>
-                                <Link
-                                    href="/galeria"
-                                    onClick={closeMobileMenu}
-                                    className="block text-black py-2 px-4 rounded hover:bg-gray-100 font-serif"
-                                >
-                                    Galería
-                                </Link>
+                            <div className="flex flex-col space-y-4 lg:space-y-2">
+                                {navItems.map((item, idx) => (
+                                    <Link
+                                        key={idx}
+                                        href={`/${currentLanguage}/${item.link}`}
+                                        onClick={closeMobileMenu}
+                                        className="block text-black py-2 px-4 rounded hover:bg-gray-100 font-serif lg:text-xs"
+                                    >
+                                        {item.label}
+                                    </Link>
+                                ))}
+
+                                {/* Selector de idioma en menú móvil */}
+                                <div className="mt-6">
+                                    <button
+                                        onClick={() =>
+                                            setIsMobileLanguageOpen(
+                                                !isMobileLanguageOpen
+                                            )
+                                        }
+                                        className="w-full flex justify-between items-center px-4 py-2 text-black font-serif lg:text-xs font-bold hover:bg-gray-100 rounded-xl"
+                                    >
+                                        Idioma
+                                        <svg
+                                            className={`w-4 h-4 transition-transform ${
+                                                isMobileLanguageOpen
+                                                    ? "rotate-180"
+                                                    : "rotate-0"
+                                            }`}
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M19 9l-7 7-7-7"
+                                            />
+                                        </svg>
+                                    </button>
+                                    {isMobileLanguageOpen && (
+                                        <div className="flex flex-wrap gap-2 px-0 w-full pt-2">
+                                            {languageOptions.map(
+                                                (lang, idx) => (
+                                                    <button
+                                                        key={idx}
+                                                        onClick={() => {
+                                                            handleLanguageChange(
+                                                                lang.code
+                                                            );
+                                                            closeMobileMenu();
+                                                        }}
+                                                        className={`w-full flex items-center gap-2 py-2 px-2 rounded-2xl hover:bg-gray-100 ${
+                                                            currentLanguage ===
+                                                            lang.code
+                                                                ? "bg-gray-200"
+                                                                : ""
+                                                        }`}
+                                                    >
+                                                        <img
+                                                            src={lang.flag}
+                                                            alt={lang.code}
+                                                            className="w-6 h-6 lg:w-[15px] lg:h-[15px] rounded-full object-cover"
+                                                        />
+                                                        <span className="text-black font-serif text-sm lg:text-xs">
+                                                            {lang.label}
+                                                        </span>
+                                                    </button>
+                                                )
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         ) : (
                             <div className="flex flex-col space-y-4">
                                 <button
                                     onClick={backToMainMenu}
-                                    className="flex items-center text-black text-sm mb-4"
+                                    className="flex items-center text-black text-sm lg:text-xs mb-4"
                                 >
                                     <svg
                                         className="w-4 h-4 mr-2"
@@ -246,36 +397,31 @@ export default function HeaderHome({ black }) {
                                     >
                                         <polyline points="15 18 9 12 15 6" />
                                     </svg>
-                                    Volver
+                                    {data.Header.ctaButton.extraTexts.back}
                                 </button>
-
-                                <Link
-                                    href="/join/fellowship"
-                                    onClick={closeMobileMenu}
-                                    className="block text-black py-2 px-4 rounded hover:bg-gray-100 font-serif"
-                                >
-                                    Intro (Arete) Fellowship
-                                </Link>
-
-                                <Link
-                                    href="/join/newsletter"
-                                    onClick={closeMobileMenu}
-                                    className="block text-black py-2 px-4 rounded hover:bg-gray-100 font-serif"
-                                >
-                                    Unirse a nuestra lista de correos
-                                </Link>
+                                {ctaButton.subItems &&
+                                    ctaButton.subItems.map((item, idx) => (
+                                        <Link
+                                            key={idx}
+                                            href={item.link}
+                                            onClick={closeMobileMenu}
+                                            className="block text-black py-2 px-4 rounded lg:text-xs hover:bg-gray-100 font-serif"
+                                        >
+                                            {item.label}
+                                        </Link>
+                                    ))}
                             </div>
                         )}
                     </div>
 
-                    {/* BOTÓN ¡Unirme! siempre abajo */}
+                    {/* BOTÓN ¡Unirme! MÓVIL */}
                     {!isJoinMenuOpen && (
                         <div className="p-6">
                             <button
                                 onClick={openJoinMenu}
-                                className="block w-full text-center text-white bg-[#06869B] px-5 py-3 rounded-full font-serif font-semibold hover:bg-[#056b7c] transition-all"
+                                className="block w-full text-center text-white bg-[#06869B] px-5 py-3 lg:px-2 lg:text-xs rounded-full font-serif font-semibold hover:bg-[#056b7c] transition-all"
                             >
-                                ¡Unirme!
+                                {ctaButton.text || "¡Unirme!"}
                             </button>
                         </div>
                     )}
