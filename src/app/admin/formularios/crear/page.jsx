@@ -1,9 +1,19 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useState, useRef } from "react";
-import { FormBuilder } from "@formio/react";
-import ToastEditor from "@/components/ToastEditor"; // Asegúrate de que la ruta es correcta
 import "formiojs/dist/formio.full.min.css";
+
+// Importamos FormBuilder sólo en cliente
+const FormBuilder = dynamic(
+    () => import("@formio/react").then((mod) => mod.FormBuilder),
+    { ssr: false }
+);
+
+// Importamos ToastEditor sólo en cliente
+const ToastEditor = dynamic(() => import("@/components/ToastEditor"), {
+    ssr: false,
+});
 
 export default function FormioBuilder() {
     const [form, setForm] = useState({
@@ -19,27 +29,27 @@ export default function FormioBuilder() {
     });
 
     const [titulo, setTitulo] = useState("");
-    // Valor inicial para el editor
     const [descripcion, setDescripcion] = useState("¡Empieza a escribir aquí!");
     const editorRef = useRef();
 
-    // Al guardar, se obtiene el markdown del ToastEditor y se envía junto al formulario
     const handleSave = async () => {
         const markdown = editorRef.current.obtenerMarkdown();
 
         const formData = {
             titulo,
-            descripcion: markdown, // Usamos el contenido del editor como descripción (en formato Markdown)
+            descripcion: markdown,
             schema: form,
         };
 
         try {
-            const res = await fetch("https://aeuniandes.pythonanywhere.com/api/crear-form", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData),
-            });
-
+            const res = await fetch(
+                "https://aeuniandes.pythonanywhere.com/api/crear-form",
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(formData),
+                }
+            );
             const data = await res.json();
             if (res.ok) {
                 alert(`✅ Guardado: ID ${data.id}`);
@@ -73,7 +83,7 @@ export default function FormioBuilder() {
                     />
                 </div>
 
-                {/* Editor de Descripción usando ToastEditor global */}
+                {/* Editor de Descripción */}
                 <div className="mb-5">
                     <label className="form-label fw-bold">Descripción</label>
                     <ToastEditor ref={editorRef} initialValue={descripcion} />
