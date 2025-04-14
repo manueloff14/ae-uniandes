@@ -152,7 +152,7 @@ export default function LoginPage() {
                 </section>
             </main>
 
-            <Footer />
+            {/* <Footer /> */}
         </>
     );
 }

@@ -95,7 +95,11 @@ export default function Home() {
 
                     // Si no hay match (raro, pero por seguridad), devolvemos la palabra tal cual
                     if (!match) {
-                        return <span key={index} className="font-serif">{word} </span>;
+                        return (
+                            <span key={index} className="font-serif">
+                                {word}{" "}
+                            </span>
+                        );
                     }
 
                     const prefix = match[1] || ""; // Signos de interrogación iniciales
@@ -106,7 +110,7 @@ export default function Home() {
                     if (core.toLowerCase().startsWith("ef")) {
                         // Resaltamos solo el núcleo, manteniendo prefijo/sufijo normales
                         return (
-                            <span key={index} className="font-serif">
+                            <span key={index} className="font- text-white">
                                 {prefix}
                                 <span className="font-serif relative bg-gradient-to-r from-[#06869b] via-[#11809D] to-[#1B607A] bg-clip-text text-transparent">
                                     {core}
@@ -114,8 +118,14 @@ export default function Home() {
                                         src="/text-effect-2.svg"
                                         alt="Efecto decorativo"
                                         className={`absolute z-[-1] left-1/2 -translate-x-1/2 top-full mt-[-20px] md:mt-[-30px] sm:mt-[-30px] lg:mt-[-40px] w-[80%] h-auto rotate-[-2.5deg] scale-x-[-1] ${
-                                            language === 'pt' ? 'lg:mt-[-30px]' : '' 
-                                        } ${language === 'de' ? 'lg:mt-[-45px]' : ''}`}                                        
+                                            language === "pt"
+                                                ? "lg:mt-[-30px]"
+                                                : ""
+                                        } ${
+                                            language === "de"
+                                                ? "lg:mt-[-45px]"
+                                                : ""
+                                        }`}
                                     />
                                     <div className="z-[-10] absolute top-[-30px] right-0 transform w-full h-64 bg-gradient-to-r from-[white] via-[white] to-[white] opacity-20 rounded-full blur-3xl" />
                                 </span>
@@ -125,7 +135,11 @@ export default function Home() {
                     }
 
                     // Si el núcleo no empieza por “ef”, mostramos la palabra sin estilos
-                    return <span key={index} className="font-serif">{word} </span>;
+                    return (
+                        <span key={index} className="font-serif text-white">
+                            {word}{" "}
+                        </span>
+                    );
                 })}
             </>
         );
@@ -338,18 +352,18 @@ export default function Home() {
                                             <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-200"></div>
                                             <div className="absolute bottom-0 left-0 w-full p-6 text-white flex items-start justify-between backdrop-blur-sm bg-[#ffffff31] rounded-b-2xl">
                                                 <div>
-                                                    <p className="text-sm font-bold font-serif">
+                                                    <p className="text-sm font-bold font- text-white font-serif">
                                                         {
                                                             proyecto.responsableName
                                                         }
                                                     </p>
-                                                    <p className="text-sm opacity-80 font-serif">
+                                                    <p className="text-sm opacity-80 font-serif text-white">
                                                         {proyecto.vigencia
                                                             ? "Proyecto Vigente"
                                                             : "Proyecto Finalizado"}
                                                     </p>
                                                 </div>
-                                                <p className="text-sm opacity-80 font-serif">
+                                                <p className="text-sm opacity-80 font-serif text-white">
                                                     {proyecto.label}
                                                 </p>
                                             </div>
@@ -410,33 +424,33 @@ export default function Home() {
                                         </div>
 
                                         <div className="relative z-10 flex flex-col gap-1">
-                                            <span className="text-sm font-serif">
+                                            <span className="text-sm font-serif text-white">
                                                 {evento.date}
                                             </span>
-                                            <span className="text-3xl font-extrabold font-serif">
+                                            <span className="text-3xl font-extrabold font-serif text-white">
                                                 {evento.date}
                                             </span>
                                         </div>
                                         <div className="relative z-10 flex flex-col gap-2">
-                                            <h2 className="font-extrabold text-xl font-serif">
+                                            <h2 className="font-extrabold text-xl font-serif text-white">
                                                 {evento.title}
                                             </h2>
-                                            <p className="text-sm font-serif">
+                                            <p className="text-sm font-serif text-white">
                                                 {evento.description}
                                             </p>
                                         </div>
                                         <div className="relative z-10 flex items-center justify-between font-bold">
                                             <div className="flex flex-col gap-0 text-xs">
-                                                <span className="font-serif">
+                                                <span className="font-serif text-white">
                                                     s - s
                                                 </span>
-                                                <span className="font-serif">
+                                                <span className="font-serif text-white">
                                                     {evento.modalidad}
                                                 </span>
                                             </div>
                                             <button className="flex items-center gap-2 font-bold mt-1">
-                                                <span className="text-sm opacity-0 translate-x-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 font-serif">
-                                                    ¡Inscribirme!
+                                                <span className="text-sm opacity-0 translate-x-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 font-serif text-white">
+                                                    {evento.inscribirme}
                                                 </span>
                                                 <svg
                                                     viewBox="0 0 24 24"
@@ -446,7 +460,7 @@ export default function Home() {
                                                 >
                                                     <path
                                                         d="M7 17L17 7M17 7H8M17 7V16"
-                                                        stroke="currentColor"
+                                                        stroke="white"
                                                         strokeWidth="2"
                                                         strokeLinecap="round"
                                                         strokeLinejoin="round"
