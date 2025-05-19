@@ -33,7 +33,8 @@
 }
 
 * {
-    color: black;
+    /* color: black; */
+    font-family: serif;
 }
 
 body {

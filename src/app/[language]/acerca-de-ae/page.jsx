@@ -26,7 +26,7 @@ export default function AcercaAEPage() {
             language || localStorage.getItem("language") || "es"; // Usa language de la URL o el valor guardado
         localStorage.setItem("language", savedLanguage);
 
-        fetch("https://aeuniandes.pythonanywhere.com/traducir", {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/traducir`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -152,7 +152,7 @@ export default function AcercaAEPage() {
                     </p>
 
                     {/* Contenedor de voluntarios */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 font-serif">
+                    <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-8 font-serif">
                         {translatedData?.voluntarios?.miembros?.map(
                             (member) => (
                                 <div
@@ -191,7 +191,7 @@ export default function AcercaAEPage() {
                     ></div>
 
                     <div
-                        className={`relative bg-[#f1f1f1] shadow-xl shadow-gray-300 rounded-3xl p-8 max-w-3xl w-full mx-4 z-50 transform transition-all duration-300 h-auto overflow-y-auto ${
+                        className={`relative bg-[#f1f1f1] shadow-xl shadow-gray-300 rounded-3xl p-4 max-w-3xl w-full mx-4 z-50 transform transition-all duration-300 h-auto overflow-y-auto ${
                             modalAnimation
                                 ? "opacity-100 scale-100"
                                 : "opacity-0 scale-95"
@@ -209,7 +209,7 @@ export default function AcercaAEPage() {
                             {/* Panel Izquierdo */}
                             <div className="md:w-1/3 border-r border-gray-300 pr-4 flex flex-col items-center">
                                 <img
-                                    src={selectedMember.image}
+                                    src={selectedMember.imageLink}
                                     alt={`Integrante ${selectedMember.name}`}
                                     className="w-[150px] h-[150px] rounded-3xl object-cover mb-4"
                                 />
@@ -308,18 +308,38 @@ export default function AcercaAEPage() {
                                             </svg>
                                         </a>
                                     </div>
-                                    <p className="text-gray-800 mb-2">
+                                    {/* <p className="text-gray-800 mb-2">
                                         <strong>Nacimiento:</strong>{" "}
                                         {selectedMember.dob}
-                                    </p>
+                                    </p> */}
                                     <p className="text-gray-800 mb-4">
                                         <strong>Estudios:</strong>{" "}
                                         {selectedMember.studies}
                                     </p>
+                                    <p className="text-gray-800 mb-4">
+                                        <strong>Universidad:</strong>{" "}
+                                        <a
+                                            href="https://www.uniandes.edu.co"
+                                            target="_black"
+                                        >
+                                            Universidad de Los Andes
+                                        </a>
+                                    </p>
+
+                                    <div className="text-center">
+                                        <span className="font-bold text-center">Agendar uno a uno</span>
+                                        <a className="mt-2 bg-white border rounded-xl p-2 px-3" href="https://calendly.com/denverparamo19/30min?month=2025-05" target="_blank" >
+                                            <img
+                                                className=""
+                                                src="https://images.squarespace-cdn.com/content/v1/61afae73df19ee3879a26ab9/1638903671873-B54ETTH512UZRSHSG1FA/CC_CalendlyLogo.png"
+                                                alt=""
+                                            />
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="md:w-2/3 pl-4 mt-4 md:mt-0 h-[400px] overflow-y-auto custom-scrollbar pr-2">
+                            <div className="md:w-2/3 pl-4 mt-4 md:mt-0 h-[550px] overflow-y-auto custom-scrollbar pr-2">
                                 <ReactMarkdown className="prose text-black">
                                     {selectedMember.bio}
                                 </ReactMarkdown>

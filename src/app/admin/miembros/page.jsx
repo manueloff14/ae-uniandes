@@ -105,23 +105,27 @@ function EditUserModal({ user, onClose }) {
                         className="rounded-full w-14 h-14 mr-4"
                     />
                     <div>
-                        <p className="text-xl font-semibold text-black mb-2">
+                        <p className="text-xl font-semibold text-black mb-2 font-serif">
                             {user.nombre}
                         </p>
-                        <p className="text-xs text-gray-500">{user.correo}</p>
+                        <p className="text-xs text-gray-500 font-serif">
+                            {user.correo}
+                        </p>
                     </div>
                 </div>
 
                 {/* Campos editables */}
-                <div className="space-y-4 text-sm">
+                <div className="space-y-4 text-sm font-serif">
                     <div>
                         <label className="block text-sm text-gray-900 mb-2">
                             Foto de Perfil
                         </label>
                         <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleFileChange}
+                            type="text"
+                            name="foto"
+                            id="foto"
+                            value={foto}
+                            onChange={(e) => setFoto(e.target.value)}
                             className="w-full p-3 bg-[#e2e2e2] text-black rounded-xl focus:outline-none"
                         />
                     </div>
@@ -173,7 +177,7 @@ function EditUserModal({ user, onClose }) {
                         />
                         <button
                             onClick={generarContrasena}
-                            className="mt-2 text-sm text-blue-400 underline"
+                            className="mt-2 text-sm text-blue-400 underline font-serif"
                         >
                             Generar contraseña aleatoria
                         </button>
@@ -181,7 +185,7 @@ function EditUserModal({ user, onClose }) {
                 </div>
 
                 {/* Botones de acción */}
-                <div className="mt-6 flex justify-between text-sm font-bold">
+                <div className="mt-6 flex justify-between text-xs font-bold font-serif">
                     <button
                         onClick={handleDelete}
                         className="flex items-center gap-2 p-3 border-2 border-transparent bg-red-600 rounded-2xl hover:border-[red] transition-all duration-200"
@@ -270,8 +274,8 @@ function AddUserModal({ onClose, onAddUser }) {
     return (
         <div
             className={`
-        fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50
-        transition-opacity duration-300 ease-out
+        fixed inset-0 z-50 flex items-center justify-center bg-[#ffffff9d] bg-opacity-50
+        transition-opacity duration-300 ease-out backdrop-blur-[3px]
         ${
             isOpen
                 ? "opacity-100 pointer-events-auto"
@@ -284,37 +288,39 @@ function AddUserModal({ onClose, onAddUser }) {
         >
             <div
                 className={`
-          bg-[#111111] w-[500px] max-w-full p-6 rounded-2xl shadow-lg relative
+          bg-[#ececec] w-[500px] max-w-full p-6 rounded-2xl shadow-lg relative
           transform transition-transform duration-300 ease-out
           ${isOpen ? "scale-100" : "scale-95"}
         `}
                 onClick={(e) => e.stopPropagation()}
             >
-                <h2 className="text-xl font-semibold text-white mb-4">
+                <h2 className="text-xl font-semibold text-black mb-4 font-serif">
                     Agregar Nuevo Miembro
                 </h2>
 
-                <div className="space-y-4 text-sm">
+                <div className="space-y-4 text-sm font-serif">
                     {/* Campo para foto de perfil */}
                     <div>
-                        <label className="block text-sm text-gray-300 mb-2">
+                        <label className="block text-sm text-gray-800 mb-2">
                             Foto de Perfil
                         </label>
                         <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleFileChange}
-                            className="w-full p-3 bg-[#222222] text-white rounded-xl focus:outline-none"
+                            type="text"
+                            name="foto"
+                            id="foto"
+                            value={foto}
+                            onChange={(e) => setFoto(e.target.value)}
+                            className="w-full p-3 bg-[#e2e2e2] text-black rounded-xl focus:outline-none"
                         />
                     </div>
 
                     {/* Campo para nombre */}
                     <div>
-                        <label className="block text-sm text-gray-300 mb-3">
+                        <label className="block text-sm text-gray-800 mb-3">
                             Nombre Completo
                         </label>
                         <input
-                            className="w-full p-3 bg-[#222222] text-white rounded-xl focus:outline-none"
+                            className="w-full p-3 bg-[#e2e2e2] text-black rounded-xl focus:outline-none"
                             type="text"
                             value={nombre}
                             onChange={(e) => setNombre(e.target.value)}
@@ -323,11 +329,11 @@ function AddUserModal({ onClose, onAddUser }) {
 
                     {/* Campo para correo */}
                     <div>
-                        <label className="block text-sm text-gray-300 mb-2">
+                        <label className="block text-sm text-gray-800 mb-2">
                             Correo
                         </label>
                         <input
-                            className="w-full p-3 bg-[#222222] text-white rounded-xl focus:outline-none"
+                            className="w-full p-3 bg-[#e2e2e2] text-black rounded-xl focus:outline-none"
                             type="email"
                             value={correo}
                             onChange={(e) => setCorreo(e.target.value)}
@@ -336,11 +342,11 @@ function AddUserModal({ onClose, onAddUser }) {
 
                     {/* Campo para rol */}
                     <div>
-                        <label className="block text-sm text-gray-300 mb-2">
+                        <label className="block text-sm text-gray-800 mb-2">
                             Rol
                         </label>
                         <select
-                            className="w-full p-3 bg-[#222222] text-white rounded-xl focus:outline-none"
+                            className="w-full p-3 bg-[#e2e2e2] text-black rounded-xl focus:outline-none"
                             value={rol}
                             onChange={(e) => setRol(e.target.value)}
                         >
@@ -352,18 +358,18 @@ function AddUserModal({ onClose, onAddUser }) {
 
                     {/* Campo para contraseña */}
                     <div>
-                        <label className="block text-sm text-gray-300 mb-2">
+                        <label className="block text-sm text-gray-800 mb-2">
                             Contraseña
                         </label>
                         <input
-                            className="w-full p-3 bg-[#222222] text-white rounded-xl focus:outline-none"
+                            className="w-full p-3 bg-[#e2e2e2] text-black rounded-xl focus:outline-none"
                             type="text"
                             value={nuevaContrasena}
                             onChange={(e) => setNuevaContrasena(e.target.value)}
                         />
                         <button
                             onClick={generarContrasena}
-                            className="mt-2 text-sm text-blue-400 underline"
+                            className="mt-2 text-sm text-blue-400 underline font-serif"
                         >
                             Generar contraseña aleatoria
                         </button>
@@ -371,7 +377,7 @@ function AddUserModal({ onClose, onAddUser }) {
                 </div>
 
                 {/* Botones: Solo Cancelar y Agregar usuario */}
-                <div className="mt-6 flex justify-end space-x-2 text-sm font-bold">
+                <div className="mt-6 flex justify-end space-x-2 text-xs font-bold font-serif">
                     <button
                         onClick={handleClose}
                         className="p-3 border-2 border-gray-600 rounded-xl hover:border-gray-400 transition-all duration-200"
@@ -430,7 +436,7 @@ export default function MiembrosPanel() {
                     <div>
                         <HeaderDashboard title="Miembros" user={user} />
 
-                        <div className="flex gap-6 mt-4">
+                        <div className="flex items-start gap-6 pt-32">
                             {/* Sección izquierda: Tabla de miembros */}
                             <div className="w-2/3">
                                 <div className="flex items-center justify-between mb-4">
@@ -588,8 +594,8 @@ export default function MiembrosPanel() {
                             </div>
 
                             {/* Sección derecha: Panel de información del usuario actual */}
-                            <div className="w-1/3 bg-[#111111] p-4 rounded-2xl border border-gray-900">
-                                <h2 className="text-xl font-bold mb-4 text-white">
+                            <div className="w-1/3 bg-[#ececec] p-4 rounded-2xl border border-gray-200">
+                                <h2 className="text-xl font-bold mb-4 text-black font-serif">
                                     Tú
                                 </h2>
 
@@ -600,20 +606,20 @@ export default function MiembrosPanel() {
                                         className="rounded-full w-14 h-14 mr-4"
                                     />
                                     <div>
-                                        <p className="font-semibold text-white">
-                                            {user?.name || "Nombre del Usuario"}
+                                        <p className="font-semibold text-black font-serif">
+                                            {user?.nombres + " " + user?.apellidos || "Nombre del Usuario"}
                                         </p>
-                                        <p className="text-sm text-gray-400">
-                                            {user?.email || "email@ejemplo.com"}
+                                        <p className="text-sm text-gray-400 font-serif">
+                                            {user?.correo || "email@ejemplo.com"}
                                         </p>
                                     </div>
                                 </div>
 
-                                <p className="text-white mb-2">
+                                <p className="text-black mb-2 font-serif">
                                     <span className="font-semibold">Rol: </span>
                                     {user?.role || "Administrador"}
                                 </p>
-                                <p className="text-white">
+                                <p className="text-black font-serif">
                                     <span className="font-semibold">
                                         Fecha de creación:{" "}
                                     </span>

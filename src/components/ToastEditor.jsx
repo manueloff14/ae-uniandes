@@ -20,7 +20,7 @@ const ToastEditor = forwardRef(({ initialValue = "" }, ref) => {
     }));
 
     return (
-        <div style={{ maxWidth: "800px", margin: "2rem auto" }}>
+        <div style={{ margin: "" }}>
             <Editor
                 initialValue={initialValue}
                 previewStyle="vertical"

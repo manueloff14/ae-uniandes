@@ -97,12 +97,19 @@ export default function FormView() {
                         </div>
                     )}
                     <hr className="mb-4" />
-                    <div className="text-lg font-serif mb-4 font-bold">
+                    {/* <div className="text-lg font-serif mb-4 font-bold">
                         Rellena el formulario
-                    </div>
+                    </div> */}
                     <div className="form-container mb-8">
                         {/* Se le pasa el controlador onSubmit para interceptar el envío */}
                         <Form form={formSchema} onSubmit={handleSubmit} />
+                        {/* <a
+                            className="bg-red-500 p-3 text-white"
+                            target="_blank"
+                            href="https://docs.google.com/forms/d/e/1FAIpQLScLJYC_psHxRF5jD4_LfAckJILUmP73ev8Dw6-EP1Lp5-ztFQ/viewform"
+                        >
+                            Completar formulario
+                        </a> */}
                     </div>
                 </div>
             </main>

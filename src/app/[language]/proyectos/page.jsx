@@ -19,7 +19,7 @@ export default function Proyectos() {
             language || localStorage.getItem("language") || "es"; // Usa language de la URL o el valor guardado
         localStorage.setItem("language", savedLanguage);
 
-        fetch("https://aeuniandes.pythonanywhere.com/traducir", {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/traducir`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

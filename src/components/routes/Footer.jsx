@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 
-export default function Footer({ data }) {
+export default function Footer({ data, unirmeLink }) {
     return (
         <footer className="text-black py-8 px-4 md:px-20">
             <div className="mx-auto p-6 rounded-3xl bg-[#f1f1f1] shadow-lg">
@@ -16,7 +16,7 @@ export default function Footer({ data }) {
                                 {data.Footer.description}
                             </p>
                         </div>
-                        <button className="flex items-center gap-2 text-sm font-bold mt-6 bg-gradient-to-r from-[#06869B] via-[#11809D] to-[#1B607A] text-white px-6 py-3 rounded-full whitespace-nowrap hover:bg-red-600 hover:shadow-2xl shadow-black">
+                        <a href={unirmeLink} target="_black" className="flex items-center gap-2 text-sm font-bold mt-6 bg-gradient-to-r from-[#06869B] via-[#11809D] to-[#1B607A] text-white px-6 py-3 rounded-full whitespace-nowrap hover:bg-red-600 hover:shadow-2xl shadow-black">
                             {data.Footer.buttonText}
                             <svg
                                 viewBox="0 0 24 24"
@@ -32,7 +32,7 @@ export default function Footer({ data }) {
                                     strokeLinejoin="round"
                                 />
                             </svg>
-                        </button>
+                        </a>
                     </div>
 
                     {/* Sección: Logo, tagline y enlaces */}
@@ -111,6 +111,7 @@ export default function Footer({ data }) {
                             </svg>
                         </a> */}
                         <a
+                            target="_blank"
                             href="https://www.instagram.com/aeuniandes/"
                             aria-label="Instagram"
                             className="hover:text-black hover:scale-[1.2] transition-all duration-200"
@@ -128,6 +129,7 @@ export default function Footer({ data }) {
                             </svg>
                         </a>
                         <a
+                            target="_blank"
                             href="https://www.linkedin.com/company/aeuniandes"
                             aria-label="LinkedIn"
                             className="hover:text-black hover:scale-[1.2] transition-all duration-200"
@@ -145,12 +147,24 @@ export default function Footer({ data }) {
                             </svg>
                         </a>
                         <a
+                            target="_blank"
                             href="mailto:altruismoeficaz@uniandes.edu.co"
                             className="hover:text-black hover:scale-[1.2] transition-all duration-200"
                         >
                             <img
                                 className="w-[30px] h-[30px]"
                                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAACkElEQVR4nO1Yz2sTURDeVq0i0cxL2oM/UEQQQYrgQbwIHvRP8OrRg2g9FY/zkirWY0GE3cykBW/5D7QH8dKaQ6h4EA8iiAgiomirUKqNTLIx6Wa3u/mxyRbfB3MJb2a+772ZWTKWZWBgYGBg4IPjOL8PkKdAcxmQ1pTm6iANkNbquXlKuFidIHN34YjStDJo0irQaCWLdDgaeyyNKaSXwyfNbSKEWyh/0HRr+GQ5oKwKNyMI4HJiBWheDheA/DTBAp5EaoMM8uUk9QEgv87k6KrVERBHxUkhvxvijX9QyNetUmlXdOKewzKDlaZphfx1YORRctF02/yPIiToudL3HylAngWkX/GRp3XQZKfu8URQWYcKaHm+ZcgVL7YHco5KEqV5o4/k/wByKT3jnGjPVzivND9rnI0soCmEFlW+OOk9l8X505K09zqnRcjzWW/8cXRO1eIjbbae71iAaxty636f8ww6F5Tm5100aDmNhUveeFI+UqpSTn5+3QpoJP1ZCz5rpwNq9FUoceQ39R6rjrT6T+DDlNJ0B5B/bOffk4DmlKAvkqxtSiCOAvI10PzRx+czaLptIe7e4mPbe2RUAvKnKLn7I6Bp7/3m9CG094tApekbaF6VV8s+oANbM1VH6t8ZettJzn4LcI0qmVzhijdWCu1xMe/vclZ8VBe5YhLQnChpLJ4LjJ13zvQ6uaw4Bbi1vikkD84snPwXE+1jtW8H0u9e41uxC2iW1brS9Ng135Goki0gHrOMAG1eoGpKaDvs+CYGzavDJqkCDDR9DxeA9CKxApCXdvhii26ECrDm5vYmay/KrlEl0moxocvdSvTlbgNYGpNdpNTdMBob6v8jlmplE/XmDQwMDAz+O/wFYobOTTvqX58AAAAASUVORK5CYII="
+                            />
+                        </a>
+                        <a
+                            target="_blank"
+                            href="https://chat.whatsapp.com/LXkClBdqTFC6mfbyP8JIvy"
+                            className="hover:text-black hover:scale-[1.2] transition-all duration-200"
+                        >
+                            <img
+                                className="w-[27px] h-[27px]"
+                                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEKklEQVR4nO2aTYwURRTHG1BAXaarWhc0IWBEDxouJBw4G5WoGDbG+AEXbkZRQY5e/jVLCCxg4kSDDv1er1kSNWM8gCDhIEYOxBguXHCBjUGEEMJmE8KBj4Ud8maGj93u6anu6e2ZECqp08z8u371Xr167007zsPxgA536y7tgvqU4R3K0AEFHtbgMW3oem2Cx5Shf2qfyXeKwWoXg8rpilEqzVGG1irDhzTopjZcTTRBN5Xhgxr+GtFy8h4Lv6w8pkGblOHziRffZCrQORe8cTEG5+YCoYv8ugaNZAUQMU/rYrBy+ghKpTnaUGkaAaa4HQ+J5TNlmL/FX6DBx3KDMHfd7e8nMDQ/EwgXg8/WzJ0zhL4XEE7JGtqC6NnCvbUw2ikIcxdmpBeDT6eCkOjRCXfSMW6WKkQrw992evE6PL9OHmI7v+hq1PRAryW4rflkpxesm8/TVpem3NhWguAbCvzZMyg/7gAzvaL/qjZ8Kw8YZWiDjTUs0w7/w/Am8L58QPj/2IMvCaCl2J+R1iwGK3N0sQ9iQPiQnUjwXrRCdUZe50uBfmtaT9im4gX4z8dYdUNOFhn3sKcQBgH12YrE+acUSxIIcrFK0X8rvJOgnbYCkro0Ayls/n6JBk3k4168PbQADd5vLVKkNyMpyuVHNfhwTq5V1YZ+jQChUwl2otINaY0CD0eBjFqLyBlAeVFIw/AfeYJow5fCILVuR5LdoJ+manj9/ovK0NXcQMDXItwi+QJc+G+HdEAfdxrkQgqhMbWZFkdYt9Qx11LgEynFjj85QPMmq1VntAzn4DOp+2GmPqXh1174DQsecCqVWRFWlubdlTAEjbrg5+7cOxLtUp0t8L4IEOpvz18pkHR+qq6H3QsV6If7UvxxF8HLU78nNbkCb1OGLifYwIG2UpSYHRqSSzEk7jjOvP7gBbmJPfA7UZ/f/z1tCwJeFbbItrIrUaBtGEO/F+B7TsrRg/JTlpt2IzJpzLQwAp+Jch+boRG8YfmM/VkUVjZnZkIZ8uWMJAIxvNdS//3mKpL0Gf4vM5j6zl3ToF0F0PKWZTb4O7uzQWcdVGbH6inD6zMFmXw4TyjQF24/LZOmRS++6Wm0ZD/S4H+tdQx92tK0DeFpAcloM4atOo4uaF2nF6ubuilNeOBXWkI0XOvH7gXhr6wgJM1IVJfk6lL0V8sDfmd42L2iS11qRP5ssrNG/R5B11nC8MmoUiEeBHy029ypJ6Zj03aDLh9LUDnVHzsa/G53WIGHrUNsNAgFFg+6pA3/In8neIY/l+QwQzc6W7ux230DQlr14QfQRWXoZwX/Ew1aKiXspB8Bj0hXXLLmlN2T8VplKgmgbWhtNTToiDQgpM0juY8Hfim08JhRz5uor1Fp7m28QHOhDigv1dBorS9Qhx6Qoihc6z8czgMzbgONkbWg+Cdq6gAAAABJRU5ErkJggg=="
+                                alt="whatsapp--v1"
                             />
                         </a>
                     </div>

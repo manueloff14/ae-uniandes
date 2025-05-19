@@ -11,21 +11,20 @@ export default function LoginPage() {
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(true);
 
-    // Verificamos si existe un token y, de ser así, comprobamos su validez.
     useEffect(() => {
         const checkExistingToken = async () => {
             const token = localStorage.getItem("token");
             if (token) {
-                // Espera 1 segundo antes de verificar el token.
                 await new Promise((resolve) => setTimeout(resolve, 1000));
                 try {
-                    const response = await fetch("https://aeuniandes.pythonanywhere.com/api/check-auth", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({ token }),
-                    });
+                    const response = await fetch(
+                        "https://aeuniandes.pythonanywhere.com/api/check-auth",
+                        {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ token }),
+                        }
+                    );
                     if (response.ok) {
                         router.push("/admin");
                         return;
@@ -39,7 +38,6 @@ export default function LoginPage() {
                     setLoading(false);
                 }
             } else {
-                // No hay token, dejamos de cargar.
                 setLoading(false);
             }
         };
@@ -52,16 +50,17 @@ export default function LoginPage() {
         setLoading(true);
 
         try {
-            const response = await fetch("https://aeuniandes.pythonanywhere.com/api/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    correo: email,
-                    contraseña: password,
-                }),
-            });
+            const response = await fetch(
+                "https://aeuniandes.pythonanywhere.com/api/login",
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        correo: email,
+                        contraseña: password,
+                    }),
+                }
+            );
 
             const data = await response.json();
 
@@ -81,38 +80,38 @@ export default function LoginPage() {
 
     if (loading) {
         return (
-            <div className="flex h-screen justify-center items-center bg-[#111111]">
-                <p className="text-white text-2xl">Cargando...</p>
+            <div className="flex h-screen justify-center items-center bg-[#ffffff]">
+                <p className="text-black text-2xl font-serif">Cargando...</p>
             </div>
         );
     }
 
     return (
         <>
-            <header className="bg-[#111111] py-6">
-                <div className="max-w-6xl mx-auto flex justify-between items-center text-white">
-                    <h1 className="text-2xl font-bold">Acceso Administrador</h1>
-                    <nav>
-                        <ul className="flex gap-6">
-                            <li>
-                                <Link href="/login" className="hover:underline">
-                                    Inicio
-                                </Link>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </header>
-
-            <main>
-                <section className="py-16 px-6 lg:px-28">
-                    <div className="max-w-lg mx-auto bg-[#111111] p-8 rounded-3xl shadow-lg">
-                        <h2 className="text-3xl font-bold text-center text-white mb-6">
-                            Iniciar sesión como Administrador
+            <main className="flex h-screen w-screen justify-center items-center bg-[#ffffff]">
+                <div className="flex flex-col items-center gap-4">
+                    <div className="max-w-md w-full bg-[#EDEDED] p-8 rounded-3xl shadow-lg">
+                        <img
+                            src="/ae-logo-black.svg"
+                            alt="Altruismo Eficaz Uniandes"
+                            className="w-[170px] mx-auto"
+                        />
+                        <h2 className="text-3xl font-bold text-center text-black my-6 mb-2 font-serif">
+                            Iniciar sesión
                         </h2>
-                        <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
+                        <p className="text-sm text-center text-gray-800 font-serif px-4 mb-10">
+                            Ingresa tus datos para acceder al panel de
+                            administración del sitio web AE Uniandes
+                        </p>
+                        <form
+                            className="flex flex-col gap-4"
+                            onSubmit={handleSubmit}
+                        >
                             <div>
-                                <label htmlFor="email" className="text-sm text-gray-300">
+                                <label
+                                    htmlFor="email"
+                                    className="text-sm text-gray-600 font-serif"
+                                >
                                     Correo electrónico
                                 </label>
                                 <input
@@ -120,22 +119,26 @@ export default function LoginPage() {
                                     type="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="w-full p-3 mt-2 text-sm rounded-lg bg-gray-800 text-white border border-transparent focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                    className="w-full p-3 mt-2 text-sm rounded-2xl bg-[#F8F8F8] text-black border border-[#D0D0D0] focus:outline-none focus:ring-2 focus:ring-[#058199] font-serif"
                                     placeholder="admin@empresa.com"
                                     required
                                 />
                             </div>
-
                             <div>
-                                <label htmlFor="password" className="text-sm text-gray-300">
+                                <label
+                                    htmlFor="password"
+                                    className="text-sm text-gray-600 font-serif"
+                                >
                                     Contraseña
                                 </label>
                                 <input
                                     id="password"
                                     type="password"
                                     value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full p-3 mt-2 text-sm rounded-lg bg-gray-800 text-white border border-transparent focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                    onChange={(e) =>
+                                        setPassword(e.target.value)
+                                    }
+                                    className="w-full p-3 mt-2 text-sm rounded-2xl bg-[#F8F8F8] text-black border border-[#D0D0D0] focus:outline-none focus:ring-2 focus:ring-[#058199] font-serif"
                                     placeholder="******"
                                     required
                                 />
@@ -143,15 +146,17 @@ export default function LoginPage() {
 
                             <button
                                 type="submit"
-                                className="mt-6 bg-gradient-to-r from-blue-500 via-blue-700 to-blue-800 text-white px-6 py-3 rounded-full font-bold hover:bg-blue-600"
+                                className="font-serif mt-6 mx-auto bg-gradient-to-l from-[#1A627C] to-[#07859B] text-white px-6 py-3 rounded-full font-bold hover:bg-blue-600"
                             >
                                 Iniciar sesión
                             </button>
                         </form>
                     </div>
-                </section>
+                    <span className="text-center text-xs text-black font-serif px-10 mb-10">
+                        Uso exclusivo de los miembros de AE Uniandes.
+                    </span>
+                </div>
             </main>
-
             {/* <Footer /> */}
         </>
     );

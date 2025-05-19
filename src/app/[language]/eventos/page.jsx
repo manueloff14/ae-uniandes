@@ -24,69 +24,6 @@ export default function Eventos() {
             });
         }
     };
-
-    // Hook para cargar los datos traducidos
-    useEffect(() => {
-        const savedLanguage =
-            language || localStorage.getItem("language") || "es"; // Usa language de la URL o el valor guardado
-        localStorage.setItem("language", savedLanguage);
-
-        fetch("https://aeuniandes.pythonanywhere.com/traducir", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                lang: savedLanguage,
-                section: "Eventos", // Asegúrate de que la sección sea la correcta
-            }),
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                setTranslatedData(data.translated_json);
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.error("Error al traducir:", error);
-                setLoading(false);
-            });
-    }, [language]); // Solo depende de language
-
-    if (loading) {
-        return (
-            <div className="flex justify-center items-center h-screen flex-col">
-                <img
-                    src="/ae-icon.svg"
-                    alt="Logo"
-                    className="w-[55px] h-[55px]" // Tamaño de la imagen a 55px
-                />
-                <p className="mt-4 text-sm font-bold font-serif text-black">
-                    Cargando...
-                </p>
-
-                <style jsx>{`
-                    img {
-                        animation: scale-up-down 0.5s ease-in-out infinite; /* Animación más rápida */
-                    }
-
-                    @keyframes scale-up-down {
-                        0% {
-                            transform: scale(1);
-                        }
-                        50% {
-                            transform: scale(1.2);
-                        }
-                        100% {
-                            transform: scale(1);
-                        }
-                    }
-                `}</style>
-            </div>
-        );
-    }
-
-    if (!translatedData) {
-        return <div>Error al cargar datos traducidos.</div>;
-    }
-
     const scrollRightVigentes = () => {
         if (scrollRefVigentes.current) {
             scrollRefVigentes.current.scrollBy({
@@ -107,7 +44,6 @@ export default function Eventos() {
             });
         }
     };
-
     const scrollRightPasados = () => {
         if (scrollRefPasados.current) {
             scrollRefPasados.current.scrollBy({
@@ -117,6 +53,66 @@ export default function Eventos() {
             });
         }
     };
+
+    // Hook para cargar los datos traducidos
+    useEffect(() => {
+        const savedLanguage =
+            language || localStorage.getItem("language") || "es";
+        localStorage.setItem("language", savedLanguage);
+
+        fetch("https://aeuniandes.pythonanywhere.com/traducir", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                lang: savedLanguage,
+                section: "Eventos",
+            }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                setTranslatedData(data.translated_json);
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.error("Error al traducir:", error);
+                setLoading(false);
+            });
+    }, [language]);
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-screen flex-col">
+                <img
+                    src="/ae-icon.svg"
+                    alt="Logo"
+                    className="w-[55px] h-[55px]"
+                />
+                <p className="mt-4 text-sm font-bold font-serif text-black">
+                    Cargando...
+                </p>
+                <style jsx>{`
+                    img {
+                        animation: scale-up-down 0.5s ease-in-out infinite;
+                    }
+                    @keyframes scale-up-down {
+                        0% {
+                            transform: scale(1);
+                        }
+                        50% {
+                            transform: scale(1.2);
+                        }
+                        100% {
+                            transform: scale(1);
+                        }
+                    }
+                `}</style>
+            </div>
+        );
+    }
+
+    if (!translatedData) {
+        return <div>Error al cargar datos traducidos.</div>;
+    }
 
     return (
         <div>
@@ -134,7 +130,7 @@ export default function Eventos() {
                     <div className="absolute inset-0 bg-[#0000003a] backdrop-blur-[10px] z-[-10]" />
                 </div>
 
-                {/* Overlay adicional para oscurecer y aplicar un blur suave */}
+                {/* Overlay adicional */}
                 <div className="absolute inset-0 bg-[#00000044] backdrop-blur-[2px]" />
 
                 {/* Figuras decorativas */}
@@ -152,198 +148,40 @@ export default function Eventos() {
                 </div>
             </section>
 
-            {/* Sección Eventos Vigentes */}
-            {translatedData.eventsVigentes &&
-                translatedData.eventsVigentes.length > 0 && (
-                    <section className={`max-w-6xl mx-auto px-6 md:px-28 pt-20 ${translatedData.eventsPasados && translatedData.eventsPasados.length > 0 ? 'pb-10' : 'pb-20'}`}>
-                        <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-black text-xl font-bold font-serif">
-                                {/* Usar el título traducido si existe; si no, un fallback */}
-                                {translatedData.eventsVigentesTitle ||
-                                    "Eventos vigentes"}
-                            </h2>
-                            <div className="flex items-center gap-2">
-                                <button
-                                    onClick={scrollLeftVigentes}
-                                    className="bg-white p-2 rounded-full shadow focus:outline-none"
-                                >
-                                    <svg
-                                        className="w-5 h-5 text-gray-700"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        viewBox="0 0 24 24"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    >
-                                        <path d="M15 18l-6-6 6-6" />
-                                    </svg>
-                                </button>
-                                <button
-                                    onClick={scrollRightVigentes}
-                                    className="bg-white p-2 rounded-full shadow focus:outline-none"
-                                >
-                                    <svg
-                                        className="w-5 h-5 text-gray-700"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        viewBox="0 0 24 24"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    >
-                                        <path d="M9 18l6-6-6-6" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
+            {/* Embed Luma Calendar usando la ruta /embed */}
+            {/* <div className="max-w-6xl mx-auto px-6 md:px-28 pt-16 py-20">
+                <h2 className="text-black text-xl font-bold font-serif">
+                    {translatedData.hero.title || "Eventos"}
+                </h2>
+                <div className="py-6">
+                    <iframe
+                        src="https://lu.ma/embed/calendar/cal-UNNJDLVBWrEroMd/events"
+                        width="100%"
+                        height="600"
+                        frameBorder="0"
+                        className="rounded-lg shadow-lg"
+                        title="Calendario de Eventos"
+                        allowFullScreen
+                    />
+                </div>
+            </div> */}
 
-                        {/* Contenedor scrollable (VIGENTES) */}
-                        <div
-                            ref={scrollRefVigentes}
-                            className="overflow-x-auto flex space-x-4 no-scrollbar scroll-smooth py-1"
-                        >
-                            {translatedData.eventsVigentes.map((event, i) => (
-                                <div
-                                    key={i}
-                                    className="relative min-w-[300px] max-w-xs bg-[#f1f1f1] rounded-3xl shadow flex-shrink-0"
-                                >
-                                    {/* Imagen */}
-                                    <div className="w-full h-36 overflow-hidden rounded-t-3xl">
-                                        <img
-                                            src={event.imageLink}
-                                            alt="Foto evento"
-                                            className="w-full h-full object-cover"
-                                        />
-                                    </div>
-
-                                    {/* Etiqueta de estado */}
-                                    <span className="absolute top-2 right-2 bg-teal-600 text-white text-xs font-semibold px-2 py-1 rounded-full font-serif">
-                                        {event.status}
-                                    </span>
-
-                                    {/* Contenido */}
-                                    <div className="p-4">
-                                        <p className="text-gray-600 text-sm mb-1 font-serif">
-                                            {event.date}
-                                        </p>
-                                        <h3 className="text-lg font-semibold text-gray-800 mb-3 font-serif">
-                                            {event.title}
-                                        </h3>
-                                        <button className="inline-flex items-center space-x-1 px-4 py-2 bg-teal-600 text-white rounded-full hover:bg-teal-700 transition-colors font-serif">
-                                            <span className="font-serif">
-                                                {event.cta}
-                                            </span>
-                                            <svg
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                className="w-5 h-5"
-                                            >
-                                                <path
-                                                    d="M7 17L17 7M17 7H8M17 7V16"
-                                                    stroke="currentColor"
-                                                    strokeWidth="2"
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
-                )}
-
-            {/* Sección Eventos Pasados */}
-            {translatedData.eventsPasados &&
-                translatedData.eventsPasados.length > 0 && (
-                    <section className="max-w-6xl mx-auto px-6 md:px-28 pt-16 pb-32">
-                        <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-black text-xl font-bold font-serif">
-                                {translatedData.eventsPasadosTitle ||
-                                    "Eventos pasados"}
-                            </h2>
-                            <div className="flex items-center gap-2">
-                                <button
-                                    onClick={scrollLeftPasados}
-                                    className="bg-white p-2 rounded-full shadow focus:outline-none"
-                                >
-                                    <svg
-                                        className="w-5 h-5 text-gray-700"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        viewBox="0 0 24 24"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    >
-                                        <path d="M15 18l-6-6 6-6" />
-                                    </svg>
-                                </button>
-                                <button
-                                    onClick={scrollRightPasados}
-                                    className="bg-white p-2 rounded-full shadow focus:outline-none"
-                                >
-                                    <svg
-                                        className="w-5 h-5 text-gray-700"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        viewBox="0 0 24 24"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    >
-                                        <path d="M9 18l6-6-6-6" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* Contenedor scrollable (PASADOS) */}
-                        <div
-                            ref={scrollRefPasados}
-                            className="overflow-x-auto flex space-x-4 no-scrollbar scroll-smooth py-1"
-                        >
-                            {translatedData.eventsPasados.map((event, i) => (
-                                <div
-                                    key={i}
-                                    className="relative min-w-[300px] max-w-xs bg-[#f1f1f1] rounded-3xl shadow flex-shrink-0"
-                                >
-                                    {/* Imagen */}
-                                    <div className="w-full h-36 overflow-hidden rounded-t-3xl">
-                                        <img
-                                            src={event.imageLink}
-                                            alt="Foto evento"
-                                            className="w-full h-full object-cover"
-                                        />
-                                    </div>
-
-                                    {/* Etiqueta de estado */}
-                                    <span className="absolute top-2 right-2 bg-gradient-to-r from-[#ff3131] to-[#ff914d] text-white text-xs font-semibold px-2 py-1 rounded-full font-serif">
-                                        {event.status}
-                                    </span>
-
-                                    {/* Contenido */}
-                                    <div className="p-4">
-                                        <p className="text-gray-600 text-sm mb-1 font-serif">
-                                            {event.date}
-                                        </p>
-                                        <h3 className="text-lg font-semibold text-gray-800 mb-3 font-serif">
-                                            {event.title}
-                                        </h3>
-                                        <button className="inline-flex items-center space-x-1 px-4 py-2 bg-gradient-to-r from-[#ff3131] to-[#ff914d] text-white rounded-full transition-colors font-serif">
-                                            <span className="font-serif">
-                                                {event.cta || "Finalizado"}
-                                            </span>
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
-                )}
+            <div className="max-w-6xl mx-auto px-6 md:px-28 pt-16 py-20">
+                <h2 className="text-black text-xl font-bold font-serif">
+                    {translatedData.hero.title || "Eventos"}
+                </h2>
+                <div className="py-6">
+                    <iframe
+                        src="https://lu.ma/embed/calendar/cal-UNNJDLVBWrEroMd/events?past=true"
+                        width="100%"
+                        height="600"
+                        frameBorder="0"
+                        className="rounded-lg shadow-lg"
+                        title="Calendario de Eventos"
+                        allowFullScreen
+                    />
+                </div>
+            </div>
 
             {/* Estilos específicos para este componente */}
             <style jsx>{`

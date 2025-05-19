@@ -9,9 +9,11 @@ import Footer from "@/components/routes/Footer";
 import HeaderHome from "@/components/routes/HeaderHome";
 import Link from "next/link";
 import IdentidadSection from "@/components/routes/home/sections/IdentidadSection";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
     const [reproducir, setReproducir] = useState(false);
+    const router = useRouter();
 
     const { language } = useParams(); // Se espera que la URL tenga /[language]/page.jsx, por ejemplo, /en
     const [translatedData, setTranslatedData] = useState(null);
@@ -20,7 +22,7 @@ export default function Home() {
     useEffect(() => {
         if (language) {
             localStorage.setItem("language", language);
-            fetch("https://aeuniandes.pythonanywhere.com/traducir", {
+            fetch(`${process.env.NEXT_PUBLIC_API_URL}/traducir`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -187,11 +189,17 @@ export default function Home() {
                         </p>
 
                         <div className="flex items-center justify-center gap-2">
-                            <button className="flex items-center gap-2 text-sm font-bold mt-6 bg-gradient-to-r from-[#06869B] via-[#11809D] to-[#1B607A] text-white px-6 py-3 rounded-full whitespace-nowrap hover:bg-red-600 hover:shadow-2xl shadow-black hover:scale-105 transition-all duration-200 font-serif">
-                                {
-                                    translatedData.HeroSection.fields.buttonText
-                                        .value
-                                }
+                            <a
+                                target="_blank"
+                                href={`${translatedData.HeroSection.fields.buttonText.buttonLink}`}
+                                className="flex items-center gap-2 text-sm font-bold mt-6 bg-gradient-to-r from-[#06869B] via-[#11809D] to-[#1B607A] text-white px-6 py-3 rounded-full whitespace-nowrap hover:bg-red-600 hover:shadow-2xl shadow-black hover:scale-105 transition-all duration-200 font-serif"
+                            >
+                                <span>
+                                    {
+                                        translatedData.HeroSection.fields
+                                            .buttonText.value
+                                    }
+                                </span>
                                 <svg
                                     viewBox="0 0 24 24"
                                     fill="none"
@@ -206,7 +214,7 @@ export default function Home() {
                                         strokeLinejoin="round"
                                     />
                                 </svg>
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </section>
@@ -393,7 +401,7 @@ export default function Home() {
                     </div>
                 </section>
 
-                <section className="py-16">
+                <section className="hidden py-16">
                     <div className="max-w-6xl mx-auto px-6 md:px-28">
                         <div className="flex justify-center mb-4">
                             <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black font-serif">
@@ -489,6 +497,31 @@ export default function Home() {
                     <div className="max-w-6xl mx-auto px-6 md:px-28">
                         <div className="flex justify-center mb-4">
                             <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black font-serif">
+                                {translatedData.EventsSection.tagline}
+                            </span>
+                        </div>
+                        <h2 className="text-3xl font-bold text-center text-black mb-2 font-serif">
+                            {translatedData.EventsSection.title}
+                        </h2>
+                        <p className="text-center text-gray-700 mb-12 font-serif">
+                            {translatedData.EventsSection.description}
+                        </p>
+                        <iframe
+                            src="https://lu.ma/embed/calendar/cal-UNNJDLVBWrEroMd/events?past=true"
+                            width="100%"
+                            height="600"
+                            frameBorder="0"
+                            className="rounded-xl shadow-lg"
+                            title="Calendario de Eventos"
+                            allowFullScreen
+                        />
+                    </div>
+                </section>
+
+                <section className="py-16">
+                    <div className="max-w-6xl mx-auto px-6 md:px-28">
+                        <div className="flex justify-center mb-4">
+                            <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black font-serif">
                                 {translatedData.Biblioteca.tagline}
                             </span>
                         </div>
@@ -527,7 +560,7 @@ export default function Home() {
                             )}
                         </div>
                         <div className="flex justify-center mt-12">
-                            <Link href={"/"}>
+                            <Link href={translatedData.Biblioteca.buttonLink} target="_blank">
                                 <button className="font-serif text-black bg-white p-3 px-6 rounded-full text-sm font-bold transition-all duration-300 hover:bg-gray-200 active:scale-95 shadow-md">
                                     {translatedData.Biblioteca.buttonText}
                                 </button>
@@ -538,7 +571,7 @@ export default function Home() {
 
                 <PreguntasFrecuentes data={translatedData} />
             </main>
-            <Footer data={translatedData} />
+            <Footer data={translatedData} unirmeLink={translatedData.HeroSection.fields.buttonText.buttonLink} />
         </>
     );
 }
