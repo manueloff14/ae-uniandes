@@ -124,7 +124,7 @@ export default function Eventos() {
                 <div className="absolute inset-0 z-[-20] overflow-hidden">
                     <img
                         className="w-full h-full object-cover"
-                        src="/img/bogota.jpg"
+                        src={translatedData.hero.imageLink}
                         alt="Fondo Uniandes"
                     />
                     <div className="absolute inset-0 bg-[#0000003a] backdrop-blur-[10px] z-[-10]" />
