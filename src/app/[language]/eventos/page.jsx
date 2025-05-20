@@ -171,8 +171,8 @@ export default function Eventos() {
                     {translatedData.hero.title || "Eventos"}
                 </h2>
 
-                <div className="flex flex-col lg:flex-row items-start gap-6" >
-                    <div className="py-6 w-full">
+                <div className="flex flex-col lg:flex-row items-start gap-6 py-6">
+                    <div className="w-full">
                         <iframe
                             src="https://lu.ma/embed/calendar/cal-UNNJDLVBWrEroMd/events?past=true"
                             width="100%"
@@ -184,16 +184,32 @@ export default function Eventos() {
                         />
                     </div>
                     <div className="flex flex-col items-start w-full lg:w-[600px]">
-                        <img src="/luma-aeuniandes.png" className="w-full rounded-2xl border border-gray-400" alt="" />
+                        <a
+                            href="https://lu.ma/calendar/cal-UNNJDLVBWrEroMd/events"
+                            target="_blank"
+                        >
+                            <img
+                                src="/luma-aeuniandes.jpg"
+                                className="w-full rounded-2xl border border-gray-400"
+                                alt=""
+                            />
+                        </a>
                         <div className="mt-4">
                             <h2 className="text-xl font-bold font-serif text-black">
                                 {translatedData.hero.title || "Eventos"}
                             </h2>
-                            <p className="text-base font-serif text-black mt-2">
-                                {translatedData.hero.description || "Eventos"}
+                            <p className="text-sm font-serif text-black mt-2 mb-2">
+                                En AE Uniandes organizamos eventos para promover
+                                decisiones informadas y acciones efectivas que
+                                realmente mejoren el mundo. Cada encuentro es
+                                una oportunidad para aplicar el pensamiento
+                                crítico al servicio del bien común.
                             </p>
-                            <a href="https://lu.ma/calendar/cal-UNNJDLVBWrEroMd/events" target="_blank">
-                                <button className="w-full bg-gradient-to-r from-[#B1BDF7] to-[#E5CCF3] text-[#303030] font-bold px-4 py-3 rounded-2xl mt-4">
+                            <a
+                                href="https://lu.ma/calendar/cal-UNNJDLVBWrEroMd/events"
+                                target="_blank"
+                            >
+                                <button className="w-full bg-gradient-to-r from-[#6EC2CC] to-[#CDD0EF] text-[#1f1f1f] font-bold px-4 py-3 rounded-2xl mt-4">
                                     Ver calendario
                                 </button>
                             </a>
