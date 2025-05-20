@@ -166,20 +166,39 @@ export default function Eventos() {
                 </div>
             </div> */}
 
-            <div className="max-w-6xl mx-auto px-6 md:px-28 pt-16 py-20">
+            <div className="max-w-[90rem] mx-auto px-6 md:px-28 pt-16 py-20">
                 <h2 className="text-black text-xl font-bold font-serif">
                     {translatedData.hero.title || "Eventos"}
                 </h2>
-                <div className="py-6">
-                    <iframe
-                        src="https://lu.ma/embed/calendar/cal-UNNJDLVBWrEroMd/events?past=true"
-                        width="100%"
-                        height="600"
-                        frameBorder="0"
-                        className="rounded-lg shadow-lg"
-                        title="Calendario de Eventos"
-                        allowFullScreen
-                    />
+
+                <div className="flex flex-col lg:flex-row items-start gap-6" >
+                    <div className="py-6 w-full">
+                        <iframe
+                            src="https://lu.ma/embed/calendar/cal-UNNJDLVBWrEroMd/events?past=true"
+                            width="100%"
+                            height="600"
+                            frameBorder="0"
+                            className="rounded-lg shadow-lg"
+                            title="Calendario de Eventos"
+                            allowFullScreen
+                        />
+                    </div>
+                    <div className="flex flex-col items-start w-full lg:w-[600px]">
+                        <img src="/luma-aeuniandes.png" className="w-full rounded-2xl border border-gray-400" alt="" />
+                        <div className="mt-4">
+                            <h2 className="text-xl font-bold font-serif text-black">
+                                {translatedData.hero.title || "Eventos"}
+                            </h2>
+                            <p className="text-base font-serif text-black mt-2">
+                                {translatedData.hero.description || "Eventos"}
+                            </p>
+                            <a href="https://lu.ma/calendar/cal-UNNJDLVBWrEroMd/events" target="_blank">
+                                <button className="w-full bg-gradient-to-r from-[#B1BDF7] to-[#E5CCF3] text-[#303030] font-bold px-4 py-3 rounded-2xl mt-4">
+                                    Ver calendario
+                                </button>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
