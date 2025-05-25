@@ -1,7 +1,11 @@
 "use client";
-import Image from "next/image";
 
-export default function Footer({ data, unirmeLink }) {
+import Image from "next/image";
+import { useParams } from "next/navigation";
+
+export default function Footer({ data, unirmeLink = "https://forms.gle/6G74rJuyKTibZ1EA7" }) {
+    const { language } = useParams();
+
     return (
         <footer className="text-black py-8 px-4 md:px-20">
             <div className="mx-auto p-6 rounded-3xl bg-[#f1f1f1] shadow-lg">
@@ -57,7 +61,7 @@ export default function Footer({ data, unirmeLink }) {
                             {data.Footer.navItems.map((link, index) => (
                                 <li key={index}>
                                     <a
-                                        href={link.link}
+                                        href={`/${language}${link.link}`}
                                         className="hover:text-black transition"
                                     >
                                         {link.label}
@@ -71,7 +75,7 @@ export default function Footer({ data, unirmeLink }) {
                 {/* Sección inferior: Copyright y redes */}
                 <div className="mt-8 pt-4 border-t border-gray-300 text-xs flex flex-col md:flex-row items-center justify-between">
                     <span className="text-gray-500 font-serif">
-                        &copy; {new Date().getFullYear()} AE Uniandes,{" "}
+                        &copy; 2021 - {new Date().getFullYear()} AE Uniandes,{" "}
                         {data.Footer.copyRight}
                     </span>
                     <div className="flex gap-6 mt-4 md:mt-0">

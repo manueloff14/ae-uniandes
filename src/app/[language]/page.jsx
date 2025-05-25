@@ -391,7 +391,7 @@ export default function Home() {
 
                         <div className="flex justify-center mt-4">
                             <Link
-                                href={`${translatedData.ProjectsSection.buttonLink}`}
+                                href={`/${language}${translatedData.ProjectsSection.buttonLink}`}
                             >
                                 <button className="font-serif text-black bg-white p-3 px-6 rounded-full text-sm font-bold transition-all duration-300 hover:bg-gray-200 active:scale-95 shadow-md">
                                     {translatedData.ProjectsSection.buttonText}

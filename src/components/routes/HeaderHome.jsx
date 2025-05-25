@@ -160,7 +160,13 @@ export default function HeaderHome({ black, data }) {
                             {ctaButton.subItems.map((item, idx) => (
                                 <Link
                                     key={idx}
-                                    href={item.link}
+                                    /* sin el href contiene la palabra Fellowship incluir el language, si no, no */
+                                    href={`${
+                                        item.link.includes("fellowship")
+                                            ? `/${currentLanguage}/${item.link}`
+                                            : item.link
+                                    }`}
+                                    target={item.link.includes("fellowship") ? "_self" : "_blank"}
                                     className="rounded-xl block px-4 py-2 text-sm text-black hover:bg-gray-100"
                                 >
                                     {item.label}
