@@ -1,7 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import '@toast-ui/editor/dist/toastui-editor.css'
-import "markdown-navbar/dist/navbar.css"
+import "@toast-ui/editor/dist/toastui-editor.css";
+import "markdown-navbar/dist/navbar.css";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -21,7 +21,41 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
     return (
-        <html lang="en">
+        <html lang="es">
+            <head>
+                {/* Google tag (gtag.js) */}
+                <script
+                    async
+                    src="https://www.googletagmanager.com/gtag/js?id=G-8J4SLG11YM"
+                />
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-8J4SLG11YM');
+            `,
+                    }}
+                />
+                {/* Incluir script inline */}
+                {/* <script
+                    dangerouslySetInnerHTML={{
+                        __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+
+              gtag('config', 'G-7EHB023GJB');
+            `,
+                    }}
+                ></script>
+                <script
+                    async
+                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1449384971274211"
+                    crossorigin="anonymous"
+                ></script> */}
+            </head>
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
