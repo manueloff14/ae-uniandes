@@ -24,7 +24,7 @@ export default function RootLayout({ children }) {
         <html lang="es">
             <head>
                 {/* Google tag (gtag.js) */}
-                {/* <script
+                <script
                     async
                     src="https://www.googletagmanager.com/gtag/js?id=G-8J4SLG11YM"
                 />
@@ -37,7 +37,7 @@ export default function RootLayout({ children }) {
               gtag('config', 'G-8J4SLG11YM');
             `,
                     }}
-                /> */}
+                />
                 {/* Incluir script inline */}
                 {/* <script
                     dangerouslySetInnerHTML={{
