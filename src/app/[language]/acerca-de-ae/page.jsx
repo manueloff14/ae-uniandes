@@ -168,7 +168,7 @@ export default function AcercaAEPage() {
                                     <h3 className="text-xl font-semibold text-black font-serif">
                                         {member.name}
                                     </h3>
-                                    {/* <p className="text-gray-500">
+                                   {/*  <p className="text-gray-500">
                                         {member.role}
                                     </p> */}
                                 </div>

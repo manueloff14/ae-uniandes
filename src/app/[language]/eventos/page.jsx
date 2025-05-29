@@ -60,7 +60,7 @@ export default function Eventos() {
             language || localStorage.getItem("language") || "es";
         localStorage.setItem("language", savedLanguage);
 
-        fetch("https://aeuniandes.pythonanywhere.com/traducir", {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/traducir`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

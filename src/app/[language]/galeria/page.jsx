@@ -20,7 +20,7 @@ export default function Galeria() {
             language || localStorage.getItem("language") || "es"; // Usa language de la URL o el valor guardado
         localStorage.setItem("language", savedLanguage);
 
-        fetch("https://aeuniandes.pythonanywhere.com/traducir", {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/traducir`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -160,7 +160,7 @@ export default function Galeria() {
                             }`}
                         >
                             <img
-                                src={image.imageLink}
+                                src={`/img/galeria/${image.imageLink}`}
                                 alt={`Imagen de la galería ${index}`}
                                 className="w-full h-auto rounded-3xl shadow hover:opacity-90 transition-opacity cursor-pointer"
                                 onClick={() => openModal(image.imageLink)}
