@@ -118,7 +118,7 @@ export default function AcercaAEPage() {
                     </p>
 
                     {/* Contenedor de integrantes */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8">
+                    <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-${translatedData?.coordinadores?.miembros?.length} gap-8`}>
                         {translatedData?.coordinadores?.miembros?.map(
                             (member) => (
                                 <div
@@ -152,7 +152,7 @@ export default function AcercaAEPage() {
                     </p>
 
                     {/* Contenedor de voluntarios */}
-                    <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-8 font-serif">
+                    <div className={`grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-${translatedData?.voluntarios?.miembros?.length} gap-8 font-serif`}>
                         {translatedData?.voluntarios?.miembros?.map(
                             (member) => (
                                 <div

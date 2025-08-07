@@ -66,7 +66,7 @@ export default function HeaderHome({ black, data }) {
         {
             code: "es",
             label: "Español",
-            flag: "https://laflamencadeborgona.es/cdn/shop/articles/Bandera-Espana-La-Flamenca-de-Borgona_-Bandera-de-Espana_-Cruz-de-Borgona_-Patricia-Munoz_-VOX_-Santiago-Abascal--1685742924_7e67cc76-acee-43fc-9a43-5e0fc0b59a19.png?v=1685744221",
+            flag: "https://upload.wikimedia.org/wikipedia/commons/f/f8/Flag_of_Colombia.png",
         },
         {
             code: "en",

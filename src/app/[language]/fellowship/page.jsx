@@ -66,7 +66,7 @@ export default function Fellowship() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 lang: savedLanguage,
-                section: "Eventos",
+                section: "HomePage",
             }),
         })
             .then((res) => res.json())
