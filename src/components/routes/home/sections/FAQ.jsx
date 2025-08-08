@@ -13,7 +13,7 @@ export default function PreguntasFrecuentes({ data }) {
     return (
         <section className="py-16">
             <div className="max-w-6xl mx-auto px-6 md:px-28">
-                <h2 className="text-center text-2xl font-bold text-black mb-6 font-serif">
+                <h2 className="text-center text-2xl font-bold text-black mb-6  font-inter">
                     Preguntas Frecuentes
                 </h2>
                 <div className="space-y-4">
@@ -23,10 +23,10 @@ export default function PreguntasFrecuentes({ data }) {
                                 onClick={() => toggleFAQ(index)}
                                 className="w-full text-left flex items-center justify-between bg-[#f1f1f1] px-6 py-3 rounded-3xl lg:rounded-full"
                             >
-                                <h3 className="text-lg font-semibold text-black font-serif">
+                                <h3 className="text-lg font-semibold text-black  font-inter">
                                     {faq.question}
                                 </h3>
-                                <span className="text-black text-sm ml-2 font-serif">
+                                <span className="text-black text-sm ml-2  font-inter">
                                     {activeIndex === index ? "-" : "+"}
                                 </span>
                             </button>
@@ -38,7 +38,7 @@ export default function PreguntasFrecuentes({ data }) {
                                 }`}
                             >
                                 <div className="mt-2 bg-[#f1f1f1] rounded-3xl px-5 py-3">
-                                    <p className="text-gray-900 text-sm leading-relaxed font-serif">
+                                    <p className="text-gray-900 text-sm leading-relaxed  font-inter">
                                         {faq.answer}
                                     </p>
                                 </div>

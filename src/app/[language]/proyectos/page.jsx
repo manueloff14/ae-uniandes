@@ -46,7 +46,7 @@ export default function Proyectos() {
                     alt="Logo"
                     className="w-[55px] h-[55px]" // Tamaño de la imagen a 55px
                 />
-                <p className="mt-4 text-sm font-bold font-serif text-black">
+                <p className="mt-4 text-sm font-bold font-inter text-black">
                     Cargando...
                 </p>
 
@@ -120,10 +120,10 @@ export default function Proyectos() {
 
                 {/* Contenido principal */}
                 <div className="relative z-10 px-6 md:px-12 lg:px-20 xl:px-56 pt-32 pb-32">
-                    <h1 className="font-bold font-serif mb-5 text-4xl sm:text-5xl md:text-6xl lg:text-7xl w-[90%] mx-auto text-white">
+                    <h1 className="font-bold font-inter mb-5 text-4xl sm:text-5xl md:text-6xl lg:text-7xl w-[90%] mx-auto text-white">
                         {translatedData.hero.title}
                     </h1>
-                    <p className="mb-8 text-base md:text-lg mx-auto w-[80%] md:w-[60%] lg:w-[40%] text-gray-200 font-serif">
+                    <p className="mb-8 text-base md:text-lg mx-auto w-[80%] md:w-[60%] lg:w-[40%] text-gray-200 font-inter">
                         {translatedData.hero.description}
                     </p>
                 </div>
@@ -132,7 +132,7 @@ export default function Proyectos() {
             {/* Sección de Proyectos (una sola) */}
             <section className="max-w-6xl mx-auto px-6 md:px-28 pt-20 pb-20">
                 <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-black text-xl font-bold font-serif">
+                    <h2 className="text-black text-xl font-bold font-inter">
                         {translatedData.projects.title}
                     </h2>
                     <div className="flex items-center gap-2">
@@ -195,10 +195,10 @@ export default function Proyectos() {
 
                             {/* Contenido */}
                             <div className="p-4">
-                                <h3 className="text-lg font-semibold text-gray-800 mb-2 font-serif">
+                                <h3 className="text-lg font-semibold text-gray-800 mb-2 font-inter">
                                     {event.title}
                                 </h3>
-                                <p className="text-gray-700 text-sm mb-4 font-serif">
+                                <p className="text-gray-700 text-sm mb-4 font-inter">
                                     {event.description}
                                 </p>
                             </div>
@@ -209,14 +209,14 @@ export default function Proyectos() {
 
             <section className="bg-white mb-36">
                 <div className="flex justify-center mb-4">
-                    <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black font-serif">
+                    <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black font-inter">
                         {translatedData.sendProject.tagline}
                     </span>
                 </div>
-                <h2 className="text-3xl font-bold text-center text-black mb-2 font-serif">
+                <h2 className="text-3xl font-bold text-center text-black mb-2 font-inter">
                     {translatedData.sendProject.title}
                 </h2>
-                <p className="text-center text-gray-700 mb-12 font-serif">
+                <p className="text-center text-gray-700 mb-12 font-inter">
                     {translatedData.sendProject.description}
                 </p>
                 <div className="max-w-6xl mx-auto px-4 py-12">
@@ -234,7 +234,7 @@ export default function Proyectos() {
 
                         {/* Contenido textual */}
                         <div className="w-full md:w-1/2 p-8 flex flex-col items-start gap-2 md:text-left">
-                            <h2 className="text-gray-900 mt-2 text-2xl font-bold font-serif">
+                            <h2 className="text-gray-900 mt-2 text-2xl font-bold font-inter">
                                 {translatedData.sendProject.box.text}
                             </h2>
                             <a
@@ -243,7 +243,7 @@ export default function Proyectos() {
                                         .buttonLink
                                 }
                                 target="_black"
-                                className="cursor-pointer p-4 px-5 flex items-center gap-2 bg-gradient-to-r from-[#06869b] via-[#11809D] to-[#1B607A] mt-4 text-sm font-serif font-bold rounded-full hover:scale-110 transition-all duration-200"
+                                className="cursor-pointer p-4 px-5 flex items-center gap-2 bg-gradient-to-r from-[#06869b] via-[#11809D] to-[#1B607A] mt-4 text-sm font-inter font-bold rounded-full hover:scale-110 transition-all duration-200"
                             >
                                 {translatedData.sendProject.box.button.text}
                                 <svg

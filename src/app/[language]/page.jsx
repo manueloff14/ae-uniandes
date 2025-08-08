@@ -52,7 +52,7 @@ export default function Home() {
                     alt="Logo"
                     className="w-[55px] h-[55px]" // Tamaño de la imagen a 55px
                 />
-                <p className="mt-4 text-sm font-bold font-serif text-black">
+                <p className="mt-4 text-sm font-bold  font-inter text-black">
                     Cargando...
                 </p>
 
@@ -98,7 +98,7 @@ export default function Home() {
                     // Si no hay match (raro, pero por seguridad), devolvemos la palabra tal cual
                     if (!match) {
                         return (
-                            <span key={index} className="font-serif">
+                            <span key={index} className=" font-inter">
                                 {word}{" "}
                             </span>
                         );
@@ -114,7 +114,7 @@ export default function Home() {
                         return (
                             <span key={index} className="font- text-white">
                                 {prefix}
-                                <span className="font-serif relative bg-gradient-to-r from-[#06869b] via-[#11809D] to-[#1B607A] bg-clip-text text-transparent">
+                                <span className=" font-inter relative bg-gradient-to-r from-[#06869b] via-[#11809D] to-[#1B607A] bg-clip-text text-transparent">
                                     {core}
                                     <img
                                         src="/text-effect-2.svg"
@@ -138,7 +138,7 @@ export default function Home() {
 
                     // Si el núcleo no empieza por “ef”, mostramos la palabra sin estilos
                     return (
-                        <span key={index} className="font-serif text-white">
+                        <span key={index} className=" font-inter text-white">
                             {word}{" "}
                         </span>
                     );
@@ -163,7 +163,7 @@ export default function Home() {
                     </div>
 
                     {/* Overlay adicional para oscurecer y aplicar un blur suave */}
-                    <div className="absolute inset-0 bg-[#00000044] backdrop-blur-[2px]" />
+                    <div className="absolute inset-0 bg-[#0000006b] backdrop-blur-[2px]" />
 
                     {/* Figuras decorativas */}
                     <div className="absolute top-[180px] left-1/2 transform -translate-x-1/2 w-full max-w-2xl h-64 bg-gradient-to-r from-[#a7a7a7] to-[#a1a1a1] opacity-20 rounded-full blur-3xl" />
@@ -171,20 +171,21 @@ export default function Home() {
 
                     {/* Contenido principal */}
                     <div className="relative z-10 px-6 md:px-12 lg:px-20 xl:px-56 pt-32 pb-32">
-                        <span className="inline-block text-xs p-2 px-4 mb-5 rounded-full border border-white text-white font-serif">
+                        <span className="inline-block text-xs p-2 px-4 mb-5 rounded-full border border-white text-white  font-inter">
                             {translatedData.HeroSection.fields.tagline.value}
                         </span>
 
-                        <h1 className="font-bold font-serif mb-5 text-4xl sm:text-5xl md:text-6xl lg:text-7xl w-[90%] mx-auto text-white">
+                        <h1 className="relative font-bold mb-5 text-4xl sm:text-5xl md:text-6xl lg:text-7xl w-[90%] mx-auto text-white">
                             <HighlightEfText
                                 text={
                                     translatedData.HeroSection.fields.title
                                         .value
                                 }
                             />
+                            <div className="absolute top-0 left-24 transform -translate-x-1/2 w-full h-64 bg-gradient-to-r from-transparent via-transparent to-[white] opacity-20 rounded-full blur-3xl" />
                         </h1>
 
-                        <p className="mb-8 text-base md:text-lg mx-auto w-[80%] md:w-[60%] lg:w-[40%] text-gray-100 font-serif">
+                        <p className="mb-8 text-base md:text-lg mx-auto w-[80%] md:w-[60%] lg:w-[40%] text-gray-100 font-inter">
                             {translatedData.HeroSection.fields.paragraph.value}
                         </p>
 
@@ -192,7 +193,7 @@ export default function Home() {
                             <a
                                 target="_blank"
                                 href={`${translatedData.HeroSection.fields.buttonText.buttonLink}`}
-                                className="flex items-center gap-2 text-sm font-bold mt-6 bg-gradient-to-r from-[#06869B] via-[#11809D] to-[#1B607A] text-white px-6 py-3 rounded-full whitespace-nowrap hover:bg-red-600 hover:shadow-2xl shadow-black hover:scale-105 transition-all duration-200 font-serif"
+                                className="flex items-center gap-2 text-sm font-bold mt-6 bg-gradient-to-r from-[#06869B] via-[#11809D] to-[#1B607A] text-white px-6 py-3 rounded-full whitespace-nowrap hover:bg-red-600 hover:shadow-2xl shadow-black hover:scale-105 transition-all duration-200  font-inter"
                             >
                                 <span>
                                     {
@@ -234,7 +235,7 @@ export default function Home() {
                         </div>
                         {/* Contenido: pregunta y respuesta */}
                         <div className="md:w-1/2 pr-4">
-                            <h2 className="text-2xl font-bold font-serif text-black mb-4">
+                            <h2 className="text-2xl font-bold  font-inter text-black mb-4">
                                 {(() => {
                                     const text =
                                         translatedData.WhyJoinSection.fields
@@ -245,7 +246,7 @@ export default function Home() {
                                     );
                                 })()}
                             </h2>
-                            <p className="text-sm text-gray-800 font-serif">
+                            <p className="text-sm text-gray-800  font-inter">
                                 {
                                     translatedData.WhyJoinSection.fields
                                         .description.value
@@ -258,17 +259,17 @@ export default function Home() {
                 <section className="py-16">
                     <div className="max-w-6xl mx-auto px-6 md:px-28">
                         <div className="flex justify-center mb-4">
-                            <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black font-serif">
+                            <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black  font-inter">
                                 {
                                     translatedData.VideoSection.fields.tagline
                                         .value
                                 }
                             </span>
                         </div>
-                        <h2 className="text-3xl font-bold text-center text-black mb-2 font-serif">
+                        <h2 className="text-3xl font-bold text-center text-black mb-2  font-inter">
                             {translatedData.VideoSection.fields.title.value}
                         </h2>
-                        <p className="text-center text-gray-700 mb-12 font-serif">
+                        <p className="text-center text-gray-700 mb-12  font-inter">
                             {
                                 translatedData.VideoSection.fields.description
                                     .value
@@ -332,14 +333,14 @@ export default function Home() {
                 <section className="py-16">
                     <div className="max-w-6xl mx-auto px-6 md:px-28">
                         <div className="flex justify-center mb-4">
-                            <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black font-serif">
+                            <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black  font-inter">
                                 {translatedData.ProjectsSection.tagline}
                             </span>
                         </div>
-                        <h2 className="text-3xl font-bold text-center text-black mb-2 font-serif">
+                        <h2 className="text-3xl font-bold text-center text-black mb-2  font-inter">
                             {translatedData.ProjectsSection.title}
                         </h2>
-                        <p className="text-center text-gray-700 mb-12 font-serif">
+                        <p className="text-center text-gray-700 mb-12  font-inter">
                             {translatedData.ProjectsSection.description}
                         </p>
 
@@ -360,27 +361,27 @@ export default function Home() {
                                             <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-200"></div>
                                             <div className="absolute bottom-0 left-0 w-full p-6 text-white flex items-start justify-between backdrop-blur-sm bg-[#ffffff31] rounded-b-2xl">
                                                 <div>
-                                                    <p className="text-sm font-bold font- text-white font-serif">
+                                                    <p className="text-sm font-bold font- text-white  font-inter">
                                                         {
                                                             proyecto.responsableName
                                                         }
                                                     </p>
-                                                    <p className="text-sm opacity-80 font-serif text-white">
+                                                    <p className="text-sm opacity-80  font-inter text-white">
                                                         {proyecto.vigencia
                                                             ? "Proyecto Vigente"
                                                             : "Proyecto Finalizado"}
                                                     </p>
                                                 </div>
-                                                <p className="text-sm opacity-80 font-serif text-white">
+                                                <p className="text-sm opacity-80  font-inter text-white">
                                                     {proyecto.label}
                                                 </p>
                                             </div>
                                         </div>
                                         <div className="mt-4 flex flex-col items-start gap-2">
-                                            <h2 className="text-xl font-semibold text-black font-serif">
+                                            <h2 className="text-xl font-semibold text-black  font-inter">
                                                 {proyecto.title}
                                             </h2>
-                                            <p className="text-sm text-gray-800 font-serif">
+                                            <p className="text-sm text-gray-800  font-inter">
                                                 {proyecto.description}
                                             </p>
                                         </div>
@@ -393,7 +394,7 @@ export default function Home() {
                             <Link
                                 href={`/${language}${translatedData.ProjectsSection.buttonLink}`}
                             >
-                                <button className="font-serif text-black bg-white p-3 px-6 rounded-full text-sm font-bold transition-all duration-300 hover:bg-gray-200 active:scale-95 shadow-md">
+                                <button className=" font-inter text-black bg-white p-3 px-6 rounded-full text-sm font-bold transition-all duration-300 hover:bg-gray-200 active:scale-95 shadow-md">
                                     {translatedData.ProjectsSection.buttonText}
                                 </button>
                             </Link>
@@ -404,14 +405,14 @@ export default function Home() {
                 <section className="hidden py-16">
                     <div className="max-w-6xl mx-auto px-6 md:px-28">
                         <div className="flex justify-center mb-4">
-                            <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black font-serif">
+                            <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black  font-inter">
                                 {translatedData.EventsSection.tagline}
                             </span>
                         </div>
-                        <h2 className="text-3xl font-bold text-center text-black mb-2 font-serif">
+                        <h2 className="text-3xl font-bold text-center text-black mb-2  font-inter">
                             {translatedData.EventsSection.title}
                         </h2>
-                        <p className="text-center text-gray-700 mb-12 font-serif">
+                        <p className="text-center text-gray-700 mb-12  font-inter">
                             {translatedData.EventsSection.description}
                         </p>
 
@@ -432,32 +433,32 @@ export default function Home() {
                                         </div>
 
                                         <div className="relative z-10 flex flex-col gap-1">
-                                            <span className="text-sm font-serif text-white">
+                                            <span className="text-sm  font-inter text-white">
                                                 {evento.date}
                                             </span>
-                                            <span className="text-3xl font-extrabold font-serif text-white">
+                                            <span className="text-3xl font-extrabold  font-inter text-white">
                                                 {evento.date}
                                             </span>
                                         </div>
                                         <div className="relative z-10 flex flex-col gap-2">
-                                            <h2 className="font-extrabold text-xl font-serif text-white">
+                                            <h2 className="font-extrabold text-xl  font-inter text-white">
                                                 {evento.title}
                                             </h2>
-                                            <p className="text-sm font-serif text-white">
+                                            <p className="text-sm  font-inter text-white">
                                                 {evento.description}
                                             </p>
                                         </div>
                                         <div className="relative z-10 flex items-center justify-between font-bold">
                                             <div className="flex flex-col gap-0 text-xs">
-                                                <span className="font-serif text-white">
+                                                <span className=" font-inter text-white">
                                                     s - s
                                                 </span>
-                                                <span className="font-serif text-white">
+                                                <span className=" font-inter text-white">
                                                     {evento.modalidad}
                                                 </span>
                                             </div>
                                             <button className="flex items-center gap-2 font-bold mt-1">
-                                                <span className="text-sm opacity-0 translate-x-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 font-serif text-white">
+                                                <span className="text-sm opacity-0 translate-x-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0  font-inter text-white">
                                                     {evento.inscribirme}
                                                 </span>
                                                 <svg
@@ -485,7 +486,7 @@ export default function Home() {
                             <Link
                                 href={`${translatedData.EventsSection.buttonLink}`}
                             >
-                                <button className="font-serif text-black bg-white p-3 px-6 rounded-full text-sm font-bold transition-all duration-300 hover:bg-gray-200 active:scale-95 shadow-md">
+                                <button className=" font-inter text-black bg-white p-3 px-6 rounded-full text-sm font-bold transition-all duration-300 hover:bg-gray-200 active:scale-95 shadow-md">
                                     {translatedData.EventsSection.buttonText}
                                 </button>
                             </Link>
@@ -496,14 +497,14 @@ export default function Home() {
                 <section className="py-16">
                     <div className="max-w-6xl mx-auto px-6 md:px-28">
                         <div className="flex justify-center mb-4">
-                            <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black font-serif">
+                            <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black  font-inter">
                                 {translatedData.EventsSection.tagline}
                             </span>
                         </div>
-                        <h2 className="text-3xl font-bold text-center text-black mb-2 font-serif">
+                        <h2 className="text-3xl font-bold text-center text-black mb-2  font-inter">
                             {translatedData.EventsSection.title}
                         </h2>
-                        <p className="text-center text-gray-700 mb-12 font-serif">
+                        <p className="text-center text-gray-700 mb-12  font-inter">
                             {translatedData.EventsSection.description}
                         </p>
                         <iframe
@@ -521,14 +522,14 @@ export default function Home() {
                 <section className="py-16">
                     <div className="max-w-6xl mx-auto px-6 md:px-28">
                         <div className="flex justify-center mb-4">
-                            <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black font-serif">
+                            <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black  font-inter">
                                 {translatedData.Biblioteca.tagline}
                             </span>
                         </div>
-                        <h2 className="text-3xl font-bold text-center text-black mb-2 font-serif">
+                        <h2 className="text-3xl font-bold text-center text-black mb-2  font-inter">
                             {translatedData.Biblioteca.title}
                         </h2>
-                        <p className="text-center text-gray-700 mb-12 font-serif">
+                        <p className="text-center text-gray-700 mb-12  font-inter">
                             {translatedData.Biblioteca.description}
                         </p>
 
@@ -545,13 +546,13 @@ export default function Home() {
                                             className="w-full h-[250px] object-cover transition-transform duration-300 group-hover:scale-105"
                                         />
                                         <div className="absolute inset-0 bg-[#000000bd] backdrop-blur-[5px] flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-6">
-                                            <h3 className="text-white text-base font-bold mb-2 text-center font-serif">
+                                            <h3 className="text-white text-base font-bold mb-2 text-center  font-inter">
                                                 {libro.title}
                                             </h3>
-                                            <p className="text-white text-xs mb-2 text-center font-serif">
+                                            <p className="text-white text-xs mb-2 text-center  font-inter">
                                                 {libro.author}
                                             </p>
-                                            <p className="text-gray-300 text-xs text-center font-serif">
+                                            <p className="text-gray-300 text-xs text-center  font-inter">
                                                 {libro.description}
                                             </p>
                                         </div>
@@ -561,7 +562,7 @@ export default function Home() {
                         </div>
                         <div className="flex justify-center mt-12">
                             <Link href={translatedData.Biblioteca.buttonLink} target="_blank">
-                                <button className="font-serif text-black bg-white p-3 px-6 rounded-full text-sm font-bold transition-all duration-300 hover:bg-gray-200 active:scale-95 shadow-md">
+                                <button className=" font-inter text-black bg-white p-3 px-6 rounded-full text-sm font-bold transition-all duration-300 hover:bg-gray-200 active:scale-95 shadow-md">
                                     {translatedData.Biblioteca.buttonText}
                                 </button>
                             </Link>

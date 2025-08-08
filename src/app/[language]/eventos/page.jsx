@@ -87,7 +87,7 @@ export default function Eventos() {
                     alt="Logo"
                     className="w-[55px] h-[55px]"
                 />
-                <p className="mt-4 text-sm font-bold font-serif text-black">
+                <p className="mt-4 text-sm font-bold font-inter text-black">
                     Cargando...
                 </p>
                 <style jsx>{`
@@ -139,10 +139,10 @@ export default function Eventos() {
 
                 {/* Contenido principal */}
                 <div className="relative z-10 px-6 md:px-12 lg:px-20 xl:px-56 pt-32 pb-32">
-                    <h1 className="font-bold font-serif mb-5 text-4xl sm:text-5xl md:text-6xl lg:text-7xl w-[90%] mx-auto text-white">
+                    <h1 className="font-bold font-inter mb-5 text-4xl sm:text-5xl md:text-6xl lg:text-7xl w-[90%] mx-auto text-white">
                         {translatedData.hero.title}
                     </h1>
-                    <p className="mb-8 text-base md:text-lg mx-auto w-[80%] md:w-[60%] lg:w-[40%] text-gray-200 font-serif">
+                    <p className="mb-8 text-base md:text-lg mx-auto w-[80%] md:w-[60%] lg:w-[40%] text-gray-200 font-inter">
                         {translatedData.hero.description}
                     </p>
                 </div>
@@ -150,7 +150,7 @@ export default function Eventos() {
 
             {/* Embed Luma Calendar usando la ruta /embed */}
             {/* <div className="max-w-6xl mx-auto px-6 md:px-28 pt-16 py-20">
-                <h2 className="text-black text-xl font-bold font-serif">
+                <h2 className="text-black text-xl font-bold font-inter">
                     {translatedData.hero.title || "Eventos"}
                 </h2>
                 <div className="py-6">
@@ -167,7 +167,7 @@ export default function Eventos() {
             </div> */}
 
             <div className="max-w-[90rem] mx-auto px-6 md:px-28 pt-16 py-20">
-                <h2 className="text-black text-xl font-bold font-serif">
+                <h2 className="text-black text-xl font-bold font-inter">
                     {translatedData.hero.title || "Eventos"}
                 </h2>
 
@@ -195,10 +195,10 @@ export default function Eventos() {
                             />
                         </a>
                         <div className="mt-4">
-                            <h2 className="text-xl font-bold font-serif text-black">
+                            <h2 className="text-xl font-bold font-inter text-black">
                                 {translatedData.hero.title || "Eventos"}
                             </h2>
-                            <p className="text-sm font-serif text-black mt-2 mb-2">
+                            <p className="text-sm font-inter text-black mt-2 mb-2">
                                 En AE Uniandes organizamos eventos para promover
                                 decisiones informadas y acciones efectivas que
                                 realmente mejoren el mundo. Cada encuentro es

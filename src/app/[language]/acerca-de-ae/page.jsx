@@ -70,7 +70,7 @@ export default function AcercaAEPage() {
                     alt="Logo"
                     className="w-[55px] h-[55px]" // Tamaño de la imagen a 55px
                 />
-                <p className="mt-4 text-sm font-bold font-serif text-black">
+                <p className="mt-4 text-sm font-bold font-inter text-black">
                     Cargando...
                 </p>
 
@@ -113,14 +113,14 @@ export default function AcercaAEPage() {
             <main>
                 <section className="pt-28 pb-16 px-4 sm:py-28 sm:px-8 md:py-32 md:px-16 lg:py-40 lg:px-28">
                     <div className="flex justify-center mb-4">
-                        <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black font-serif">
+                        <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black font-inter">
                             {translatedData.coordinadores.tagline}
                         </span>
                     </div>
-                    <h2 className="text-2xl sm:text-3xl font-bold text-center text-black mb-2 font-serif">
+                    <h2 className="text-2xl sm:text-3xl font-bold text-center text-black mb-2 font-inter">
                         {translatedData.coordinadores.title}
                     </h2>
-                    <p className="text-center text-gray-800 mt-4 mb-12 max-w-3xl mx-auto font-serif">
+                    <p className="text-center text-gray-800 mt-4 mb-12 max-w-3xl mx-auto font-inter">
                         {translatedData.coordinadores.description}
                     </p>
 
@@ -139,7 +139,7 @@ export default function AcercaAEPage() {
                                         alt={`Integrante ${member.name}`}
                                         className="w-[280px] h-[280px] rounded-3xl object-cover mb-4"
                                     />
-                                    <h3 className="text-xl font-semibold text-black font-serif">
+                                    <h3 className="text-xl font-semibold text-black font-inter">
                                         {member.name}
                                     </h3>
                                 </div>
@@ -149,16 +149,16 @@ export default function AcercaAEPage() {
                 </section>
 
                 <section className="pt-10 pb-16 px-4 sm:py-28 sm:px-8 md:py-32 md:px-16 lg:py-40 lg:pt-10 lg:px-96">
-                    <h2 className="text-2xl sm:text-3xl font-bold text-center text-black mb-2 font-serif">
+                    <h2 className="text-2xl sm:text-3xl font-bold text-center text-black mb-2 font-inter">
                         {translatedData.voluntarios.title}
                     </h2>
-                    <p className="text-center text-gray-800 mt-4 mb-12 max-w-3xl mx-auto font-serif">
+                    <p className="text-center text-gray-800 mt-4 mb-12 max-w-3xl mx-auto font-inter">
                         {translatedData.voluntarios.description}
                     </p>
 
                     {/* Contenedor de voluntarios */}
                     <div
-                        className={`grid gap-8 font-serif grid-cols-1 sm:${voluntariosGrid}`}
+                        className={`grid gap-8 font-inter grid-cols-1 sm:${voluntariosGrid}`}
                     >
                         {translatedData?.voluntarios?.miembros?.map(
                             (member) => (
@@ -171,7 +171,7 @@ export default function AcercaAEPage() {
                                         alt={`Integrante ${member.name}`}
                                         className="w-[280px] h-[280px] rounded-3xl object-cover mb-4"
                                     />
-                                    <h3 className="text-xl font-semibold text-black font-serif">
+                                    <h3 className="text-xl font-semibold text-black font-inter">
                                         {member.name}
                                     </h3>
                                 </div>
@@ -362,14 +362,14 @@ export default function AcercaAEPage() {
 
             <section className="pt-10 pb-16 px-4 sm:py-28 sm:px-8 md:py-32 md:px-16 lg:pb-40 lg:pt-28 lg:px-28">
                 <div className="flex justify-center mb-4">
-                    <span className="p-2 px-4 rounded-full border text-xs text-center text-black font-serif">
+                    <span className="p-2 px-4 rounded-full border text-xs text-center text-black font-inter">
                         {translatedData.ImpactoEficaz.tagline}
                     </span>
                 </div>
-                <h2 className="text-2xl sm:text-3xl font-bold text-center text-black mb-2 font-serif">
+                <h2 className="text-2xl sm:text-3xl font-bold text-center text-black mb-2 font-inter">
                     {translatedData.ImpactoEficaz.title}
                 </h2>
-                <p className="text-center text-gray-800 mt-4 mb-12 max-w-3xl mx-auto font-serif">
+                <p className="text-center text-gray-800 mt-4 mb-12 max-w-3xl mx-auto font-inter">
                     {translatedData.ImpactoEficaz.description}
                 </p>
             </section>
@@ -395,14 +395,14 @@ export default function AcercaAEPage() {
                                 src={translatedData.AEGlobal.aeLogoLink}
                                 alt="Logo EA"
                             />
-                            <p className="text-gray-600 mt-2 text-lg md:text-xl font-serif">
+                            <p className="text-gray-600 mt-2 text-lg md:text-xl font-inter">
                                 {translatedData.AEGlobal.text}
                             </p>
                             <a
                                 href={translatedData.AEGlobal.button.buttonLink}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="cursor-pointer p-4 px-5 flex items-center gap-2 bg-gradient-to-r from-[#06869b] via-[#11809D] to-[#1B607A] mt-4 text-sm font-serif font-bold rounded-full hover:scale-110 transition-all duration-200"
+                                className="cursor-pointer p-4 px-5 flex items-center gap-2 bg-gradient-to-r from-[#06869b] via-[#11809D] to-[#1B607A] mt-4 text-sm font-inter font-bold rounded-full hover:scale-110 transition-all duration-200"
                             >
                                 {translatedData.AEGlobal.button.text}
                                 <svg

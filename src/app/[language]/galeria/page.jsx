@@ -83,7 +83,7 @@ export default function Galeria() {
                     alt="Logo"
                     className="w-[55px] h-[55px]" // Tamaño de la imagen a 55px
                 />
-                <p className="mt-4 text-sm font-bold font-serif text-black">
+                <p className="mt-4 text-sm font-bold font-inter text-black">
                     Cargando...
                 </p>
 
@@ -118,16 +118,16 @@ export default function Galeria() {
 
             <section className="max-w-6xl mx-auto px-4 pt-32 py-28 sm:pt-48 mb-10">
                 <div className="flex justify-center mb-4">
-                    <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black font-serif">
+                    <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black font-inter">
                         {translatedData.tagline}
                     </span>
                 </div>
 
-                <h2 className="text-3xl font-bold text-center text-black mb-2 font-serif">
+                <h2 className="text-3xl font-bold text-center text-black mb-2 font-inter">
                     {translatedData.title}
                 </h2>
 
-                <p className="text-center text-gray-700 mb-12 font-serif">
+                <p className="text-center text-gray-700 mb-12 font-inter">
                     {translatedData.description}
                 </p>
 
@@ -136,7 +136,7 @@ export default function Galeria() {
                     <div className="flex justify-center items-center py-32">
                         <div className="flex flex-col items-center gap-4">
                             <div className="w-12 h-12 border-4 border-black border-dotted rounded-full animate-spin"></div>
-                            {/* <p className="text-gray-600 font-serif">
+                            {/* <p className="text-gray-600 font-inter">
                                 Cargando imágenes...
                             </p> */}
                         </div>

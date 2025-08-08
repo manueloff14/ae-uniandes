@@ -22,7 +22,7 @@ export default function IdentidadSection({ data }) {
 
     return (
         <section className="py-16">
-            <h2 className="text-3xl font-bold text-center text-black mb-10 font-serif">
+            <h2 className="text-3xl font-bold text-center text-black mb-10 font-inter">
                 {data.identidad.title}
             </h2>
             {data.identidad.fields ? (
@@ -77,10 +77,10 @@ export default function IdentidadSection({ data }) {
                         >
                             &times;
                         </button>
-                        <h3 className="text-2xl font-bold mb-4 text-black font-serif">
+                        <h3 className="text-2xl font-bold mb-4 text-black font-inter">
                             {selectedItem.texto}
                         </h3>
-                        <p className="mb-4 text-black font-serif">
+                        <p className="mb-4 text-black font-inter">
                             {selectedItem.content}
                         </p>
                     </div>

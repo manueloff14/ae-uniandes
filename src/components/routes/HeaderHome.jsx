@@ -142,7 +142,7 @@ export default function HeaderHome({ black, data }) {
                     <Link
                         key={idx}
                         href={`/${currentLanguage}/${item.link}`}
-                        className="px-4 py-2 text-xs xl:text-sm font-semibold text-black border rounded-full bg-white hover:bg-gray-100 font-serif"
+                        className="px-4 py-2 text-xs xl:text-sm font-semibold text-black border rounded-full bg-white hover:bg-gray-100 font-inter"
                     >
                         {item.label}
                     </Link>
@@ -152,7 +152,7 @@ export default function HeaderHome({ black, data }) {
             {/* BOTÓN DE ACCIÓN (Desktop) */}
             <div className="hidden xl:flex items-center justify-end space-x-4 flex-grow basis-0">
                 <div className="relative group">
-                    <div className="cursor-pointer flex items-center gap-2 px-5 py-2 text-xs xl:text-sm font-semibold text-white border-2 border-[#06869B] bg-[#06869B] rounded-full transition-all font-serif hover:bg-white hover:text-[#06869B]">
+                    <div className="cursor-pointer flex items-center gap-2 px-5 py-2 text-xs xl:text-sm font-semibold text-white border-2 border-[#06869B] bg-[#06869B] rounded-full transition-all font-inter hover:bg-white hover:text-[#06869B]">
                         {ctaButton.text || "¡Unirme!"}
                     </div>
                     {ctaButton.subItems && (
@@ -187,7 +187,7 @@ export default function HeaderHome({ black, data }) {
                             alt={currentLangData.code}
                             className="w-7 h-7 rounded-full object-cover"
                         />
-                        <span className="text-black font-serif text-xs">
+                        <span className="text-black font-inter text-xs">
                             {currentLangData.code.toUpperCase()}
                         </span>
                         <img
@@ -316,7 +316,7 @@ export default function HeaderHome({ black, data }) {
                                         key={idx}
                                         href={`/${currentLanguage}/${item.link}`}
                                         onClick={closeMobileMenu}
-                                        className="block text-black py-2 px-4 rounded hover:bg-gray-100 font-serif lg:text-xs"
+                                        className="block text-black py-2 px-4 rounded hover:bg-gray-100 font-inter lg:text-xs"
                                     >
                                         {item.label}
                                     </Link>
@@ -330,7 +330,7 @@ export default function HeaderHome({ black, data }) {
                                                 !isMobileLanguageOpen
                                             )
                                         }
-                                        className="w-full flex justify-between items-center px-4 py-2 text-black font-serif lg:text-xs font-bold hover:bg-gray-100 rounded-xl"
+                                        className="w-full flex justify-between items-center px-4 py-2 text-black font-inter lg:text-xs font-bold hover:bg-gray-100 rounded-xl"
                                     >
                                         Idioma
                                         <svg
@@ -376,7 +376,7 @@ export default function HeaderHome({ black, data }) {
                                                             alt={lang.code}
                                                             className="w-6 h-6 lg:w-[15px] lg:h-[15px] rounded-full object-cover"
                                                         />
-                                                        <span className="text-black font-serif text-sm lg:text-xs">
+                                                        <span className="text-black font-inter text-sm lg:text-xs">
                                                             {lang.label}
                                                         </span>
                                                     </button>
@@ -412,7 +412,7 @@ export default function HeaderHome({ black, data }) {
                                             /* miramos si empieza por http lo dejamos normal, pero si no, ponemos el lenguaje */
                                             href={item.link.startsWith("http") ? item.link : `/${currentLanguage}/${item.link}`}
                                             onClick={closeMobileMenu}
-                                            className="block text-black py-2 px-4 rounded lg:text-xs hover:bg-gray-100 font-serif"
+                                            className="block text-black py-2 px-4 rounded lg:text-xs hover:bg-gray-100 font-inter"
                                         >
                                             {item.label}
                                         </Link>
@@ -426,7 +426,7 @@ export default function HeaderHome({ black, data }) {
                         <div className="p-6">
                             <button
                                 onClick={openJoinMenu}
-                                className="block w-full text-center text-white bg-[#06869B] px-5 py-3 lg:px-2 lg:text-xs rounded-full font-serif font-semibold hover:bg-[#056b7c] transition-all"
+                                className="block w-full text-center text-white bg-[#06869B] px-5 py-3 lg:px-2 lg:text-xs rounded-full font-inter font-semibold hover:bg-[#056b7c] transition-all"
                             >
                                 {ctaButton.text || "¡Unirme!"}
                             </button>

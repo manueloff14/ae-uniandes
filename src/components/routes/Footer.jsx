@@ -13,10 +13,10 @@ export default function Footer({ data, unirmeLink = "https://forms.gle/6G74rJuyK
                     {/* Sección: Título, descripción y CTA */}
                     <div className="flex flex-col md:flex-row items-start md:items-center justify-between">
                         <div>
-                            <h2 className="text-xl md:text-2xl font-semibold text-gray-800 mb-1 font-serif">
+                            <h2 className="text-xl md:text-2xl font-semibold text-gray-800 mb-1 font-inter">
                                 {data.Footer.heading}
                             </h2>
-                            <p className="text-sm text-gray-600 mb-4 font-serif">
+                            <p className="text-sm text-gray-600 mb-4 font-inter">
                                 {data.Footer.description}
                             </p>
                         </div>
@@ -51,13 +51,13 @@ export default function Footer({ data, unirmeLink = "https://forms.gle/6G74rJuyK
                                     height={40}
                                 />
                             </div>
-                            <span className="text-xs text-gray-500 font-serif">
+                            <span className="text-xs text-gray-500 font-inter">
                                 {data.Footer.question}
                             </span>
                         </div>
 
                         {/* Enlaces de navegación */}
-                        <ul className="flex flex-col items-start md:flex-row md:items-center gap-6 text-sm text-gray-700 [&>li>a]:font-serif">
+                        <ul className="flex flex-col items-start md:flex-row md:items-center gap-6 text-sm text-gray-700 [&>li>a]:font-inter">
                             {data.Footer.navItems.map((link, index) => (
                                 <li key={index}>
                                     <a
@@ -74,7 +74,7 @@ export default function Footer({ data, unirmeLink = "https://forms.gle/6G74rJuyK
 
                 {/* Sección inferior: Copyright y redes */}
                 <div className="mt-8 pt-4 border-t border-gray-300 text-xs flex flex-col md:flex-row items-center justify-between">
-                    <span className="text-gray-500 font-serif">
+                    <span className="text-gray-500 font-inter">
                         &copy; 2021 - {new Date().getFullYear()} AE Uniandes,{" "}
                         {data.Footer.copyRight}
                     </span>

@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import "markdown-navbar/dist/navbar.css";
+import localFont from "next/font/local";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -11,6 +12,24 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
     variable: "--font-geist-mono",
     subsets: ["latin"],
+});
+
+const inter = localFont({
+    src: [
+        {
+            path: "./fonts/inter/Inter-VariableFont_opsz,wght.ttf",
+            weight: "100 900",
+            style: "normal",
+        },
+        {
+            path: "./fonts/inter/Inter-Italic-VariableFont_opsz,wght.ttf",
+            weight: "100 900",
+            style: "italic",
+        },
+    ],
+    variable: "--font-inter",
+    display: "swap",
+    fallback: ["system-ui", "Segoe UI", "Roboto", "Arial"],
 });
 
 export const metadata = {
@@ -57,7 +76,7 @@ export default function RootLayout({ children }) {
                 ></script> */}
             </head>
             <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+                className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased`}
             >
                 {children}
             </body>
