@@ -99,6 +99,14 @@ export default function AcercaAEPage() {
         return <div>Error al cargar datos traducidos.</div>;
     }
 
+    const voluntariosCount = translatedData?.voluntarios?.miembros?.length;
+    const coordinadoresCount = translatedData?.coordinadores?.miembros?.length;
+
+    const voluntariosGrid =
+        voluntariosCount > 1 ? "grid-cols-2" : "grid-cols-1";
+    const coordinadoresGrid =
+        coordinadoresCount > 1 ? "grid-cols-2" : "grid-cols-1";
+
     return (
         <div>
             <HeaderHome black={true} data={translatedData} />
@@ -118,13 +126,18 @@ export default function AcercaAEPage() {
                     </p>
 
                     {/* Contenedor de integrantes */}
-                    <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-${translatedData?.coordinadores?.miembros?.length} gap-8`}>
+                    <div
+                        className={`grid gap-8 grid-cols-1 sm:grid-cols-2 ${
+                            coordinadoresCount >= 4
+                                ? `md:grid-cols-${coordinadoresCount}`
+                                : `md:grid-cols-${coordinadoresCount}`
+                        }`}
+                    >
                         {translatedData?.coordinadores?.miembros?.map(
                             (member) => (
                                 <div
-                                    key={member.id}
+                                    key={member.id ?? member.name}
                                     className="flex flex-col items-center cursor-pointer transform transition hover:scale-105"
-                                    /* onClick={() => openModal(member)} */
                                 >
                                     <img
                                         src={member.imageLink}
@@ -134,9 +147,6 @@ export default function AcercaAEPage() {
                                     <h3 className="text-xl font-semibold text-black font-serif">
                                         {member.name}
                                     </h3>
-                                    {/* <p className="text-gray-500">
-                                        {member.role}
-                                    </p> */}
                                 </div>
                             )
                         )}
@@ -152,13 +162,18 @@ export default function AcercaAEPage() {
                     </p>
 
                     {/* Contenedor de voluntarios */}
-                    <div className={`grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-${translatedData?.voluntarios?.miembros?.length} gap-8 font-serif`}>
+                    <div
+                        className={`grid gap-8 font-serif grid-cols-1 sm:grid-cols-1 md:grid-cols-1 ${
+                            voluntariosCount >= 2
+                                ? `lg:grid-cols-${voluntariosCount}`
+                                : `lg:grid-cols-${voluntariosCount}`
+                        }`}
+                    >
                         {translatedData?.voluntarios?.miembros?.map(
                             (member) => (
                                 <div
-                                    key={member.id}
+                                    key={member.id ?? member.name}
                                     className="flex flex-col items-center cursor-pointer transform transition hover:scale-105"
-                                    /* onClick={() => openModal(member)} */
                                 >
                                     <img
                                         src={member.imageLink}
@@ -168,9 +183,6 @@ export default function AcercaAEPage() {
                                     <h3 className="text-xl font-semibold text-black font-serif">
                                         {member.name}
                                     </h3>
-                                   {/*  <p className="text-gray-500">
-                                        {member.role}
-                                    </p> */}
                                 </div>
                             )
                         )}
@@ -327,8 +339,14 @@ export default function AcercaAEPage() {
                                     </p>
 
                                     <div className="text-center">
-                                        <span className="font-bold text-center">Agendar uno a uno</span>
-                                        <a className="mt-2 bg-white border rounded-xl p-2 px-3" href="https://calendly.com/denverparamo19/30min?month=2025-05" target="_blank" >
+                                        <span className="font-bold text-center">
+                                            Agendar uno a uno
+                                        </span>
+                                        <a
+                                            className="mt-2 bg-white border rounded-xl p-2 px-3"
+                                            href="https://calendly.com/denverparamo19/30min?month=2025-05"
+                                            target="_blank"
+                                        >
                                             <img
                                                 className=""
                                                 src="https://images.squarespace-cdn.com/content/v1/61afae73df19ee3879a26ab9/1638903671873-B54ETTH512UZRSHSG1FA/CC_CalendlyLogo.png"
