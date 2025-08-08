@@ -102,10 +102,9 @@ export default function AcercaAEPage() {
     const voluntariosCount = translatedData?.voluntarios?.miembros?.length;
     const coordinadoresCount = translatedData?.coordinadores?.miembros?.length;
 
-    const voluntariosGrid =
-        voluntariosCount > 1 ? "grid-cols-2" : "grid-cols-1";
-    const coordinadoresGrid =
-        coordinadoresCount > 1 ? "grid-cols-2" : "grid-cols-1";
+    const coordinadoresGrid = `grid-cols-${coordinadoresCount}`;
+    const voluntariosGrid = `grid-cols-${voluntariosCount}`;
+    
 
     return (
         <div>
@@ -127,11 +126,7 @@ export default function AcercaAEPage() {
 
                     {/* Contenedor de integrantes */}
                     <div
-                        className={`grid gap-8 grid-cols-1 sm:grid-cols-2 ${
-                            coordinadoresCount >= 4
-                                ? `md:grid-cols-${coordinadoresCount}`
-                                : `md:grid-cols-${coordinadoresCount}`
-                        }`}
+                        className={`grid gap-8 grid-cols-1 sm:grid-cols-2 lg:${coordinadoresGrid}`}
                     >
                         {translatedData?.coordinadores?.miembros?.map(
                             (member) => (
@@ -163,11 +158,7 @@ export default function AcercaAEPage() {
 
                     {/* Contenedor de voluntarios */}
                     <div
-                        className={`grid gap-8 font-serif grid-cols-1 sm:grid-cols-1 md:grid-cols-1 ${
-                            voluntariosCount >= 2
-                                ? `lg:grid-cols-${voluntariosCount}`
-                                : `lg:grid-cols-${voluntariosCount}`
-                        }`}
+                        className={`grid gap-8 font-serif grid-cols-1 sm:${voluntariosGrid}`}
                     >
                         {translatedData?.voluntarios?.miembros?.map(
                             (member) => (
