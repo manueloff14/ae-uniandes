@@ -409,7 +409,8 @@ export default function HeaderHome({ black, data }) {
                                     ctaButton.subItems.map((item, idx) => (
                                         <Link
                                             key={idx}
-                                            href={item.link}
+                                            /* miramos si empieza por http lo dejamos normal, pero si no, ponemos el lenguaje */
+                                            href={item.link.startsWith("http") ? item.link : `/${currentLanguage}/${item.link}`}
                                             onClick={closeMobileMenu}
                                             className="block text-black py-2 px-4 rounded lg:text-xs hover:bg-gray-100 font-serif"
                                         >

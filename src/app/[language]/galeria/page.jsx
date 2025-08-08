@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import HeaderHome from "@/components/routes/HeaderHome";
 import Footer from "@/components/routes/Footer";
+import CarouselGallery from "@/components/Gallery";
 
 export default function Galeria() {
     const [selectedImage, setSelectedImage] = useState(null);
@@ -112,10 +113,10 @@ export default function Galeria() {
     }
 
     return (
-        <div>
+        <div className="bg-white bg-[url('/bg-texture.svg')]">
             <HeaderHome black={true} data={translatedData} />
 
-            <section className="max-w-6xl mx-auto px-4 py-8 pt-32 mb-10">
+            <section className="max-w-6xl mx-auto px-4 pt-32 py-28 sm:pt-48 mb-10">
                 <div className="flex justify-center mb-4">
                     <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black font-serif">
                         {translatedData.tagline}
@@ -141,33 +142,8 @@ export default function Galeria() {
                         </div>
                     </div>
                 )}
-
-                {/* Layout tipo Masonry con CSS columns */}
-                <div
-                    className={`columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 ${
-                        isGalleryVisible
-                            ? "opacity-100 transition-opacity duration-500"
-                            : "opacity-0 pointer-events-none"
-                    }`}
-                >
-                    {translatedData.fields.map((image, index) => (
-                        <div
-                            key={index}
-                            className={`mb-4 break-inside-avoid transition-transform duration-500 ${
-                                isGalleryVisible
-                                    ? "scale-100 opacity-100"
-                                    : "scale-95 opacity-0"
-                            }`}
-                        >
-                            <img
-                                src={`/img/galeria/${image.imageLink}`}
-                                alt={`Imagen de la galería ${index}`}
-                                className="w-full h-auto rounded-3xl shadow hover:opacity-90 transition-opacity cursor-pointer"
-                                onClick={() => openModal(image.imageLink)}
-                            />
-                        </div>
-                    ))}
-                </div>
+                
+                <CarouselGallery galeria={translatedData.fields} />
             </section>
 
             <Footer data={translatedData} />

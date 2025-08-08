@@ -118,3 +118,26 @@ body {
     content: none !important;
     background: none !important;
 }
+
+
+.swiper-button-next {
+    color: black !important;
+    padding-left: 1.5rem !important;
+}
+
+.swiper-button-prev {
+    color: black !important;
+    padding-right: 1.5rem !important;
+}
+
+.swiper-pagination-bullet {
+    background-color: gray !important;
+    transition: all 0.2s ease-in-out;
+}
+
+.swiper-pagination-bullet-active {
+    background-color: black !important;
+    width: 12px !important;
+    /* transition-all */
+    transition: all 0.2s ease-in-out;
+}
