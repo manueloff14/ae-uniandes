@@ -46,7 +46,7 @@ const EmblaCarousel = ({ slides, options }) => {
                                     }`}
                                 >
                                     <img
-                                        src={`/img/galeria/${item.imageLink}`}
+                                        src={item.image.url}
                                         alt={item.title}
                                         className="h-[350px] sm:h-[500px] w-full rounded-3xl object-cover"
                                         loading="lazy"

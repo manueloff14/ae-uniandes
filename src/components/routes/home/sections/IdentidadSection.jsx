@@ -23,24 +23,24 @@ export default function IdentidadSection({ data }) {
     return (
         <section className="py-16">
             <h2 className="text-3xl font-bold text-center text-black mb-10 font-inter">
-                {data.identidad.title}
+                {data.ourIdentity.info.title}
             </h2>
-            {data.identidad.fields ? (
+            {data.ourIdentity.identity ? (
                 <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-6xl mx-auto px-10">
-                    {data.identidad.fields.map((item, index) => (
+                    {data.ourIdentity.identity.map((item, index) => (
                         <li
                             key={index}
                             className="relative h-[250px] bg-[#1E1E1E] rounded-[2.5rem] shadow-2xl overflow-hidden transition-all duration-200 hover:shadow-3xl hover:shadow-black hover:scale-105 cursor-pointer"
                             onClick={() => handleItemClick(item)}
                         >
                             <img
-                                src={item.imageLink}
-                                alt={item.texto}
+                                src={item.image.url}
+                                alt={item.title}
                                 className="w-full h-full object-cover"
                             />
                             <div className="absolute bottom-4 left-4 right-4 border-2 border-transparent bg-gradient-to-r from-[#06869B] via-[#11809D] to-[#1B607A] rounded-full flex items-center justify-center p-4 shadow-2xl shadow-black">
                                 <span className="text-white font-semibold text-base text-center">
-                                    {item.texto}
+                                    {item.title}
                                 </span>
                             </div>
                         </li>
@@ -78,10 +78,10 @@ export default function IdentidadSection({ data }) {
                             &times;
                         </button>
                         <h3 className="text-2xl font-bold mb-4 text-black font-inter">
-                            {selectedItem.texto}
+                            {selectedItem.title}
                         </h3>
                         <p className="mb-4 text-black font-inter">
-                            {selectedItem.content}
+                            {selectedItem.description}
                         </p>
                     </div>
                 </div>

@@ -11,34 +11,80 @@ export default function Galeria() {
     const [modalAnimation, setModalAnimation] = useState(false);
     const [isGalleryVisible, setIsGalleryVisible] = useState(false);
 
-    const { language } = useParams(); // Se espera que la URL tenga /[language]/page.jsx, por ejemplo, /en
+    const { language } = useParams();
+
     const [loading, setLoading] = useState(true);
-    const [translatedData, setTranslatedData] = useState(null);
+    const [headerData, setHeaderData] = useState(null);
+    const [footerData, setFooterData] = useState(null);
+    const [pageData, setPageData] = useState(null);
 
-    // Hook para cargar los datos traducidos
+    const [reproducir, setReproducir] = useState(false);
+
     useEffect(() => {
-        const savedLanguage =
-            language || localStorage.getItem("language") || "es"; // Usa language de la URL o el valor guardado
-        localStorage.setItem("language", savedLanguage);
+        const ctrl = new AbortController();
 
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/traducir`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                lang: savedLanguage,
-                section: "Galeria", // Asegúrate de que la sección sea la correcta
-            }),
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                setTranslatedData(data.translated_json);
+        async function load() {
+            try {
+                setLoading(true);
+
+                // idioma desde URL o localStorage (cliente)
+                let lang = "es";
+                try {
+                    lang = language ?? localStorage.getItem("language") ?? "es";
+                    localStorage.setItem("language", lang);
+                } catch {}
+
+                const base = process.env.NEXT_PUBLIC_API_URL;
+                const pLevel = 5;
+
+                const [headerRes, pageRes, footerRes] = await Promise.all([
+                    fetch(`${base}/api/header?pLevel=${pLevel}`, {
+                        signal: ctrl.signal,
+                    }),
+                    fetch(`${base}/api/galeria-page?pLevel=${pLevel}`, {
+                        signal: ctrl.signal,
+                    }),
+                    fetch(`${base}/api/footer?pLevel=${pLevel}`, {
+                        signal: ctrl.signal,
+                    }),
+                ]);
+
+                if (!headerRes.ok || !pageRes.ok || !footerRes.ok) {
+                    throw new Error(
+                        `HTTP: header ${headerRes.status}, page ${pageRes.status}, footer ${footerRes.status}`
+                    );
+                }
+
+                // Estos endpoints ya devuelven el JSON listo (o translated_json)
+                const [headerJson, pageJson, footerJson] = await Promise.all([
+                    headerRes.json(),
+                    pageRes.json(),
+                    footerRes.json(),
+                ]);
+
+                const header = headerJson?.translated_json ?? headerJson;
+                const pageRaw = pageJson?.translated_json ?? pageJson;
+                const footer = footerJson?.translated_json ?? footerJson;
+
+                setHeaderData(header);
+                setPageData(pageRaw);
+                setFooterData(footer);
+            } catch (err) {
+                if (err.name !== "AbortError") {
+                    console.error("Fallo cargando datos:", err);
+                }
+            } finally {
                 setLoading(false);
-            })
-            .catch((error) => {
-                console.error("Error al traducir:", error);
-                setLoading(false);
-            });
+            }
+        }
+
+        load();
+        return () => ctrl.abort();
     }, [language]);
+
+    const page = pageData?.data;
+    const header = headerData?.data;
+    const footer = footerData?.data;
 
     // Retrasar la visualización de las imágenes (mover este hook antes de los retornos condicionales)
     useEffect(() => {
@@ -108,27 +154,23 @@ export default function Galeria() {
         );
     }
 
-    if (!translatedData) {
-        return <div>Error al cargar datos traducidos.</div>;
-    }
-
     return (
         <div className="bg-white bg-[url('/bg-texture.svg')]">
-            <HeaderHome black={true} data={translatedData} />
+            <HeaderHome black={true} data={header} />
 
             <section className="max-w-6xl mx-auto px-4 pt-32 py-28 sm:pt-48 mb-10">
                 <div className="flex justify-center mb-4">
                     <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black font-inter">
-                        {translatedData.tagline}
+                        {page.Gallery.info.preTitle}
                     </span>
                 </div>
 
                 <h2 className="text-3xl font-bold text-center text-black mb-2 font-inter">
-                    {translatedData.title}
+                    {page.Gallery.info.title}
                 </h2>
 
                 <p className="text-center text-gray-700 mb-12 font-inter">
-                    {translatedData.description}
+                    {page.Gallery.info.description}
                 </p>
 
                 {/* Loader mientras espera mostrar la galería */}
@@ -143,10 +185,10 @@ export default function Galeria() {
                     </div>
                 )}
                 
-                <CarouselGallery galeria={translatedData.fields} />
+                <CarouselGallery galeria={page.Gallery.imageGallery} />
             </section>
 
-            <Footer data={translatedData} />
+            <Footer data={{header, footer}} />
 
             {/* Modal para la imagen ampliada */}
             {selectedImage && (

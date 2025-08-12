@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Menu } from "lucide-react";
 
 export default function HeaderHome({ black, data }) {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -113,39 +114,41 @@ export default function HeaderHome({ black, data }) {
         setIsJoinMenuOpen(false);
     };
 
+    console.log(data);
+
     return (
         <header
-            className={`fixed w-full flex items-center justify-between px-6 lg:px-16 z-[100] transition-all duration-300 ${
+            className={`fixed w-full flex items-center justify-between px-6 lg:px-16 py-2 z-[100] transition-all duration-300 ${
                 isScrolled ? "bg-white shadow-md" : "bg-transparent"
             }`}
         >
             {/* LOGO */}
             <div className="flex flex-grow basis-0 justify-start">
-                <Link href="/" className="inline-flex items-center">
+                <a href={`/${currentLanguage}`} className="inline-flex items-center">
                     <img
                         src={
                             black
                                 ? "/ae-logo-black.svg"
-                                : isScrolled
-                                ? "/ae-logo-black.svg"
-                                : "/ae-logo.svg"
+                                : !isScrolled
+                                    ? "/ae-logo.svg"
+                                    : "/ae-logo-black.svg"
                         }
                         className="w-[160px] lg:w-[200px]"
                         alt="AE Logo"
                     />
-                </Link>
+                </a>
             </div>
 
             {/* MENÚ NAVEGACIÓN (Desktop) */}
             <nav className="hidden xl:flex items-center space-x-4">
-                {navItems.map((item, idx) => (
-                    <Link
+                {data?.links.map((item, idx) => item.text !== "Inicio" && (
+                    <a
                         key={idx}
-                        href={`/${currentLanguage}/${item.link}`}
+                        href={`/${currentLanguage}${item.url}`}
                         className="px-4 py-2 text-xs xl:text-sm font-semibold text-black border rounded-full bg-white hover:bg-gray-100 font-inter"
                     >
-                        {item.label}
-                    </Link>
+                        {item.text}
+                    </a>
                 ))}
             </nav>
 
@@ -153,31 +156,31 @@ export default function HeaderHome({ black, data }) {
             <div className="hidden xl:flex items-center justify-end space-x-4 flex-grow basis-0">
                 <div className="relative group">
                     <div className="cursor-pointer flex items-center gap-2 px-5 py-2 text-xs xl:text-sm font-semibold text-white border-2 border-[#06869B] bg-[#06869B] rounded-full transition-all font-inter hover:bg-white hover:text-[#06869B]">
-                        {ctaButton.text || "¡Unirme!"}
+                        {data?.buttonAction?.text || "¡Unirme!"}
                     </div>
-                    {ctaButton.subItems && (
+                    {data?.buttonAction?.children && (
                         <div className="absolute right-0 top-full p-2 mt-2 w-56 bg-white border rounded-2xl shadow-lg invisible opacity-0 group-hover:visible group-hover:opacity-100 hover:visible hover:opacity-100 transition-all duration-300">
-                            {ctaButton.subItems.map((item, idx) => (
-                                <Link
+                            {data?.buttonAction?.children.map((item, idx) => (
+                                <a
                                     key={idx}
                                     /* sin el href contiene la palabra Fellowship incluir el language, si no, no */
                                     href={`${
-                                        item.link.includes("fellowship")
-                                            ? `/${currentLanguage}/${item.link}`
-                                            : item.link
+                                        item.url.includes("fellowship")
+                                            ? `/${currentLanguage}${item.url}`
+                                            : item.url
                                     }`}
-                                    target={item.link.includes("fellowship") ? "_self" : "_blank"}
+                                    target={item.url.includes("fellowship") ? "_self" : "_blank"}
                                     className="rounded-xl block px-4 py-2 text-sm text-black hover:bg-gray-100"
                                 >
-                                    {item.label}
-                                </Link>
+                                    {item.text}
+                                </a>
                             ))}
                         </div>
                     )}
                 </div>
 
                 {/* Selector de idioma (Desktop) */}
-                <div className="relative">
+                <div className="hidden">
                     <button
                         className="cursor-pointer flex items-center gap-2 bg-white border p-[5px] px-3 pl-2 rounded-full"
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -230,32 +233,7 @@ export default function HeaderHome({ black, data }) {
                     onClick={toggleMobileMenu}
                     className="focus:outline-none"
                 >
-                    <svg
-                        className={`w-6 h-6 ${
-                            black || isScrolled ? "text-black" : "text-white"
-                        }`}
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <line
-                            x1="4"
-                            y1="7"
-                            x2="20"
-                            y2="7"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                        />
-                        <line
-                            x1="4"
-                            y1="17"
-                            x2="20"
-                            y2="17"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                        />
-                    </svg>
+                    <Menu size={24} color={black ? "black" : isScrolled ? "black" : "white"} />
                 </button>
             </div>
 
@@ -311,15 +289,15 @@ export default function HeaderHome({ black, data }) {
                     <div className="flex-1 p-6 pt-2">
                         {!isJoinMenuOpen ? (
                             <div className="flex flex-col space-y-4 lg:space-y-2">
-                                {navItems.map((item, idx) => (
-                                    <Link
+                                {data?.links.map((item, idx) => (
+                                    <a
                                         key={idx}
-                                        href={`/${currentLanguage}/${item.link}`}
+                                        href={`/${currentLanguage}${item.url}`}
                                         onClick={closeMobileMenu}
                                         className="block text-black py-2 px-4 rounded hover:bg-gray-100 font-inter lg:text-xs"
                                     >
-                                        {item.label}
-                                    </Link>
+                                        {item.text}
+                                    </a>
                                 ))}
 
                                 {/* Selector de idioma en menú móvil */}
@@ -403,19 +381,18 @@ export default function HeaderHome({ black, data }) {
                                     >
                                         <polyline points="15 18 9 12 15 6" />
                                     </svg>
-                                    {data.Header.ctaButton.extraTexts.back}
                                 </button>
-                                {ctaButton.subItems &&
-                                    ctaButton.subItems.map((item, idx) => (
-                                        <Link
+                                {data?.buttonAction?.children &&
+                                    data?.buttonAction?.children.map((item, idx) => (
+                                        <a
                                             key={idx}
                                             /* miramos si empieza por http lo dejamos normal, pero si no, ponemos el lenguaje */
-                                            href={item.link.startsWith("http") ? item.link : `/${currentLanguage}/${item.link}`}
+                                            href={item.url.startsWith("http") ? item.url : `/${currentLanguage}/${item.url}`}
                                             onClick={closeMobileMenu}
                                             className="block text-black py-2 px-4 rounded lg:text-xs hover:bg-gray-100 font-inter"
                                         >
-                                            {item.label}
-                                        </Link>
+                                            {item.text}
+                                        </a>
                                     ))}
                             </div>
                         )}
@@ -428,7 +405,7 @@ export default function HeaderHome({ black, data }) {
                                 onClick={openJoinMenu}
                                 className="block w-full text-center text-white bg-[#06869B] px-5 py-3 lg:px-2 lg:text-xs rounded-full font-inter font-semibold hover:bg-[#056b7c] transition-all"
                             >
-                                {ctaButton.text || "¡Unirme!"}
+                                {data?.buttonAction?.text || "¡Unirme!"}
                             </button>
                         </div>
                     )}

@@ -58,7 +58,7 @@ const CarouselGallery = ({ galeria }) => {
                             <SwiperSlide key={index} className="bg-white">
                                 <div className="swiper-carousel-animate-opacity">
                                     <img
-                                        src={`/img/galeria/${item.imageLink}`}
+                                        src={`${item.image.url}`}
                                         alt={item.title}
                                     />
                                     <div className="slide-content">

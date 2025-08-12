@@ -11,9 +11,78 @@ export default function Fellowship() {
     const scrollRefVigentes = useRef(null);
     const scrollRefPasados = useRef(null);
 
-    const { language } = useParams(); // Se espera que la URL tenga /[language]/page.jsx, por ejemplo, /en
+    const { language } = useParams();
+
     const [loading, setLoading] = useState(true);
-    const [translatedData, setTranslatedData] = useState(null);
+    const [headerData, setHeaderData] = useState(null);
+    const [footerData, setFooterData] = useState(null);
+    const [pageData, setPageData] = useState(null);
+
+    useEffect(() => {
+        const ctrl = new AbortController();
+
+        async function load() {
+            try {
+                setLoading(true);
+
+                // idioma desde URL o localStorage (cliente)
+                let lang = "es";
+                try {
+                    lang = language ?? localStorage.getItem("language") ?? "es";
+                    localStorage.setItem("language", lang);
+                } catch {}
+
+                const base = process.env.NEXT_PUBLIC_API_URL;
+                const pLevel = 5;
+
+                const [headerRes, pageRes, footerRes] = await Promise.all([
+                    fetch(`${base}/api/header?pLevel=${pLevel}`, {
+                        signal: ctrl.signal,
+                    }),
+                    fetch(`${base}/api/eventos-page?pLevel=${pLevel}`, {
+                        signal: ctrl.signal,
+                    }),
+                    fetch(`${base}/api/footer?pLevel=${pLevel}`, {
+                        signal: ctrl.signal,
+                    }),
+                ]);
+
+                if (!headerRes.ok || !pageRes.ok || !footerRes.ok) {
+                    throw new Error(
+                        `HTTP: header ${headerRes.status}, page ${pageRes.status}, footer ${footerRes.status}`
+                    );
+                }
+
+                // Estos endpoints ya devuelven el JSON listo (o translated_json)
+                const [headerJson, pageJson, footerJson] = await Promise.all([
+                    headerRes.json(),
+                    pageRes.json(),
+                    footerRes.json(),
+                ]);
+
+                const header = headerJson?.translated_json ?? headerJson;
+                const pageRaw = pageJson?.translated_json ?? pageJson;
+                const footer = footerJson?.translated_json ?? footerJson;
+
+                setHeaderData(header);
+                setPageData(pageRaw);
+                setFooterData(footer);
+            } catch (err) {
+                if (err.name !== "AbortError") {
+                    console.error("Fallo cargando datos:", err);
+                }
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        load();
+        return () => ctrl.abort();
+    }, [language]);
+
+    const page = pageData?.data;
+    const header = headerData?.data;
+    const footer = footerData?.data;
 
     // Funciones de scroll para la sección de "Proyectos vigentes"
     const scrollLeftVigentes = () => {
@@ -55,31 +124,6 @@ export default function Fellowship() {
         }
     };
 
-    // Hook para cargar los datos traducidos
-    useEffect(() => {
-        const savedLanguage =
-            language || localStorage.getItem("language") || "es";
-        localStorage.setItem("language", savedLanguage);
-
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/traducir`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                lang: savedLanguage,
-                section: "HomePage",
-            }),
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                setTranslatedData(data.translated_json);
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.error("Error al traducir:", error);
-                setLoading(false);
-            });
-    }, [language]);
-
     if (loading) {
         return (
             <div className="flex justify-center items-center h-screen flex-col">
@@ -111,13 +155,11 @@ export default function Fellowship() {
         );
     }
 
-    if (!translatedData) {
-        return <div>Error al cargar datos traducidos.</div>;
-    }
-
-    const preguntasFrecuentes = {
-        PreguntasFrecuentes: {
-            faq: [
+    const data = {
+        frequentlyQuestions: {
+            id: 4,
+            title: "Preguntas Frecuentes",
+            question: [
                 {
                     question: "¿Cuál es el formato de la Arete Fellowship?",
                     answer: "La beca consiste en una serie de 7 sesiones presenciales de 2 horas cada una, basadas en lecturas y discusiones con 5–8 participantes y 1–2 líderes de discusión. Los líderes plantean preguntas sobre las lecturas, pero la mayor parte de la conversación la llevan los participantes.",
@@ -133,7 +175,8 @@ export default function Fellowship() {
                     answer: "La beca es una excelente introducción al altruismo eficaz para estudiantes de Uniandes de cualquier facultad que nunca hayan oído hablar de AE Uniandes o no estén muy involucrados. Si ya participas en AE Uniandes, explora el sitio de AE Uniandes o contacta a miembros actuales para oportunidades más específicas.",
                 },
                 {
-                    question: "¿Cuánto tiempo deben dedicar los participantes?",
+                    question:
+                        "¿Cuánto tiempo deben dedicar los participantes?",
                     answer: "Aproximadamente la mitad de cada sesión de dos horas se dedica a leer los artículos asignados y la otra mitad a la discusión.",
                 },
                 {
@@ -157,7 +200,7 @@ export default function Fellowship() {
 
     return (
         <div>
-            <HeaderHome data={translatedData} />
+            <HeaderHome data={header} />
 
             {/* Sección Hero (primera sección) */}
             <section className="relative w-full min-h-screen flex flex-col justify-center text-center">
@@ -326,7 +369,7 @@ export default function Fellowship() {
                 />
             </div> */}
 
-            <PreguntasFrecuentes data={preguntasFrecuentes} />
+            <PreguntasFrecuentes data={data} />
 
             <div className="py-6"></div>
 
@@ -343,7 +386,7 @@ export default function Fellowship() {
                 }
             `}</style>
 
-            <Footer data={translatedData} />
+            <Footer data={{ header, footer }} />
         </div>
     );
 }

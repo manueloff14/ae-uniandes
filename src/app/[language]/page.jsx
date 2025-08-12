@@ -1,89 +1,109 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import ReactMarkdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
-import { useState, useEffect } from "react";
-import PreguntasFrecuentes from "@/components/routes/home/sections/FAQ";
-import Footer from "@/components/routes/Footer";
+import { useEffect, useState } from "react";
 import HeaderHome from "@/components/routes/HeaderHome";
+import Footer from "@/components/routes/Footer";
 import Link from "next/link";
-import IdentidadSection from "@/components/routes/home/sections/IdentidadSection";
-import { useRouter } from "next/navigation";
+import PreguntasFrecuentes from "@/components/routes/home/sections/FAQ";
+
+/** Helper: elige una URL de imagen de Strapi sin repetir chains */
+function pickStrapiImageUrl(media, fallback = "") {
+    if (!media) return fallback;
+    const fmts = media.formats ?? {};
+    return (
+        fmts?.medium?.url ||
+        fmts?.large?.url ||
+        fmts?.small?.url ||
+        fmts?.thumbnail?.url ||
+        media.url ||
+        fallback
+    );
+}
 
 export default function Home() {
-    const [reproducir, setReproducir] = useState(false);
-    const router = useRouter();
+    const { language } = useParams();
 
-    const { language } = useParams(); // Se espera que la URL tenga /[language]/page.jsx, por ejemplo, /en
-    const [translatedData, setTranslatedData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [headerData, setHeaderData] = useState(null);
+    const [footerData, setFooterData] = useState(null);
+    const [homeData, setHomeData] = useState(null);
+
+    const [reproducir, setReproducir] = useState(false);
 
     useEffect(() => {
-        if (language) {
-            localStorage.setItem("language", language);
-            fetch(`${process.env.NEXT_PUBLIC_API_URL}/traducir`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    lang: language,
-                    section: "HomePage",
-                }),
-            })
-                .then((res) => res.json())
-                .then((data) => {
-                    setTranslatedData(data.translated_json);
-                    setLoading(false);
-                })
-                .catch((error) => {
-                    console.error("Error al traducir:", error);
-                    setLoading(false);
+        const ctrl = new AbortController();
+
+        async function load() {
+            try {
+                setLoading(true);
+
+                // idioma desde URL o localStorage (cliente)
+                let lang = "es";
+                try {
+                    lang = language ?? localStorage.getItem("language") ?? "es";
+                    localStorage.setItem("language", lang);
+                } catch {}
+
+                const base = process.env.NEXT_PUBLIC_API_URL;
+                const pLevel = 5;
+
+                const [headerRes, homeRes, footerRes] = await Promise.all([
+                    fetch(`${base}/api/header?pLevel=${pLevel}`, {
+                        signal: ctrl.signal,
+                    }),
+                    fetch(`${base}/api/home-page?pLevel=${pLevel}`, {
+                        signal: ctrl.signal,
+                    }),
+                    fetch(`${base}/api/footer?pLevel=${pLevel}`, {
+                        signal: ctrl.signal,
+                    }),
+                ]);
+
+                if (!headerRes.ok || !homeRes.ok || !footerRes.ok) {
+                    throw new Error(
+                        `HTTP: header ${headerRes.status}, home ${homeRes.status}, footer ${footerRes.status}`
+                    );
+                }
+
+                // Estos endpoints ya devuelven el JSON listo (o translated_json)
+                const [headerJson, homeJson, footerJson] = await Promise.all([
+                    headerRes.json(),
+                    homeRes.json(),
+                    footerRes.json(),
+                ]);
+
+                const header = headerJson?.translated_json ?? headerJson;
+                const homeRaw = homeJson?.translated_json ?? homeJson;
+                const footer = footerJson?.translated_json ?? footerJson;
+
+                // Normaliza portada una sola vez
+                const portadaUrl = pickStrapiImageUrl(
+                    homeRaw?.HeroSection?.portada,
+                    "/fallback-hero.jpg"
+                );
+
+                setHeaderData(header);
+                setHomeData({
+                    ...homeRaw,
+                    HeroSection: {
+                        ...homeRaw?.HeroSection,
+                        portadaUrl,
+                    },
                 });
-        } else {
-            const savedLanguage = localStorage.getItem("language") || "es";
+                setFooterData(footer);
+            } catch (err) {
+                if (err.name !== "AbortError") {
+                    console.error("Fallo cargando datos:", err);
+                }
+            } finally {
+                setLoading(false);
+            }
         }
+
+        load();
+        return () => ctrl.abort();
     }, [language]);
-
-    if (loading) {
-        return (
-            <div className="flex justify-center items-center h-screen flex-col">
-                <img
-                    src="/ae-icon.svg"
-                    alt="Logo"
-                    className="w-[55px] h-[55px]" // Tamaño de la imagen a 55px
-                />
-                <p className="mt-4 text-sm font-bold  font-inter text-black">
-                    Cargando...
-                </p>
-
-                <style jsx>{`
-                    img {
-                        animation: scale-up-down 0.5s ease-in-out infinite; /* Animación más rápida */
-                    }
-
-                    @keyframes scale-up-down {
-                        0% {
-                            transform: scale(1);
-                        }
-                        50% {
-                            transform: scale(1.2);
-                        }
-                        100% {
-                            transform: scale(1);
-                        }
-                    }
-                `}</style>
-            </div>
-        );
-    }
-    if (!translatedData) return <div>Error al cargar datos traducidos.</div>;
-
-    // Devuelve la palabra que empiece por "ef" (ignorando mayúsculas)
-    function getEfHighlight(title) {
-        // \b: límites de palabra, (ef\S*): “ef” seguido de cualquier carácter
-        const match = title.match(/\b(ef\S*)\b/i);
-        return match ? match[1] : "";
-    }
 
     function HighlightEfText({ text }) {
         return (
@@ -147,16 +167,52 @@ export default function Home() {
         );
     }
 
+    const home = homeData?.data;
+    const header = headerData?.data;
+    const footer = footerData?.data;
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-screen flex-col">
+                <img
+                    src="/ae-icon.svg"
+                    alt="Logo"
+                    className="w-[55px] h-[55px]"
+                />
+                <p className="mt-4 text-sm font-bold font-inter text-black">
+                    Cargando...
+                </p>
+                <style jsx>{`
+                    img {
+                        animation: scale-up-down 0.5s ease-in-out infinite;
+                    }
+                    @keyframes scale-up-down {
+                        0% {
+                            transform: scale(1);
+                        }
+                        50% {
+                            transform: scale(1.2);
+                        }
+                        100% {
+                            transform: scale(1);
+                        }
+                    }
+                `}</style>
+            </div>
+        );
+    }
+
     return (
-        <>
-            <HeaderHome data={translatedData} />
+        <div>
+            {headerData && <HeaderHome data={header} />}
+
             <main>
                 <section className="relative w-full min-h-screen flex flex-col justify-center text-center">
                     {/* Fondo e imagen */}
                     <div className="absolute inset-0 z-[-20] overflow-hidden">
                         <img
                             className="w-full h-full object-cover"
-                            src={translatedData.HeroSection.fields.imageLink}
+                            src={home.HeroSection.portada.url}
                             alt="Fondo Uniandes"
                         />
                         <div className="absolute inset-0 bg-[#0000003a] backdrop-blur-[10px] z-[-10]" />
@@ -172,35 +228,27 @@ export default function Home() {
                     {/* Contenido principal */}
                     <div className="relative z-10 px-6 md:px-12 lg:px-20 xl:px-56 pt-32 pb-32">
                         <span className="inline-block text-xs p-2 px-4 mb-5 rounded-full border border-white text-white  font-inter">
-                            {translatedData.HeroSection.fields.tagline.value}
+                            {home.HeroSection.preTitle}
                         </span>
 
                         <h1 className="relative font-bold mb-5 text-4xl sm:text-5xl md:text-6xl lg:text-7xl w-[90%] mx-auto text-white">
                             <HighlightEfText
-                                text={
-                                    translatedData.HeroSection.fields.title
-                                        .value
-                                }
+                                text={home.HeroSection.title.title}
                             />
                             <div className="absolute top-0 left-24 transform -translate-x-1/2 w-full h-64 bg-gradient-to-r from-transparent via-transparent to-[white] opacity-20 rounded-full blur-3xl" />
                         </h1>
 
                         <p className="mb-8 text-base md:text-lg mx-auto w-[80%] md:w-[60%] lg:w-[40%] text-gray-100 font-inter">
-                            {translatedData.HeroSection.fields.paragraph.value}
+                            {home.HeroSection.subtitle}
                         </p>
 
                         <div className="flex items-center justify-center gap-2">
                             <a
                                 target="_blank"
-                                href={`${translatedData.HeroSection.fields.buttonText.buttonLink}`}
+                                href={`${home.HeroSection.button.link}`}
                                 className="flex items-center gap-2 text-sm font-bold mt-6 bg-gradient-to-r from-[#06869B] via-[#11809D] to-[#1B607A] text-white px-6 py-3 rounded-full whitespace-nowrap hover:bg-red-600 hover:shadow-2xl shadow-black hover:scale-105 transition-all duration-200  font-inter"
                             >
-                                <span>
-                                    {
-                                        translatedData.HeroSection.fields
-                                            .buttonText.value
-                                    }
-                                </span>
+                                <span>{home.HeroSection.button.text}</span>
                                 <svg
                                     viewBox="0 0 24 24"
                                     fill="none"
@@ -225,10 +273,7 @@ export default function Home() {
                         {/* Imagen de placeholder */}
                         <div className="h-[250px] w-full md:w-1/2">
                             <img
-                                src={
-                                    translatedData.WhyJoinSection.fields
-                                        .imageLink
-                                }
+                                src={home.whyAE.image.url}
                                 alt="Placeholder"
                                 className="w-full h-full object-cover rounded-3xl shadow-lg"
                             />
@@ -237,9 +282,7 @@ export default function Home() {
                         <div className="md:w-1/2 pr-4">
                             <h2 className="text-2xl font-bold  font-inter text-black mb-4">
                                 {(() => {
-                                    const text =
-                                        translatedData.WhyJoinSection.fields
-                                            .title.value;
+                                    const text = home.whyAE.question;
                                     return text.replace(
                                         /'ae uni\S*/gi,
                                         "'AE Uniandes'"
@@ -247,10 +290,7 @@ export default function Home() {
                                 })()}
                             </h2>
                             <p className="text-sm text-gray-800  font-inter">
-                                {
-                                    translatedData.WhyJoinSection.fields
-                                        .description.value
-                                }
+                                {home.whyAE.answer}
                             </p>
                         </div>
                     </div>
@@ -260,20 +300,14 @@ export default function Home() {
                     <div className="max-w-6xl mx-auto px-6 md:px-28">
                         <div className="flex justify-center mb-4">
                             <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black  font-inter">
-                                {
-                                    translatedData.VideoSection.fields.tagline
-                                        .value
-                                }
+                                {home.importantVideo.info.preTitle}
                             </span>
                         </div>
                         <h2 className="text-3xl font-bold text-center text-black mb-2  font-inter">
-                            {translatedData.VideoSection.fields.title.value}
+                            {home.importantVideo.info.title}
                         </h2>
                         <p className="text-center text-gray-700 mb-12  font-inter">
-                            {
-                                translatedData.VideoSection.fields.description
-                                    .value
-                            }
+                            {home.importantVideo.info.description}
                         </p>
 
                         {/* Contenedor del video */}
@@ -285,10 +319,7 @@ export default function Home() {
                                 // Video de YouTube
                                 <iframe
                                     className="w-full h-full rounded-3xl"
-                                    src={
-                                        translatedData.VideoSection.fields
-                                            .videoLink
-                                    }
+                                    src={home.importantVideo.videoLink}
                                     title="YouTube video"
                                     allow="autoplay; encrypted-media"
                                     allowFullScreen
@@ -297,10 +328,7 @@ export default function Home() {
                                 // Imagen de carátula con botón de reproducción
                                 <div className="relative w-full h-full">
                                     <img
-                                        src={
-                                            translatedData.VideoSection.fields
-                                                .imageLink
-                                        }
+                                        src={home.importantVideo.portada.url}
                                         alt="Carátula del video"
                                         className="w-full h-full object-cover rounded-3xl"
                                     />
@@ -334,181 +362,17 @@ export default function Home() {
                     <div className="max-w-6xl mx-auto px-6 md:px-28">
                         <div className="flex justify-center mb-4">
                             <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black  font-inter">
-                                {translatedData.ProjectsSection.tagline}
+                                {home.importantEvents.info.preTitle}
                             </span>
                         </div>
                         <h2 className="text-3xl font-bold text-center text-black mb-2  font-inter">
-                            {translatedData.ProjectsSection.title}
+                            {home.importantEvents.info.title}
                         </h2>
                         <p className="text-center text-gray-700 mb-12  font-inter">
-                            {translatedData.ProjectsSection.description}
-                        </p>
-
-                        {/* Diseño con columnas para la sección de proyectos */}
-                        <div className="columns-1 sm:columns-2 gap-6">
-                            {translatedData.ProjectsSection.projects.map(
-                                (proyecto, index) => (
-                                    <div
-                                        key={index}
-                                        className="mb-6 break-inside-avoid rounded-3xl shadow-xls shadow-[#080808] flex flex-col bg-[#f1f1f1] p-5 lg:p-6 hover:shadow-2xl transition-all duration-200"
-                                    >
-                                        <div className="relative group cursor-pointer overflow-hidden rounded-3xl">
-                                            <img
-                                                src={proyecto.image}
-                                                alt={proyecto.title}
-                                                className="w-full h-[470px] object-cover"
-                                            />
-                                            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-200"></div>
-                                            <div className="absolute bottom-0 left-0 w-full p-6 text-white flex items-start justify-between backdrop-blur-sm bg-[#ffffff31] rounded-b-2xl">
-                                                <div>
-                                                    <p className="text-sm font-bold font- text-white  font-inter">
-                                                        {
-                                                            proyecto.responsableName
-                                                        }
-                                                    </p>
-                                                    <p className="text-sm opacity-80  font-inter text-white">
-                                                        {proyecto.vigencia
-                                                            ? "Proyecto Vigente"
-                                                            : "Proyecto Finalizado"}
-                                                    </p>
-                                                </div>
-                                                <p className="text-sm opacity-80  font-inter text-white">
-                                                    {proyecto.label}
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div className="mt-4 flex flex-col items-start gap-2">
-                                            <h2 className="text-xl font-semibold text-black  font-inter">
-                                                {proyecto.title}
-                                            </h2>
-                                            <p className="text-sm text-gray-800  font-inter">
-                                                {proyecto.description}
-                                            </p>
-                                        </div>
-                                    </div>
-                                )
-                            )}
-                        </div>
-
-                        <div className="flex justify-center mt-4">
-                            <Link
-                                href={`/${language}${translatedData.ProjectsSection.buttonLink}`}
-                            >
-                                <button className=" font-inter text-black bg-white p-3 px-6 rounded-full text-sm font-bold transition-all duration-300 hover:bg-gray-200 active:scale-95 shadow-md">
-                                    {translatedData.ProjectsSection.buttonText}
-                                </button>
-                            </Link>
-                        </div>
-                    </div>
-                </section>
-
-                <section className="hidden py-16">
-                    <div className="max-w-6xl mx-auto px-6 md:px-28">
-                        <div className="flex justify-center mb-4">
-                            <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black  font-inter">
-                                {translatedData.EventsSection.tagline}
-                            </span>
-                        </div>
-                        <h2 className="text-3xl font-bold text-center text-black mb-2  font-inter">
-                            {translatedData.EventsSection.title}
-                        </h2>
-                        <p className="text-center text-gray-700 mb-12  font-inter">
-                            {translatedData.EventsSection.description}
-                        </p>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {translatedData.EventsSection.events.map(
-                                (evento, index) => (
-                                    <div
-                                        key={index}
-                                        className="cursor-pointer relative mb-0 p-6 rounded-3xl shadow-lg overflow-hidden flex flex-col gap-4 justify-between text-white transition-all duration-300 group hover:scale-105 hover:shadow-xl hover:shadow-gray-400"
-                                    >
-                                        <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
-                                            <img
-                                                className="w-full h-full object-cover"
-                                                src={evento.imageLink}
-                                                alt="s"
-                                            />
-                                            <div className="absolute inset-0 bg-[#0000008c] backdrop-blur-[5px]"></div>
-                                        </div>
-
-                                        <div className="relative z-10 flex flex-col gap-1">
-                                            <span className="text-sm  font-inter text-white">
-                                                {evento.date}
-                                            </span>
-                                            <span className="text-3xl font-extrabold  font-inter text-white">
-                                                {evento.date}
-                                            </span>
-                                        </div>
-                                        <div className="relative z-10 flex flex-col gap-2">
-                                            <h2 className="font-extrabold text-xl  font-inter text-white">
-                                                {evento.title}
-                                            </h2>
-                                            <p className="text-sm  font-inter text-white">
-                                                {evento.description}
-                                            </p>
-                                        </div>
-                                        <div className="relative z-10 flex items-center justify-between font-bold">
-                                            <div className="flex flex-col gap-0 text-xs">
-                                                <span className=" font-inter text-white">
-                                                    s - s
-                                                </span>
-                                                <span className=" font-inter text-white">
-                                                    {evento.modalidad}
-                                                </span>
-                                            </div>
-                                            <button className="flex items-center gap-2 font-bold mt-1">
-                                                <span className="text-sm opacity-0 translate-x-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0  font-inter text-white">
-                                                    {evento.inscribirme}
-                                                </span>
-                                                <svg
-                                                    viewBox="0 0 24 24"
-                                                    fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    className="w-5 h-5"
-                                                >
-                                                    <path
-                                                        d="M7 17L17 7M17 7H8M17 7V16"
-                                                        stroke="white"
-                                                        strokeWidth="2"
-                                                        strokeLinecap="round"
-                                                        strokeLinejoin="round"
-                                                    />
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    </div>
-                                )
-                            )}
-                        </div>
-
-                        <div className="flex justify-center mt-12">
-                            <Link
-                                href={`${translatedData.EventsSection.buttonLink}`}
-                            >
-                                <button className=" font-inter text-black bg-white p-3 px-6 rounded-full text-sm font-bold transition-all duration-300 hover:bg-gray-200 active:scale-95 shadow-md">
-                                    {translatedData.EventsSection.buttonText}
-                                </button>
-                            </Link>
-                        </div>
-                    </div>
-                </section>
-
-                <section className="py-16">
-                    <div className="max-w-6xl mx-auto px-6 md:px-28">
-                        <div className="flex justify-center mb-4">
-                            <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black  font-inter">
-                                {translatedData.EventsSection.tagline}
-                            </span>
-                        </div>
-                        <h2 className="text-3xl font-bold text-center text-black mb-2  font-inter">
-                            {translatedData.EventsSection.title}
-                        </h2>
-                        <p className="text-center text-gray-700 mb-12  font-inter">
-                            {translatedData.EventsSection.description}
+                            {home.importantEvents.info.description}
                         </p>
                         <iframe
-                            src="https://lu.ma/embed/calendar/cal-UNNJDLVBWrEroMd/events?past=true"
+                            src={home.importantEvents.linkEmbed}
                             width="100%"
                             height="600"
                             frameBorder="0"
@@ -523,25 +387,25 @@ export default function Home() {
                     <div className="max-w-6xl mx-auto px-6 md:px-28">
                         <div className="flex justify-center mb-4">
                             <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black  font-inter">
-                                {translatedData.Biblioteca.tagline}
+                                {home.books.info.preTitle}
                             </span>
                         </div>
                         <h2 className="text-3xl font-bold text-center text-black mb-2  font-inter">
-                            {translatedData.Biblioteca.title}
+                            {home.books.info.title}
                         </h2>
                         <p className="text-center text-gray-700 mb-12  font-inter">
-                            {translatedData.Biblioteca.description}
+                            {home.books.info.description}
                         </p>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-                            {translatedData.Biblioteca.books.map(
+                            {home.books.book.map(
                                 (libro, index) => (
                                     <div
                                         key={index}
                                         className="relative group rounded-3xl overflow-hidden shadow-lg"
                                     >
                                         <img
-                                            src={libro.imageLink}
+                                            src={libro.portada.url}
                                             alt={`Portada de ${libro.title}`}
                                             className="w-full h-[250px] object-cover transition-transform duration-300 group-hover:scale-105"
                                         />
@@ -549,9 +413,13 @@ export default function Home() {
                                             <h3 className="text-white text-base font-bold mb-2 text-center  font-inter">
                                                 {libro.title}
                                             </h3>
-                                            <p className="text-white text-xs mb-2 text-center  font-inter">
-                                                {libro.author}
-                                            </p>
+                                            {
+                                                libro.author && (
+                                                    <p className="text-white text-xs mb-2 text-center  font-inter">
+                                                        {libro.author}
+                                                    </p>
+                                                )
+                                            }
                                             <p className="text-gray-300 text-xs text-center  font-inter">
                                                 {libro.description}
                                             </p>
@@ -561,18 +429,30 @@ export default function Home() {
                             )}
                         </div>
                         <div className="flex justify-center mt-12">
-                            <Link href={translatedData.Biblioteca.buttonLink} target="_blank">
+                            <Link
+                                href={home.books.buttonAction.link}
+                                target="_blank"
+                            >
                                 <button className=" font-inter text-black bg-white p-3 px-6 rounded-full text-sm font-bold transition-all duration-300 hover:bg-gray-200 active:scale-95 shadow-md">
-                                    {translatedData.Biblioteca.buttonText}
+                                    {home.books.buttonAction.text}
                                 </button>
                             </Link>
                         </div>
                     </div>
                 </section>
 
-                <PreguntasFrecuentes data={translatedData} />
+                <PreguntasFrecuentes data={home} />
             </main>
-            <Footer data={translatedData} unirmeLink={translatedData.HeroSection.fields.buttonText.buttonLink} />
-        </>
+
+            <Footer
+                data={{
+                    header,
+                    footer,
+                }}
+                unirmeLink={
+                    "s"
+                }
+            />
+        </div>
     );
 }

@@ -14,10 +14,13 @@ export default function PreguntasFrecuentes({ data }) {
         <section className="py-16">
             <div className="max-w-6xl mx-auto px-6 md:px-28">
                 <h2 className="text-center text-2xl font-bold text-black mb-6  font-inter">
-                    Preguntas Frecuentes
+                    {
+                        data?.frequentlyQuestions?.title
+                        || "Preguntas Frecuentes"
+                    }
                 </h2>
                 <div className="space-y-4">
-                    {data.PreguntasFrecuentes.faq.map((faq, index) => (
+                    {data.frequentlyQuestions.question.map((faq, index) => (
                         <div key={index}>
                             <button
                                 onClick={() => toggleFAQ(index)}
