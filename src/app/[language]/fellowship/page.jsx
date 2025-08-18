@@ -39,7 +39,7 @@ export default function Fellowship() {
                     fetch(`${base}/api/header?pLevel=${pLevel}`, {
                         signal: ctrl.signal,
                     }),
-                    fetch(`${base}/api/eventos-page?pLevel=${pLevel}`, {
+                    fetch(`${base}/api/fellowship-page?pLevel=${pLevel}`, {
                         signal: ctrl.signal,
                     }),
                     fetch(`${base}/api/footer?pLevel=${pLevel}`, {
@@ -175,8 +175,7 @@ export default function Fellowship() {
                     answer: "La beca es una excelente introducción al altruismo eficaz para estudiantes de Uniandes de cualquier facultad que nunca hayan oído hablar de AE Uniandes o no estén muy involucrados. Si ya participas en AE Uniandes, explora el sitio de AE Uniandes o contacta a miembros actuales para oportunidades más específicas.",
                 },
                 {
-                    question:
-                        "¿Cuánto tiempo deben dedicar los participantes?",
+                    question: "¿Cuánto tiempo deben dedicar los participantes?",
                     answer: "Aproximadamente la mitad de cada sesión de dos horas se dedica a leer los artículos asignados y la otra mitad a la discusión.",
                 },
                 {
@@ -198,6 +197,8 @@ export default function Fellowship() {
         },
     };
 
+    console.log("page:", page);
+
     return (
         <div>
             <HeaderHome data={header} />
@@ -208,7 +209,7 @@ export default function Fellowship() {
                 <div className="absolute inset-0 z-[-20] overflow-hidden">
                     <img
                         className="w-full h-full object-cover"
-                        src="https://i.ibb.co/FCCk1Jz/EHqaexq-X0-AEQzt-Y.jpg"
+                        src={page.heroSection.portada.url}
                         /* src={translatedData.hero.imageLink} */
                         alt="Fondo Uniandes"
                     />
@@ -224,12 +225,13 @@ export default function Fellowship() {
 
                 {/* Contenido principal */}
                 <div className="relative z-10 px-6 md:px-12 lg:px-20 xl:px-56 pt-32 pb-32">
-                    <h1 className="font-bold font-serif mb-5 text-4xl sm:text-5xl md:text-6xl lg:text-7xl w-[90%] mx-auto text-white">
-                        Arete Fellowship
+                    <h1 className="font-bold font-inter mb-5 text-4xl sm:text-5xl md:text-6xl lg:text-7xl w-[90%] mx-auto text-white">
+                        {page.heroSection.title.title}
                         {/* {translatedData.hero.title} */}
                     </h1>
-                    <p className="mb-8 text-base md:text-lg mx-auto w-[80%] md:w-[60%] lg:w-[40%] text-gray-200 font-serif">
-                        Maximiza tu impacto en siete semanas de lecturas,
+                    <p className="mb-8 text-base md:text-lg mx-auto w-[80%] md:w-[60%] lg:w-[40%] text-gray-200 font-inter">
+                        {page.heroSection.subtitle}
+                        {/* Maximiza tu impacto en siete semanas de lecturas,
                         debates y mentoría práctica para aplicar evidencia y
                         colaborar con líderes del cambio.
                         {/* {translatedData.hero.description} */}
@@ -237,119 +239,21 @@ export default function Fellowship() {
                 </div>
             </section>
 
-            {/* Embed Luma Calendar usando la ruta /embed */}
-            {/* <div className="max-w-6xl mx-auto px-6 md:px-28 pt-16 py-20">
-                <h2 className="text-black text-xl font-bold font-serif">
-                    {translatedData.hero.title || "Eventos"}
-                </h2>
-                <div className="py-6">
-                    <iframe
-                        src="https://lu.ma/embed/calendar/cal-UNNJDLVBWrEroMd/events"
-                        width="100%"
-                        height="600"
-                        frameBorder="0"
-                        className="rounded-lg shadow-lg"
-                        title="Calendario de Eventos"
-                        allowFullScreen
-                    />
-                </div>
-            </div> */}
-
-            {/* <div className="max-w-6xl mx-auto px-6 md:px-28 py-16 pt-28">
-                <img
-                    src="https://images.squarespace-cdn.com/content/v1/55f47404e4b06b1754d1df07/1611690966103-8G9HVF0FUARB6SMKT3BL/transparent.png?format=2500w"
-                    alt=""
+            <div className="max-w-6xl mx-auto px-6 md:px-28 py-16 pb-20 font-inter">
+                <article
+                    className="prose max-w-none"
+                    dangerouslySetInnerHTML={{ __html: page.content }}
                 />
-            </div> */}
-
-            <div className="max-w-6xl mx-auto px-6 md:px-28 py-16 pb-6">
-                <div>
-                    <h2 className="text-black text-2xl font-bold font-serif">
-                        ¿Qué es Arete Fellowship?
-                    </h2>
-                    <br />
-                    <p className="text-black font-serif">
-                        El Arete Fellowship es un programa intensivo de siete
-                        semanas, diseñado por el AE Uniandes, que guía a sus
-                        participantes a través de lecturas semanales, debates,
-                        mentorías y proyectos prácticos. Su objetivo es enseñar
-                        métodos basados en evidencia para tomar decisiones de
-                        alto impacto y conectar a los estudiantes con una red de
-                        profesionales y líderes comprometidos con el altruismo
-                        eficaz.
-                    </p>
-                </div>
             </div>
 
-            <div className="max-w-6xl mx-auto px-6 md:px-28 py-6">
-                <p className="text-black font-serif">
-                    Algunos esfuerzos para mejorar el mundo pueden ser mucho más
-                    impactantes que otros. La erradicación de la viruela, el
-                    movimiento abolicionista, la teoría germinal y la Revolución
-                    Verde demuestran lo que es posible cuando las personas se
-                    unen para resolver problemas urgentes. Pero estas
-                    oportunidades son pocas y muy espaciadas. En el otro extremo
-                    del espectro, iniciativas bienintencionadas han resultado
-                    ineficaces o incluso contraproducentes.
-                </p>
-            </div>
-
-            {/*  <div className="max-w-6xl mx-auto px-6 md:px-28 py-6">
-                <img
-                    src="https://images.squarespace-cdn.com/content/v1/55f47404e4b06b1754d1df07/1598528580436-5XUQ23T4S398AA9GR533/2%2Bcopy.jpg?format=2500w"
-                    alt=""
-                />
-            </div> */}
-
-            <div className="max-w-6xl mx-auto px-6 md:px-28 py-6">
-                <p className="text-black font-serif">
-                    Hacer el bien de manera más eficaz es uno de los retos
-                    fundamentales de nuestra época. Reconociendo esta necesidad,
-                    el grupo estudiantil AE Uniandes creó la Arete Fellowship
-                    para dotar a los estudiantes de los conocimientos necesarios
-                    para generar un impacto real en el mundo y de las
-                    herramientas para pensar críticamente sobre sus metas
-                    profesionales. Al finalizar el semestre, los becarios
-                    cuentan con asesoramiento profundo, conexiones de carrera y
-                    oportunidades únicas para ayudar a los demás como parte de
-                    una vida plena y feliz.
-                </p>
-            </div>
-
-            <div className="max-w-6xl mx-auto px-6 md:px-28 py-6">
-                <p className="text-black font-serif">
-                    Cada semestre, seleccionamos a un grupo de estudiantes para
-                    participar en una beca de siete semanas basada en lecturas
-                    semanales, debates, actividades sociales, redacción,
-                    investigación y más. Los exbecarios han valorado muy
-                    positivamente su experiencia y consideran la beca una
-                    oportunidad valiosa y reveladora. La beca está abierta a
-                    estudiantes de cualquier escuela de Uniandes.{" "}
-                    {/* Consulta el
-                    programa de estudios de un semestre anterior{" "}
-                    <a
-                        className="text-blue-500 text-base"
-                        href="https://www.harvardcollegeeffectivealtruism.org/arete-fellowship"
-                    >
-                        aquí
-                    </a>
-                    . */}
-                </p>
-                <br />
-                {/* <p className="text-black font-serif">
-                    Para la primavera de 2025, las solicitudes deben presentarse
-                    antes del 9 de febrero.
-                </p> */}
-                <br />
+            {page.buttonApply.link ? (
                 <div className="flex flex-col items-center justify-center">
-                    <a
-                        /* href="https://www.harvardcollegeeffectivealtruism.org/arete-fellowship" */ href=""
-                    >
-                        <button className="bg-[#1B607A] text-white py-2 px-4 rounded-full text-center font-serif font-bold">
-                            ¡POR EL MOMENTO NO ESTÁ DISPONIBLE!
+                    <a href={page.buttonApply.link}>
+                        <button className="bg-[#1B607A] text-white py-2 px-4 rounded-full text-center font-inter font-bold">
+                            {page.buttonApply.text}
                         </button>
                     </a>
-                    <span className="text-black font-serif text-xs mt-6">
+                    <span className="text-black font-inter text-xs mt-6">
                         Contacta al equipo de la Arete Fellowship en{" "}
                         <a
                             className="text-blue-500"
@@ -360,16 +264,27 @@ export default function Fellowship() {
                         .
                     </span>
                 </div>
-            </div>
+            ) : (
+                <div className="flex flex-col items-center justify-center">
+                    <div>
+                        <button className="cursor-not-allowed bg-[#1B607A] text-white py-2 px-4 rounded-full text-center font-inter font-bold">
+                            ¡POR EL MOMENTO NO ESTÁ DISPONIBLE!
+                        </button>
+                    </div>
+                    <span className="text-black font-inter text-xs mt-6">
+                        Contacta al equipo de la Arete Fellowship en{" "}
+                        <a
+                            className="text-blue-500"
+                            href="mailto:altruismoeficaz@uniandes.edu.co"
+                        >
+                            altruismoeficaz@uniandes.edu.co
+                        </a>
+                        .
+                    </span>
+                </div>
+            )}
 
-            {/* <div className="max-w-6xl mx-auto px-6 md:px-28 py-6">
-                <img
-                    src="https://images.squarespace-cdn.com/content/v1/55f47404e4b06b1754d1df07/1598528616606-63A4WP1YSLDC8RFNGVBU/1+copy.png?format=2500w"
-                    alt=""
-                />
-            </div> */}
-
-            <PreguntasFrecuentes data={data} />
+            <PreguntasFrecuentes data={page} />
 
             <div className="py-6"></div>
 
