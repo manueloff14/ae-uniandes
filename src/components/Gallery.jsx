@@ -1,87 +1,72 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-// Importas los módulos necesarios de Swiper
+// 1. Importa los módulos necesarios de Swiper
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, EffectCoverflow } from "swiper/modules";
+
+// 2. 🔥 IMPORTANTE: Importa los estilos base de Swiper y los módulos que usas
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/effect-coverflow';
+
+
+// Tu componente para móvil (no lo modificamos)
 import EmblaCarousel from "./embla/Carrousel";
 
-// Se mantiene la carga del CSS externo como has pedido
 const CarouselGallery = ({ galeria }) => {
-    const [loading, setLoading] = useState(false);
+    // 3. El estado de "loading" fue eliminado porque no se usaba.
+    // Si en el futuro cargas los datos de una API, puedes volver a añadirlo.
 
-    useEffect(() => {
-        const link = document.createElement("link");
-        link.rel = "stylesheet";
-        link.href =
-            "https://carousel-slider.uiinitiative.com/assets/index.0f26cec9.css";
-        document.head.appendChild(link);
-
-        return () => {
-            document.head.removeChild(link);
-        };
-    }, []);
-
-    if (loading) {
-        return (
-            <div className="h-screen w-full flex items-center justify-center">
-                <p>Cargando...</p>
-            </div>
-        );
-    } else {
-        return (
-            <>
-                {/* DESKTOP */}
-                <div className="hidden lg:block bg-transparent">
-                    <Swiper
-                        modules={[Navigation, Pagination, EffectCoverflow]}
-                        effect={"coverflow"}
-                        centeredSlides={true}
-                        loop={true}
-                        // 2. CAMBIO PRINCIPAL: El valor debe ser un número impar como 3 para centrar correctamente.
-                        slidesPerView={3}
-                        // 3. FIX PARA EL BUCLE: Asegura que la transición infinita sea suave.
-                        loopedSlides={galeria.length}
-                        navigation={true}
-                        pagination={{ clickable: true }}
-                        // 4. AJUSTE DE ESTILO: 'stretch: 0' da un espaciado más estándar.
-                        coverflowEffect={{
-                            rotate: 50,
-                            stretch: 0,
-                            depth: 100,
-                            modifier: 1,
-                            slideShadows: true,
-                        }}
-                        className="swiper-carousel bg-white"
-                    >
-                        {galeria.map((item, index) => (
-                            <SwiperSlide key={index} className="bg-white">
-                                <div className="swiper-carousel-animate-opacity">
-                                    <img
-                                        src={`${item.image.url}`}
-                                        alt={item.title}
-                                    />
-                                    <div className="slide-content">
-                                        {item?.title ? (
-                                            <h2>{item.title}</h2>
-                                        ) : null}
-                                        {item?.description ? (
-                                            <p>{item.description}</p>
-                                        ) : null}
-                                    </div>
-                                </div>
-                            </SwiperSlide>
-                        ))}
-                    </Swiper>
-                </div>
-
-                {/* MOBIL */}
-                <div className="lg:hidden">
-                    <EmblaCarousel slides={galeria} />
-                </div>
-            </>
-        );
+    // Si la galería no tiene imágenes, puedes mostrar un mensaje o nada.
+    if (!galeria || galeria.length === 0) {
+        return <p className="text-center">No hay imágenes en la galería.</p>;
     }
+    
+    return (
+        <>
+            {/* DESKTOP */}
+            <div className="hidden lg:block bg-transparent">
+                {/* 4. Asegúrate de que el contenedor de Swiper tenga un tamaño definido, 
+                    puedes hacerlo con una clase CSS o inline styles. 
+                    Ej: className="w-full h-[500px]" */}
+                <Swiper
+                    modules={[Navigation, Pagination, EffectCoverflow]}
+                    effect={"coverflow"}
+                    centeredSlides={true}
+                    loop={true}
+                    slidesPerView={3} // Ideal para el efecto coverflow
+                    navigation={true}
+                    pagination={{ clickable: true }}
+                    coverflowEffect={{
+                        rotate: 50,
+                        stretch: 0,
+                        depth: 100,
+                        modifier: 1,
+                        slideShadows: true,
+                    }}
+                    className="mySwiper" // Usa una clase más genérica y dale estilos si es necesario
+                >
+                    {galeria.map((item) => (
+                        <SwiperSlide key={item.id || item.image.url}> {/* Es mejor usar un ID único si lo tienes */}
+                            <img
+                                src={item.image.url}
+                                alt={item.title || 'Imagen de la galería'}
+                                className="block w-full h-full object-cover"
+                            />
+                            {/* Si quieres texto sobre la imagen, puedes posicionarlo aquí */}
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
+            </div>
+
+            {/* MOBIL */}
+            <div className="lg:hidden">
+                <EmblaCarousel slides={galeria} />
+            </div>
+        </>
+    );
 };
 
 export default CarouselGallery;
