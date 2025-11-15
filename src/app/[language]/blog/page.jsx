@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Link from "next/link";
 import {
     Grid2x2,
     HomeIcon,
@@ -23,55 +24,90 @@ const navLinks = [
     { name: "Contacto", icon: Phone, href: "#", current: false },
 ];
 
-const featuredEditors = [
-    {
-        name: "Jose Gelves",
-        image: "/img/coordinadores/camilo_eduardo_castro.jpg",
-        articlesCount: 24,
-    },
-    {
-        name: "Vicente Gelves",
-        image: "/img/coordinadores/santiago_ramirez.jpg",
-        articlesCount: 18,
-    },
-    {
-        name: "Camilo Eduardo Castro",
-        image: "/img/coordinadores/camilo_eduardo_castro.jpg",
-        articlesCount: 24,
-    },
-    {
-        name: "Camilo Eduardo Castro",
-        image: "/img/coordinadores/camilo_eduardo_castro.jpg",
-        articlesCount: 24,
-    },
-];
-
-const posts = [
-    {
-        id: 5,
-        votes: 3,
-        title: "AI Safety Research: New Breakthroughs in Alignment",
-        author: "Dr. Sarah Chen",
-        date: "2025-09-16T09:00:00Z",
-    },
-    {
-        id: 1,
-        votes: 1,
-        title: "Open thread: April - June 2025",
-        author: "Toby Tremlett",
-        date: "2025-09-15T10:30:00Z",
-    },
-    {
-        id: 3,
-        votes: 1,
-        title: "PauseAI US is looking for local group leads",
-        author: "Toby Tremlett",
-        date: "2025-09-15T14:45:00Z",
-    }
-].sort((a, b) => new Date(b.date) - new Date(a.date));
-
 export default function BlogPage() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [posts, setPosts] = useState([]);
+    const [featuredEditors, setFeaturedEditors] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [loadingEditors, setLoadingEditors] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                setLoading(true);
+                const response = await fetch(
+                    "http://localhost:1337/api/blog-entries?pLevel=5"
+                );
+
+                if (!response.ok) {
+                    throw new Error("Error al cargar los blogs");
+                }
+
+                const data = await response.json();
+                if (data.data && Array.isArray(data.data)) {
+                    const formattedPosts = data.data.map((blog) => ({
+                        id: blog.id,
+                        documentId: blog.documentId,
+                        votes: 0,
+                        title: blog.title,
+                        author: blog.authors?.[0]?.author?.name || "Autor desconocido",
+                        date: blog.createdAt,
+                    }));
+                    setPosts(formattedPosts.sort((a, b) => new Date(b.date) - new Date(a.date)));
+                } else {
+                    setError("No hay blogs disponibles");
+                }
+            } catch (err) {
+                setError(`Error: ${err.message}`);
+                console.error("Error fetching posts:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchPosts();
+    }, []);
+
+    // Fetch editors/authors desde el API
+    useEffect(() => {
+        const fetchEditors = async () => {
+            try {
+                setLoadingEditors(true);
+                const response = await fetch(
+                    "http://localhost:1337/api/authors"
+                );
+
+                if (!response.ok) {
+                    throw new Error("Error al cargar los autores");
+                }
+
+                const data = await response.json();
+                if (data.data && Array.isArray(data.data)) {
+                    const formattedEditors = data.data.map((author) => ({
+                        name: author.name,
+                        image: `https://placehold.co/400x400/black/white?text=${author.name
+                            ?.split(" ")
+                            .slice(0, 2)
+                            .map((w) => w[0])
+                            .join("")}&font=roboto`,
+                        articlesCount: 0, // Puedes calcular esto desde los blogs si lo necesitas
+                        bio: author.bio,
+                    }));
+                    setFeaturedEditors(formattedEditors);
+                } else {
+                    setFeaturedEditors([]);
+                }
+            } catch (err) {
+                console.error("Error fetching editors:", err);
+                setFeaturedEditors([]);
+            } finally {
+                setLoadingEditors(false);
+            }
+        };
+
+        fetchEditors();
+    }, []);
 
     // Función para formatear fechas relativas (Sin cambios)
     const formatRelativeTime = (dateString) => {
@@ -184,61 +220,78 @@ export default function BlogPage() {
                     </div>
                 </header>
 
-                {/* Mobile Menu Overlay (Sin cambios) */}
-                {isMenuOpen && (
+                {/* Mobile Menu Overlay */}
+                <div
+                    className={`lg:hidden fixed inset-0 z-30 bg-[white] transition-opacity duration-300 ${
+                        isMenuOpen
+                            ? "opacity-100"
+                            : "opacity-0 pointer-events-none"
+                    }`}
+                    onClick={() => setIsMenuOpen(false)}
+                >
+                    <div className="lg:hidden absolute py-3 px-5 w-full ">
+                        <div className="flex items-center justify-between gap-2 w-full">
+                            <span className="text-lg font-semibold">Menu</span>
+                            <button
+                                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                                className="p-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-100 transition-colors duration-300"
+                            >
+                                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                            </button>
+                        </div>
+                    </div>
                     <div
-                        className="lg:hidden fixed inset-0 z-30 bg-black bg-opacity-50"
-                        onClick={() => setIsMenuOpen(false)}
+                        className={`fixed top-16 left-0 right-0 bg-transparent max-h-[calc(100vh-4rem)] overflow-y-auto transition-transform duration-300 ${
+                            isMenuOpen ? "translate-y-0" : "-translate-y-full"
+                        }`}
                     >
-                        <div className="fixed top-16 left-0 right-0 bg-white max-h-[calc(100vh-4rem)] overflow-y-auto">
-                            <div className="px-4 py-6 space-y-4">
-                                {/* Mobile Navigation */}
-                                <nav className="space-y-2">
-                                    {navLinks.map((link) => (
-                                        <a
-                                            key={link.name}
-                                            href={link.href}
-                                            onClick={() => setIsMenuOpen(false)}
-                                            className={`flex items-center gap-3 p-4 rounded-xl transition-all duration-300 ${
-                                                link.current
-                                                    ? "bg-gradient-to-r from-[#18647E] to-[#08849A] text-white"
-                                                    : "text-gray-700 hover:bg-gray-100"
-                                            }`}
-                                        >
-                                            <link.icon size={20} />
-                                            <span className="font-medium">
-                                                {link.name}
-                                            </span>
-                                        </a>
-                                    ))}
-                                </nav>
+                        <div className="px-4 py-6 pt-2 space-y-4">
+                            {/* Mobile Navigation */}
+                            <nav className="space-y-2">
+                                {navLinks.map((link) => (
+                                    <a
+                                        key={link.name}
+                                        href={link.href}
+                                        onClick={() => setIsMenuOpen(false)}
+                                        className={`flex items-center gap-3 p-4 px-5 rounded-full transition-all duration-300 ${
+                                            link.current
+                                                ? "bg-gradient-to-r from-[#18647E] to-[#08849A] text-white"
+                                                : "text-gray-700 hover:bg-gray-100"
+                                        }`}
+                                    >
+                                        <link.icon size={20} />
+                                        <span className="font-medium">
+                                            {link.name}
+                                        </span>
+                                    </a>
+                                ))}
+                            </nav>
 
-                                {/* Mobile Login Button */}
-                                <div className="pt-4 border-t border-gray-200">
-                                    <button className="w-full bg-gradient-to-r from-[#18647E] to-[#08849A] hover:from-[#08849A] hover:to-[#0A9B8C] transition-all duration-300 text-white px-6 py-3 rounded-xl font-semibold text-sm shadow-lg hover:shadow-xl">
-                                        ¡Únete ahora!
-                                    </button>
-                                </div>
+                            {/* Mobile Login Button */}
+                            <div className="pt-4 border-t border-gray-200">
+                                <button className="w-full bg-gradient-to-r from-[#18647E] to-[#08849A] hover:from-[#08849A] hover:to-[#0A9B8C] transition-all duration-300 text-white px-6 py-5 rounded-full font-semibold text-sm shadow-lg hover:shadow-xl transform hover:scale-105">
+                                    ¡Únete ahora!
+                                </button>
                             </div>
                         </div>
                     </div>
-                )}
+                </div>
 
                 {/* ===== LAYOUT PRINCIPAL (CON CAMBIOS) ===== */}
                 <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12">
+                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-12">
                         {/* ===== Columna Izquierda (Wrapper para Aside) ===== */}
-                        <div className="hidden lg:block lg:col-span-1">
+                        <div className="lg:col-span-1 order-2 lg:order-1">
                             {/* ✅ El aside ahora es sticky dentro de esta columna */}
-                            <aside className="sticky top-0 space-y-6">
-                                {/* Navigation */}
-                                <nav>
+                            <aside className="lg:sticky lg:top-0 space-y-6">
+                                {/* Navigation - Hidden on all screens, only in mobile menu */}
+                                <nav className="hidden lg:block">
                                     <ul className="space-y-2">
                                         {navLinks.map((link) => (
                                             <li key={link.name}>
                                                 <a
                                                     href={link.href}
-                                                    className={`flex items-center gap-3 p-3 rounded-xl transition-all duration-300 text-gray-700 font-medium ${
+                                                    className={`flex items-center gap-3 p-3 rounded-xl transition-all duration-300 text-gray-700 font-medium hover:shadow-sm ${
                                                         link.current
                                                             ? "bg-gradient-to-r from-[#18647E] to-[#08849A] text-white"
                                                             : "hover:bg-gray-100"
@@ -261,7 +314,7 @@ export default function BlogPage() {
                                     </h3>
                                     <iframe
                                         src="https://lu.ma/embed/calendar/cal-UNNJDLVBWrEroMd/events?past=true"
-                                        className="w-full h-[300px] border border-gray-200 rounded-xl"
+                                        className="w-full h-[300px] border border-gray-200 rounded-xl shadow-md"
                                         frameBorder="0"
                                         allowFullScreen=""
                                         title="Calendario de Eventos"
@@ -271,51 +324,66 @@ export default function BlogPage() {
                         </div>
 
                         {/* ===== Section Central (Contenido Principal) ===== */}
-                        <section className="col-span-1 lg:col-span-2">
+                        <section className="col-span-1 lg:col-span-2 order-1">
                             <h2 className="text-2xl font-bold mb-4 text-gray-800 border-b border-gray-200 pb-4">
                                 Nuevos blogs
                             </h2>
 
-                            <div className="space-y-4">
+                            {loading && (
+                                <div className="text-center py-12">
+                                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#18647E] mx-auto mb-4"></div>
+                                    <p className="text-gray-600 font-medium">Cargando blogs...</p>
+                                </div>
+                            )}
+
+                            {error && (
+                                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
+                                    {error}
+                                </div>
+                            )}
+
+                            <div className="space-y-10">
                                 {posts.map((post) => (
-                                    <article
+                                    <Link
+                                        href={`/es/blog/${post.documentId}`}
                                         key={post.id}
-                                        className="group p-6 px-0 cursor-pointer transition-all duration-300 hover:border-[#18647E]"
                                     >
-                                        <div className="flex items-start gap-4">
-                                            <div className="flex-shrink-0">
-                                                <div className="w-12 h-12 bg-gray-100 group-hover:bg-gradient-to-br from-[#18647E] to-[#08849A] group-hover:text-white rounded-full flex items-center justify-center text-[#18647E] font-bold text-lg transition-all duration-300">
-                                                    {post.votes}
+                                        <article className="group p-0 cursor-pointer transition-all duration-300">
+                                            <div className="flex items-start gap-4">
+                                                <div className="flex-shrink-0 hidden">
+                                                    <div className="w-12 h-12 bg-gray-100 group-hover:bg-gradient-to-br from-[#18647E] to-[#08849A] group-hover:text-white rounded-full flex items-center justify-center text-[#18647E] font-bold text-lg transition-all duration-300 transform group-hover:scale-110">
+                                                        {post.votes}
+                                                    </div>
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-[#18647E] transition-colors duration-300 line-clamp-2">
+                                                        {post.title}
+                                                    </h3>
+                                                    <p className="text-sm text-gray-500 flex items-center gap-2">
+                                                        <span className="font-medium">
+                                                            {post.author}
+                                                        </span>
+                                                        <span>•</span>
+                                                        <span>
+                                                            {formatRelativeTime(
+                                                                post.date
+                                                            )}
+                                                        </span>
+                                                    </p>
                                                 </div>
                                             </div>
-                                            <div className="flex-1 min-w-0">
-                                                <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-[#18647E] transition-colors duration-300 line-clamp-2">
-                                                    {post.title}
-                                                </h3>
-                                                <p className="text-sm text-gray-500 flex items-center gap-2">
-                                                    <span className="font-medium">
-                                                        {post.author}
-                                                    </span>
-                                                    <span>•</span>
-                                                    <span>
-                                                        {formatRelativeTime(
-                                                            post.date
-                                                        )}
-                                                    </span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </article>
+                                        </article>
+                                    </Link>
                                 ))}
                             </div>
                         </section>
 
                         {/* ===== Columna Derecha (Wrapper para Aside) ===== */}
-                        <div className="hidden lg:block lg:col-span-1">
+                        <div className="lg:col-span-1 order-3">
                             {/* ✅ El aside ahora es sticky dentro de esta columna */}
-                            <aside className="sticky top-0 space-y-6">
+                            <aside className="lg:sticky lg:top-0 space-y-6">
                                 {/* Newsletter */}
-                                <div className="bg-gradient-to-br from-[#18647E] to-[#08849A] p-6 rounded-2xl text-white shadow-lg">
+                                <div className="hidden bg-gradient-to-br from-[#18647E] to-[#08849A] p-6 rounded-2xl text-white shadow-lg hover:shadow-xl transition-shadow duration-300">
                                     <h3 className="text-xl font-bold mb-2">
                                         Suscríbete al Newsletter
                                     </h3>
@@ -327,43 +395,49 @@ export default function BlogPage() {
                                         <input
                                             type="email"
                                             placeholder="Tu correo electrónico"
-                                            className="w-full px-4 py-3 border border-white/20 rounded-xl text-sm bg-white/10 backdrop-blur-sm text-white placeholder-white/70 focus:ring-2 focus:ring-white focus:border-white outline-none transition-all"
+                                            className="w-full px-4 py-3 border border-white/20 rounded-xl text-sm bg-white/10 backdrop-blur-sm text-white placeholder-white/70 focus:ring-2 focus:ring-white focus:border-white outline-none transition-all hover:border-white/40"
                                         />
-                                        <button className="w-full bg-white text-[#18647E] font-semibold px-4 py-3 rounded-xl hover:bg-gray-50 transition-all duration-300">
+                                        <button className="w-full bg-white text-[#18647E] font-semibold px-4 py-3 rounded-xl hover:bg-gray-50 hover:shadow-md transition-all duration-300 transform hover:scale-105">
                                             Enviar
                                         </button>
                                     </div>
                                 </div>
 
                                 {/* Posts Más Votados */}
-                                <div>
+                                <div className="hidden">
                                     <h3 className="text-lg font-bold text-gray-800 mb-4">
                                         Los más votados
                                     </h3>
-                                    <div className="space-y-4">
+                                    <div className="space-y-6">
                                         {posts
                                             .sort((a, b) => b.votes - a.votes)
                                             .slice(0, 3)
                                             .map((post) => (
-                                            <div key={post.id}>
-                                                <a
-                                                    href="#"
-                                                    className="text-gray-800 hover:text-[#18647E] transition-colors block leading-relaxed font-medium text-sm"
+                                                <div
+                                                    key={post.id}
+                                                    className="p-0 rounded-lg hover:bg-gray-50 transition-colors duration-300"
                                                 >
-                                                    {post.title.length > 60
-                                                        ? post.title.substring(
-                                                              0,
-                                                              60
-                                                          ) + "..."
-                                                        : post.title}
-                                                </a>
-                                                <div className="flex items-center justify-between mt-2">
-                                                    <p className="text-xs text-gray-500">
-                                                        {post.votes} {post.votes === 1 ? 'voto' : 'votos'}
-                                                    </p>
+                                                    <a
+                                                        href="#"
+                                                        className="text-gray-800 hover:text-[#18647E] hover:underline transition-all duration-300 block leading-relaxed font-medium text-sm"
+                                                    >
+                                                        {post.title.length > 60
+                                                            ? post.title.substring(
+                                                                  0,
+                                                                  60
+                                                              ) + "..."
+                                                            : post.title}
+                                                    </a>
+                                                    <div className="flex items-center justify-between mt-2">
+                                                        <p className="text-xs text-gray-500 font-medium">
+                                                            {post.votes}{" "}
+                                                            {post.votes === 1
+                                                                ? "voto"
+                                                                : "votos"}
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        ))}
+                                            ))}
                                     </div>
                                 </div>
 
@@ -377,17 +451,17 @@ export default function BlogPage() {
                                             (editor, index) => (
                                                 <div
                                                     key={index}
-                                                    className="flex items-center gap-3"
+                                                    className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors duration-300"
                                                 >
                                                     <img
                                                         src={editor.image}
                                                         alt={editor.name}
-                                                        className="w-12 h-12 rounded-full object-cover border-2 border-gray-200"
+                                                        className="w-12 h-12 rounded-full object-cover border-2 border-gray-200 hover:scale-105 transition-transform duration-300"
                                                     />
                                                     <div className="flex-1">
                                                         <a
                                                             href="#"
-                                                            className="text-gray-700 hover:text-[#18647E] transition-colors font-medium block"
+                                                            className="text-gray-700 hover:text-[#18647E] hover:underline transition-all duration-300 font-medium block"
                                                         >
                                                             {editor.name}
                                                         </a>
