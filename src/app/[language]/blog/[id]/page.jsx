@@ -27,7 +27,7 @@ export default function BlogPage({ params }) {
             try {
                 setLoading(true);
                 const response = await fetch(
-                    `http://localhost:1337/api/blog-entries?filters[documentId][$eq]=${params.id}&pLevel=5`
+                    `${process.env.NEXT_PUBLIC_API_URL}/api/blog-entries?filters[documentId][$eq]=${params.id}&pLevel=5`
                 );
 
                 if (!response.ok) {
