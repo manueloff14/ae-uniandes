@@ -37,7 +37,7 @@ export default function BlogPage() {
             try {
                 setLoading(true);
                 const response = await fetch(
-                    "http://localhost:1337/api/blog-entries?pLevel=5"
+                    `${process.env.NEXT_PUBLIC_API_URL}/api/blog-entries?pLevel=5`
                 );
 
                 if (!response.ok) {
@@ -75,7 +75,7 @@ export default function BlogPage() {
             try {
                 setLoadingEditors(true);
                 const response = await fetch(
-                    "http://localhost:1337/api/authors"
+                    `${process.env.NEXT_PUBLIC_API_URL}/api/authors`
                 );
 
                 if (!response.ok) {
