@@ -33,80 +33,80 @@ export default function BlogPage() {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchPosts = async () => {
+        const fetchData = async () => {
             try {
                 setLoading(true);
-                const response = await fetch(
+                // Primero: cargar blogs
+                const postsResponse = await fetch(
                     `${process.env.NEXT_PUBLIC_API_URL}/api/blog-entries?pLevel=5`
                 );
 
-                if (!response.ok) {
+                if (!postsResponse.ok) {
                     throw new Error("Error al cargar los blogs");
                 }
 
-                const data = await response.json();
-                if (data.data && Array.isArray(data.data)) {
-                    const formattedPosts = data.data.map((blog) => ({
+                const postsData = await postsResponse.json();
+                let formattedPosts = [];
+
+                if (postsData.data && Array.isArray(postsData.data)) {
+                    formattedPosts = postsData.data.map((blog) => ({
                         id: blog.id,
                         documentId: blog.documentId,
                         votes: 0,
                         title: blog.title,
                         author: blog.authors?.[0]?.author?.name || "Autor desconocido",
                         date: blog.createdAt,
-                    }));
-                    setPosts(formattedPosts.sort((a, b) => new Date(b.date) - new Date(a.date)));
+                    })).sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                    setPosts(formattedPosts);
                 } else {
                     setError("No hay blogs disponibles");
+                    return;
                 }
-            } catch (err) {
-                setError(`Error: ${err.message}`);
-                console.error("Error fetching posts:", err);
-            } finally {
-                setLoading(false);
-            }
-        };
 
-        fetchPosts();
-    }, []);
-
-    // Fetch editors/authors desde el API
-    useEffect(() => {
-        const fetchEditors = async () => {
-            try {
+                // Segundo: cargar autores CON el conteo de posts
                 setLoadingEditors(true);
-                const response = await fetch(
+                const authorsResponse = await fetch(
                     `${process.env.NEXT_PUBLIC_API_URL}/api/authors`
                 );
 
-                if (!response.ok) {
+                if (!authorsResponse.ok) {
                     throw new Error("Error al cargar los autores");
                 }
 
-                const data = await response.json();
-                if (data.data && Array.isArray(data.data)) {
-                    const formattedEditors = data.data.map((author) => ({
-                        name: author.name,
-                        image: `https://placehold.co/400x400/black/white?text=${author.name
-                            ?.split(" ")
-                            .slice(0, 2)
-                            .map((w) => w[0])
-                            .join("")}&font=roboto`,
-                        articlesCount: 0, // Puedes calcular esto desde los blogs si lo necesitas
-                        bio: author.bio,
-                    }));
+                const authorsData = await authorsResponse.json();
+                if (authorsData.data && Array.isArray(authorsData.data)) {
+                    const formattedEditors = authorsData.data.map((author) => {
+                        // Contar artículos del autor en los posts ya cargados
+                        const articleCount = formattedPosts.filter(
+                            (post) => post.author === author.name
+                        ).length;
+
+                        return {
+                            name: author.name,
+                            image: `https://placehold.co/400x400/black/white?text=${author.name
+                                ?.split(" ")
+                                .slice(0, 2)
+                                .map((w) => w[0])
+                                .join("")}&font=roboto`,
+                            articlesCount: articleCount,
+                            bio: author.bio,
+                        };
+                    });
                     setFeaturedEditors(formattedEditors);
                 } else {
                     setFeaturedEditors([]);
                 }
             } catch (err) {
-                console.error("Error fetching editors:", err);
-                setFeaturedEditors([]);
+                setError(`Error: ${err.message}`);
+                console.error("Error fetching data:", err);
             } finally {
+                setLoading(false);
                 setLoadingEditors(false);
             }
         };
 
-        fetchEditors();
+        fetchData();
     }, []);
 
     // Función para formatear fechas relativas (Sin cambios)
@@ -314,7 +314,7 @@ export default function BlogPage() {
                                     </h3>
                                     <iframe
                                         src="https://lu.ma/embed/calendar/cal-UNNJDLVBWrEroMd/events?past=true"
-                                        className="w-full h-[300px] border border-gray-200 rounded-xl shadow-md"
+                                        className="w-full h-[350px] border border-gray-200 rounded-xl shadow-md"
                                         frameBorder="0"
                                         allowFullScreen=""
                                         title="Calendario de Eventos"
@@ -348,7 +348,7 @@ export default function BlogPage() {
                                         href={`/es/blog/${post.documentId}`}
                                         key={post.id}
                                     >
-                                        <article className="group p-0 cursor-pointer transition-all duration-300">
+                                        <article className="group p-0 cursor-pointer transition-all duration-300 pb-6">
                                             <div className="flex items-start gap-4">
                                                 <div className="flex-shrink-0 hidden">
                                                     <div className="w-12 h-12 bg-gray-100 group-hover:bg-gradient-to-br from-[#18647E] to-[#08849A] group-hover:text-white rounded-full flex items-center justify-center text-[#18647E] font-bold text-lg transition-all duration-300 transform group-hover:scale-110">
@@ -451,7 +451,7 @@ export default function BlogPage() {
                                             (editor, index) => (
                                                 <div
                                                     key={index}
-                                                    className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors duration-300"
+                                                    className="flex items-center gap-3 p-0 rounded-lg hover:bg-gray-50 transition-colors duration-300"
                                                 >
                                                     <img
                                                         src={editor.image}

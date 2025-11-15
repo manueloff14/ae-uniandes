@@ -1,9 +1,9 @@
 // Este archivo vive en: app/[language]/blog/[id]/layout.jsx
 
 export async function generateMetadata({ params }) {
-    const { id } = params;
+    const { id } = await params;
     const baseUrl =
-        process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:1337";
+        process.env.NEXT_PUBLIC_BACKEND_URL || "https://rational-canvas-1f9094ba41.strapiapp.com";
 
     try {
         const res = await fetch(
@@ -36,7 +36,7 @@ export async function generateMetadata({ params }) {
         };
     } catch (err) {
         console.error("Error generating metadata:", err);
-        return { title: "Error cargando el blog" };
+        return { title: "Blog - AE Uniandes" };
     }
 }
 

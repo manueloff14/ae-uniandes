@@ -6,12 +6,13 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft, Share2 } from "lucide-react";
 import tocbot from "tocbot";
 
-// ✅ CAMBIO: Se importan las librerías para renderizar Markdown y Ecuaciones
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import rehypeSlug from "rehype-slug";
-import "katex/dist/katex.min.css"; // Hoja de estilos para las ecuaciones
+import rehypeRaw from "rehype-raw";
+import remarkGfm from "remark-gfm";
+import "katex/dist/katex.min.css";
 
 import "tocbot/dist/tocbot.css";
 
@@ -20,14 +21,24 @@ export default function BlogPage({ params }) {
     const [blog, setBlog] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [showDebug, setShowDebug] = useState(false); // 🔍 Debug toggle
+    const [id, setId] = useState(null);
 
-    // Fetch blog data when component mounts
+    // Extraer el ID de params de forma segura
     useEffect(() => {
+        if (params?.id) {
+            setId(params.id);
+        }
+    }, [params]);
+
+    useEffect(() => {
+        if (!id) return;
+
         const fetchBlog = async () => {
             try {
                 setLoading(true);
                 const response = await fetch(
-                    `${process.env.NEXT_PUBLIC_API_URL}/api/blog-entries?filters[documentId][$eq]=${params.id}&pLevel=5`
+                    `${process.env.NEXT_PUBLIC_API_URL}/api/blog-entries?filters[documentId][$eq]=${id}&pLevel=5`
                 );
 
                 if (!response.ok) {
@@ -59,20 +70,24 @@ export default function BlogPage({ params }) {
         };
 
         fetchBlog();
-    }, [params.id]);
+    }, [id]);
 
     useEffect(() => {
-        tocbot.init({
-            tocSelector: ".js-toc",
-            contentSelector: ".js-content",
-            headingSelector: "h2, h3, h4",
-            collapseDepth: 3,
-            orderedList: false,
-            activeLinkClass: "is-active-link",
-            listClass: "toc-list",
-            linkClass: "toc-link",
-            headingTopOffset: 120,
-        });
+        if (blog) {
+            setTimeout(() => {
+                tocbot.init({
+                    tocSelector: ".js-toc",
+                    contentSelector: ".js-content",
+                    headingSelector: "h2, h3, h4",
+                    collapseDepth: 3,
+                    orderedList: false,
+                    activeLinkClass: "is-active-link",
+                    listClass: "toc-list",
+                    linkClass: "toc-link",
+                    headingTopOffset: 120,
+                });
+            }, 100);
+        }
         return () => tocbot.destroy();
     }, [blog]);
 
@@ -152,6 +167,60 @@ export default function BlogPage({ params }) {
                 .prose h4 {
                     scroll-margin-top: 120px;
                 }
+                
+                .prose table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin: 2rem 0;
+                    font-size: 0.9rem;
+                    overflow-x: auto;
+                    display: block;
+                }
+                
+                .prose thead {
+                    background-color: #f3f4f6;
+                }
+                
+                .prose th {
+                    border: 1px solid #d1d5db;
+                    padding: 0.75rem;
+                    text-align: left;
+                    font-weight: 600;
+                    color: #111827;
+                }
+                
+                .prose td {
+                    border: 1px solid #e5e7eb;
+                    padding: 0.75rem;
+                    color: #374151;
+                }
+                
+                .prose tbody tr:hover {
+                    background-color: #f9fafb;
+                }
+                
+                .prose table .katex {
+                    font-size: 0.95em;
+                }
+
+                /* 🔍 Estilos para el debug panel */
+                .debug-panel {
+                    position: fixed;
+                    bottom: 20px;
+                    right: 20px;
+                    z-index: 9999;
+                }
+                
+                .debug-content {
+                    max-width: 600px;
+                    max-height: 400px;
+                    overflow: auto;
+                    background: white;
+                    border: 2px solid #18647e;
+                    border-radius: 8px;
+                    padding: 16px;
+                    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                }
             `}</style>
 
             <header className="sticky top-0 z-20 w-full bg-white/95 backdrop-blur-lg border-b border-gray-200">
@@ -164,7 +233,7 @@ export default function BlogPage({ params }) {
                         />
                     </Link>
 
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-4"> 
                         <button
                             onClick={() => router.back()}
                             className="hidden sm:flex items-center gap-2 text-gray-600 hover:text-black transition-colors font-semibold text-sm"
@@ -183,6 +252,27 @@ export default function BlogPage({ params }) {
                 </div>
             </header>
 
+            {/* 🔍 Panel de Debug */}
+            {showDebug && (
+                <div className="debug-panel">
+                    <div className="debug-content">
+                        <h3 className="font-bold text-lg mb-2">🔍 Contenido Raw de Strapi:</h3>
+                        <pre className="text-xs bg-gray-100 p-3 rounded overflow-x-auto whitespace-pre-wrap break-words">
+                            {blog.content.substring(0, 2000)}...
+                        </pre>
+                        <button
+                            onClick={() => {
+                                navigator.clipboard.writeText(blog.content);
+                                alert('Contenido copiado al portapapeles!');
+                            }}
+                            className="mt-2 bg-blue-500 text-white px-3 py-1 rounded text-sm"
+                        >
+                            📋 Copiar todo el contenido
+                        </button>
+                    </div>
+                </div>
+            )}
+
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12">
                     <aside className="hidden lg:block lg:col-span-1">
@@ -197,7 +287,7 @@ export default function BlogPage({ params }) {
                     <article className="lg:col-span-2 js-content">
                         <header className="mb-12">
                             <div className="mb-6">
-                                <h1 className="text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight tracking-tight">
+                                <h1 className="text-2xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight">
                                     {blog.title}
                                 </h1>
                             </div>
@@ -220,11 +310,27 @@ export default function BlogPage({ params }) {
                             </figure>
                         )}
 
-                        <div className="mb-32 prose prose-lg max-w-none prose-a:text-[#18647E] prose-headings:font-bold prose-h2:text-3xl prose-h3:text-2xl prose-img:rounded-lg">
-                            {/* ✅ Se usa ReactMarkdown con los plugins de Matemáticas */}
+                        <div className="mb-32 prose prose-base md:prose-lg max-w-none prose-a:text-[#18647E] prose-headings:font-bold prose-h2:text-3xl prose-h3:text-2xl prose-img:rounded-lg">
                             <ReactMarkdown
-                                remarkPlugins={[remarkMath]}
-                                rehypePlugins={[rehypeKatex, rehypeSlug]}
+                                remarkPlugins={[remarkMath, remarkGfm]}
+                                rehypePlugins={[rehypeKatex, rehypeSlug, rehypeRaw]}
+                                components={{
+                                    table: ({ node, ...props }) => (
+                                        <div className="overflow-x-auto my-6">
+                                            <table {...props} />
+                                        </div>
+                                    ),
+                                    code: ({ node, inline, className, children, ...props }) => {
+                                        if (inline) {
+                                            return <code className={className} {...props}>{children}</code>;
+                                        }
+                                        return (
+                                            <pre className="bg-gray-50 p-4 rounded-lg overflow-x-auto">
+                                                <code className={className} {...props}>{children}</code>
+                                            </pre>
+                                        );
+                                    },
+                                }}
                             >
                                 {blog.content}
                             </ReactMarkdown>
