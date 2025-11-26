@@ -13,15 +13,39 @@ import {
     X,
     ChevronLeft,
     ChevronRight,
+    Info,
+    SquareChartGantt,
+    Calendar,
+    Images,
 } from "lucide-react";
 
 // --- DATOS DE EJEMPLO (Sin cambios) ---
 const navLinks = [
     { name: "Inicio", icon: HomeIcon, href: "#", current: true },
-    { name: "Categorías", icon: Grid2x2, href: "#", current: false },
-    { name: "Archivo", icon: Archive, href: "#", current: false },
-    { name: "Sobre los autores", icon: Users, href: "#", current: false },
-    { name: "Contacto", icon: Phone, href: "#", current: false },
+    {
+        name: "Acerca de AE",
+        icon: Info,
+        href: "https://www.aeuniandes.com/es/acerca-de-ae",
+        current: false,
+    },
+    {
+        name: "Proyectos",
+        icon: SquareChartGantt,
+        href: "https://www.aeuniandes.com/es/proyectos",
+        current: false,
+    },
+    {
+        name: "Eventos",
+        icon: Calendar,
+        href: "https://www.aeuniandes.com/es/eventos",
+        current: false,
+    },
+    {
+        name: "Galería",
+        icon: Images,
+        href: "https://www.aeuniandes.com/es/galeria",
+        current: false,
+    },
 ];
 
 export default function BlogPage() {
@@ -49,14 +73,18 @@ export default function BlogPage() {
                 let formattedPosts = [];
 
                 if (postsData.data && Array.isArray(postsData.data)) {
-                    formattedPosts = postsData.data.map((blog) => ({
-                        id: blog.id,
-                        documentId: blog.documentId,
-                        votes: 0,
-                        title: blog.title,
-                        author: blog.authors?.[0]?.author?.name || "Autor desconocido",
-                        date: blog.createdAt,
-                    })).sort((a, b) => new Date(b.date) - new Date(a.date));
+                    formattedPosts = postsData.data
+                        .map((blog) => ({
+                            id: blog.id,
+                            documentId: blog.documentId,
+                            votes: 0,
+                            title: blog.title,
+                            author:
+                                blog.authors?.[0]?.author?.name ||
+                                "Autor desconocido",
+                            date: blog.createdAt,
+                        }))
+                        .sort((a, b) => new Date(b.date) - new Date(a.date));
 
                     setPosts(formattedPosts);
                 } else {
@@ -236,7 +264,11 @@ export default function BlogPage() {
                                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                                 className="p-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-100 transition-colors duration-300"
                             >
-                                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                                {isMenuOpen ? (
+                                    <X size={24} />
+                                ) : (
+                                    <Menu size={24} />
+                                )}
                             </button>
                         </div>
                     </div>
@@ -332,7 +364,9 @@ export default function BlogPage() {
                             {loading && (
                                 <div className="text-center py-12">
                                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#18647E] mx-auto mb-4"></div>
-                                    <p className="text-gray-600 font-medium">Cargando blogs...</p>
+                                    <p className="text-gray-600 font-medium">
+                                        Cargando blogs...
+                                    </p>
                                 </div>
                             )}
 
