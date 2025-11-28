@@ -55,6 +55,7 @@ export default function BlogPage() {
     const [loading, setLoading] = useState(true);
     const [loadingEditors, setLoadingEditors] = useState(true);
     const [error, setError] = useState(null);
+    const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -164,6 +165,12 @@ export default function BlogPage() {
         return `hace ${months} ${months === 1 ? "mes" : "meses"}`;
     };
 
+    const filteredPosts = posts.filter(
+        (post) =>
+            post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            post.author.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     return (
         <>
             <style jsx global>{`
@@ -185,20 +192,28 @@ export default function BlogPage() {
                         <div className="flex items-center justify-between h-16 lg:h-20">
                             {/* Logo */}
                             <div className="flex-shrink-0">
-                                <img
-                                    className="h-8 lg:h-12 w-auto transition-all duration-300"
-                                    src="/ae-blog-logo.svg"
-                                    alt="Logo AE Uniandes"
-                                />
+                                <Link href="https://www.aeuniandes.com">
+                                    <img
+                                        className="h-8 lg:h-12 w-auto transition-all duration-300"
+                                        src="/ae-blog-logo.svg"
+                                        alt="Logo AE Uniandes"
+                                    />
+                                </Link>
                             </div>
 
                             {/* Search Bar - Desktop */}
                             <div className="hidden md:flex flex-1 max-w-2xl mx-8 gap-2">
                                 <div className="flex items-center gap-2">
-                                    <button className="p-2 rounded-full text-gray-700 hover:text-gray-900 hover:bg-gray-100 transition-colors duration-300">
+                                    <button
+                                        onClick={() => window.history.back()}
+                                        className="p-2 rounded-full text-gray-700 hover:text-gray-900 hover:bg-gray-100 transition-colors duration-300"
+                                    >
                                         <ChevronLeft />
                                     </button>
-                                    <button className="p-2 rounded-full text-gray-700 hover:text-gray-900 hover:bg-gray-100 transition-colors duration-300">
+                                    <button
+                                        onClick={() => window.history.forward()}
+                                        className="p-2 rounded-full text-gray-700 hover:text-gray-900 hover:bg-gray-100 transition-colors duration-300"
+                                    >
                                         <ChevronRight />
                                     </button>
                                 </div>
@@ -208,13 +223,25 @@ export default function BlogPage() {
                                         className="p-2 py-2.5 w-full bg-transparent outline-none text-sm placeholder-gray-500"
                                         type="text"
                                         placeholder="Buscar artículo, autor o categoría..."
+                                        value={searchTerm}
+                                        onChange={(e) =>
+                                            setSearchTerm(e.target.value)
+                                        }
                                     />
                                 </div>
                             </div>
 
                             {/* Desktop Login Button */}
                             <div className="hidden lg:block">
-                                <button className="bg-gradient-to-r from-[#18647E] to-[#08849A] hover:from-[#08849A] hover:to-[#0A9B8C] transition-all duration-300 text-white px-6 py-2.5 rounded-full font-semibold text-sm shadow-lg hover:shadow-xl transform hover:scale-105">
+                                <button
+                                    onClick={() =>
+                                        window.open(
+                                            "https://docs.google.com/forms/d/e/1FAIpQLSdKu9jUoggmJY4eTA7jCV9Up0_bqiDKw6WTemu07tNDyTvjJg/viewform?usp=send_form",
+                                            "_blank"
+                                        )
+                                    }
+                                    className="bg-gradient-to-r from-[#18647E] to-[#08849A] hover:from-[#08849A] hover:to-[#0A9B8C] transition-all duration-300 text-white px-6 py-2.5 rounded-full font-semibold text-sm shadow-lg hover:shadow-xl transform hover:scale-105"
+                                >
                                     ¡Únete ahora!
                                 </button>
                             </div>
@@ -242,6 +269,10 @@ export default function BlogPage() {
                                     className="p-2 py-2.5 w-full bg-transparent outline-none text-sm placeholder-gray-500"
                                     type="text"
                                     placeholder="Buscar..."
+                                    value={searchTerm}
+                                    onChange={(e) =>
+                                        setSearchTerm(e.target.value)
+                                    }
                                 />
                             </div>
                         </div>
@@ -301,7 +332,15 @@ export default function BlogPage() {
 
                             {/* Mobile Login Button */}
                             <div className="pt-4 border-t border-gray-200">
-                                <button className="w-full bg-gradient-to-r from-[#18647E] to-[#08849A] hover:from-[#08849A] hover:to-[#0A9B8C] transition-all duration-300 text-white px-6 py-5 rounded-full font-semibold text-sm shadow-lg hover:shadow-xl transform hover:scale-105">
+                                <button
+                                    onClick={() =>
+                                        window.open(
+                                            "https://docs.google.com/forms/d/e/1FAIpQLSdKu9jUoggmJY4eTA7jCV9Up0_bqiDKw6WTemu07tNDyTvjJg/viewform?usp=send_form",
+                                            "_blank"
+                                        )
+                                    }
+                                    className="w-full bg-gradient-to-r from-[#18647E] to-[#08849A] hover:from-[#08849A] hover:to-[#0A9B8C] transition-all duration-300 text-white px-6 py-5 rounded-full font-semibold text-sm shadow-lg hover:shadow-xl transform hover:scale-105"
+                                >
                                     ¡Únete ahora!
                                 </button>
                             </div>
@@ -377,7 +416,7 @@ export default function BlogPage() {
                             )}
 
                             <div className="space-y-10">
-                                {posts.map((post) => (
+                                {filteredPosts.map((post) => (
                                     <Link
                                         href={`/es/blog/${post.documentId}`}
                                         key={post.id}
@@ -409,6 +448,14 @@ export default function BlogPage() {
                                         </article>
                                     </Link>
                                 ))}
+                                {filteredPosts.length === 0 &&
+                                    !loading &&
+                                    !error && (
+                                        <p className="text-gray-500 text-center py-8">
+                                            No se encontraron resultados para "
+                                            {searchTerm}"
+                                        </p>
+                                    )}
                             </div>
                         </section>
 
