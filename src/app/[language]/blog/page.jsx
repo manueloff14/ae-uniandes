@@ -93,10 +93,10 @@ export default function BlogPage() {
                     return;
                 }
 
-                // Segundo: cargar autores CON el conteo de posts
+                // Segundo: cargar autores CON el conteo de posts y sus fotos (populate=*)
                 setLoadingEditors(true);
                 const authorsResponse = await fetch(
-                    `${process.env.NEXT_PUBLIC_API_URL}/api/authors`
+                    `${process.env.NEXT_PUBLIC_API_URL}/api/authors?populate=*`
                 );
 
                 if (!authorsResponse.ok) {
@@ -111,13 +111,25 @@ export default function BlogPage() {
                             (post) => post.author === author.name
                         ).length;
 
+                        // 1. Placeholder usando las iniciales como antes
+                        const placeholderUrl = `https://placehold.co/400x400/black/white?text=${author.name
+                            ?.split(" ")
+                            .slice(0, 2)
+                            .map((w) => w[0])
+                            .join("")}&font=roboto`;
+                        
+                        // 2. Extraemos la imagen (ahora sabemos que el campo se llama 'foto' en tu Strapi)
+                        const imgData = author.foto;
+                        
+                        // 3. Obtener la URL (Si no empieza con http, significa que es ruta relativa de Strapi)
+                        const realImageUrl = imgData?.url 
+                            ? (imgData.url.startsWith("http") ? imgData.url : `${process.env.NEXT_PUBLIC_API_URL}${imgData.url}`)
+                            : null;
+
                         return {
                             name: author.name,
-                            image: `https://placehold.co/400x400/black/white?text=${author.name
-                                ?.split(" ")
-                                .slice(0, 2)
-                                .map((w) => w[0])
-                                .join("")}&font=roboto`,
+                            documentId: author.documentId,
+                            image: realImageUrl || placeholderUrl,
                             articlesCount: articleCount,
                             bio: author.bio,
                         };
@@ -540,12 +552,12 @@ export default function BlogPage() {
                                                         className="w-12 h-12 rounded-full object-cover border-2 border-gray-200 hover:scale-105 transition-transform duration-300"
                                                     />
                                                     <div className="flex-1">
-                                                        <a
-                                                            href="#"
+                                                        <Link
+                                                            href={`/es/author/${editor.documentId}`}
                                                             className="text-gray-700 hover:text-[#18647E] hover:underline transition-all duration-300 font-medium block"
                                                         >
                                                             {editor.name}
-                                                        </a>
+                                                        </Link>
                                                         <p className="text-xs text-gray-500">
                                                             {
                                                                 editor.articlesCount

@@ -23,6 +23,13 @@ export default function BlogPage({ params }) {
     const [loading, setLoading] = useState(true);
     const [showDebug, setShowDebug] = useState(false); // 🔍 Debug toggle
     const [id, setId] = useState(null);
+    const [copied, setCopied] = useState(false);
+
+    const handleShare = () => {
+        navigator.clipboard.writeText(window.location.href);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
 
     // Extraer el ID de params de forma segura
     useEffect(() => {
@@ -53,6 +60,12 @@ export default function BlogPage({ params }) {
                         authors: blogData.authors
                             ? blogData.authors.map((a) => a.author.name)
                             : ["Autor desconocido"],
+                        authorsData: blogData.authors
+                            ? blogData.authors.map((a) => ({
+                                  name: a.author?.name || "Autor desconocido",
+                                  documentId: a.author?.documentId,
+                              }))
+                            : [{ name: "Autor desconocido", documentId: null }],
                         created_at: blogData.createdAt,
                         featured_image: blogData.image,
                         content:
@@ -293,7 +306,20 @@ export default function BlogPage({ params }) {
                             </div>
                             <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4 text-gray-600 text-base">
                                 <div className="flex items-center gap-4">
-                                    <p className="font-semibold text-gray-800">{blog.authors.join(", ")}</p>
+                                    <p className="font-semibold text-[#18647E]">
+                                        {blog.authorsData.map((a, i) => (
+                                            <span key={i}>
+                                                {a.documentId ? (
+                                                    <Link href={`/es/author/${a.documentId}`} className="hover:underline">
+                                                        {a.name}
+                                                    </Link>
+                                                ) : (
+                                                    a.name
+                                                )}
+                                                {i < blog.authorsData.length - 1 ? ", " : ""}
+                                            </span>
+                                        ))}
+                                    </p>
                                     <span className="hidden sm:inline text-gray-400">•</span>
                                 </div>
                                 <p className="text-gray-500">{formattedDate}</p>
@@ -345,28 +371,61 @@ export default function BlogPage({ params }) {
                                         ? "Autores"
                                         : "Autor"}
                                 </h3>
-                                <div className="flex items-center gap-4">
-                                    <img
-                                        src={`https://placehold.co/400x400/black/white?text=${blog.authors[0]
-                                            ?.split(" ")
-                                            .slice(0, 2)
-                                            .map((w) => w[0])
-                                            .join("")}&font=roboto`}
-                                        alt={blog.authors[0]}
-                                        className="w-14 h-14 rounded-full object-cover"
-                                    />
-                                    <div>
-                                        <p className="font-semibold text-gray-800">
-                                            {blog.authors.join(", ")}
-                                        </p>
-                                        <p className="text-sm text-gray-500">
-                                            Editor Principal
-                                        </p>
-                                    </div>
+                                <div className="flex flex-col gap-4">
+                                    {blog.authorsData.map((author, index) => (
+                                        author.documentId ? (
+                                            <Link href={`/es/author/${author.documentId}`} key={index} className="flex items-center gap-4 group transition-all">
+                                                <img
+                                                    src={`https://placehold.co/400x400/black/white?text=${author.name
+                                                        ?.split(" ")
+                                                        .slice(0, 2)
+                                                        .map((w) => w[0])
+                                                        .join("")}&font=roboto`}
+                                                    alt={author.name}
+                                                    className="w-14 h-14 rounded-full object-cover border-2 border-transparent group-hover:border-[#18647E] transition-all"
+                                                />
+                                                <div>
+                                                    <p className="font-semibold text-gray-800 group-hover:text-[#18647E] transition-colors">
+                                                        {author.name}
+                                                    </p>
+                                                    <p className="text-sm text-gray-500">
+                                                        {index === 0 ? "Editor Principal" : "Co-autor"}
+                                                    </p>
+                                                </div>
+                                            </Link>
+                                        ) : (
+                                            <div key={index} className="flex items-center gap-4">
+                                                <img
+                                                    src={`https://placehold.co/400x400/black/white?text=${author.name
+                                                        ?.split(" ")
+                                                        .slice(0, 2)
+                                                        .map((w) => w[0])
+                                                        .join("")}&font=roboto`}
+                                                    alt={author.name}
+                                                    className="w-14 h-14 rounded-full object-cover"
+                                                />
+                                                <div>
+                                                    <p className="font-semibold text-gray-800">
+                                                        {author.name}
+                                                    </p>
+                                                    <p className="text-sm text-gray-500">
+                                                        Colaborador
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        )
+                                    ))}
                                 </div>
-                                <button className="w-full mt-6 flex items-center justify-center gap-2 text-gray-600 hover:text-white hover:bg-[#18647E] border border-gray-200 p-2.5 rounded-xl transition-colors font-semibold text-sm">
+                                <button
+                                    onClick={handleShare}
+                                    className={`w-full mt-6 flex items-center justify-center gap-2 border p-2.5 rounded-xl transition-all font-semibold text-sm ${
+                                        copied 
+                                            ? "bg-green-500 text-white border-green-500" 
+                                            : "text-gray-600 hover:text-white hover:bg-[#18647E] border-gray-200"
+                                    }`}
+                                >
                                     <Share2 size={16} />
-                                    <span>Compartir Artículo</span>
+                                    <span>{copied ? "¡Enlace copiado!" : "Compartir Artículo"}</span>
                                 </button>
                             </div>
                         </div>
