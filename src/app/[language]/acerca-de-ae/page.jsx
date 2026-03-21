@@ -8,11 +8,15 @@ import { useParams } from "next/navigation";
 import IdentidadSection from "@/components/routes/home/sections/IdentidadSection";
 import HeroSection from "@/components/routes/HeroSection";
 import { ExternalLink } from "lucide-react";
+import Loading from "@/components/routes/Loading";
 
 export default function Home() {
     const { language } = useParams();
 
     const [loading, setLoading] = useState(true);
+    const [startTime] = useState(Date.now());
+    const [showLoading, setShowLoading] = useState(true);
+    const [isExiting, setIsExiting] = useState(false);
     const [headerData, setHeaderData] = useState(null);
     const [footerData, setFooterData] = useState(null);
     const [pageData, setPageData] = useState(null);
@@ -81,6 +85,18 @@ export default function Home() {
         return () => ctrl.abort();
     }, [language]);
 
+    useEffect(() => {
+        if (!loading) {
+            const elapsed = Date.now() - startTime;
+            const remaining = Math.max(4000 - elapsed, 3000);
+            const timer = setTimeout(() => {
+                setIsExiting(true);
+                setTimeout(() => setShowLoading(false), 500);
+            }, remaining);
+            return () => clearTimeout(timer);
+        }
+    }, [loading, startTime]);
+
     const page = pageData?.data;
     const header = headerData?.data;
     const footer = footerData?.data;
@@ -102,38 +118,7 @@ export default function Home() {
         }, 300);
     };
 
-    if (loading) {
-        return (
-            <div className="flex justify-center items-center h-screen flex-col">
-                <img
-                    src="/ae-icon.svg"
-                    alt="Logo"
-                    className="w-[55px] h-[55px]" // Tamaño de la imagen a 55px
-                />
-                <p className="mt-4 text-sm font-bold font-inter text-black">
-                    Cargando...
-                </p>
-
-                <style jsx>{`
-                    img {
-                        animation: scale-up-down 0.5s ease-in-out infinite; /* Animación más rápida */
-                    }
-
-                    @keyframes scale-up-down {
-                        0% {
-                            transform: scale(1);
-                        }
-                        50% {
-                            transform: scale(1.2);
-                        }
-                        100% {
-                            transform: scale(1);
-                        }
-                    }
-                `}</style>
-            </div>
-        );
-    }
+    if (showLoading) return <Loading isExiting={isExiting} />;
 
     const voluntariosCount = page?.volundarios?.person?.length;
     const coordinadoresCount = page?.coordinadores?.person?.length;

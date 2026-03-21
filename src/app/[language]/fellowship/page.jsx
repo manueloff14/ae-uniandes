@@ -7,6 +7,7 @@ import { useParams } from "next/navigation";
 import PreguntasFrecuentes from "@/components/routes/home/sections/FAQ";
 import HeroSection from "@/components/routes/HeroSection";
 import { ExternalLink } from "lucide-react";
+import Loading from "@/components/routes/Loading";
 
 export default function Fellowship() {
     // Referencias al contenedor scrollable (una para vigentes y otra para pasados)
@@ -16,6 +17,9 @@ export default function Fellowship() {
     const { language } = useParams();
 
     const [loading, setLoading] = useState(true);
+    const [startTime] = useState(Date.now());
+    const [showLoading, setShowLoading] = useState(true);
+    const [isExiting, setIsExiting] = useState(false);
     const [headerData, setHeaderData] = useState(null);
     const [footerData, setFooterData] = useState(null);
     const [pageData, setPageData] = useState(null);
@@ -82,6 +86,18 @@ export default function Fellowship() {
         return () => ctrl.abort();
     }, [language]);
 
+    useEffect(() => {
+        if (!loading) {
+            const elapsed = Date.now() - startTime;
+            const remaining = Math.max(4000 - elapsed, 3000);
+            const timer = setTimeout(() => {
+                setIsExiting(true);
+                setTimeout(() => setShowLoading(false), 500);
+            }, remaining);
+            return () => clearTimeout(timer);
+        }
+    }, [loading, startTime]);
+
     const page = pageData?.data;
     const header = headerData?.data;
     const footer = footerData?.data;
@@ -126,36 +142,7 @@ export default function Fellowship() {
         }
     };
 
-    if (loading) {
-        return (
-            <div className="flex justify-center items-center h-screen flex-col">
-                <img
-                    src="/ae-icon.svg"
-                    alt="Logo"
-                    className="w-[55px] h-[55px]"
-                />
-                <p className="mt-4 text-sm font-bold font-serif text-black">
-                    Cargando...
-                </p>
-                <style jsx>{`
-                    img {
-                        animation: scale-up-down 0.5s ease-in-out infinite;
-                    }
-                    @keyframes scale-up-down {
-                        0% {
-                            transform: scale(1);
-                        }
-                        50% {
-                            transform: scale(1.2);
-                        }
-                        100% {
-                            transform: scale(1);
-                        }
-                    }
-                `}</style>
-            </div>
-        );
-    }
+    if (showLoading) return <Loading isExiting={isExiting} />;
 
     const data = {
         frequentlyQuestions: {

@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import HeaderHome from "@/components/routes/HeaderHome";
 import Footer from "@/components/routes/Footer";
 import CarouselGallery from "@/components/Gallery";
+import Loading from "@/components/routes/Loading";
 
 export default function Galeria() {
     const [selectedImage, setSelectedImage] = useState(null);
@@ -14,6 +15,9 @@ export default function Galeria() {
     const { language } = useParams();
 
     const [loading, setLoading] = useState(true);
+    const [startTime] = useState(Date.now());
+    const [showLoading, setShowLoading] = useState(true);
+    const [isExiting, setIsExiting] = useState(false);
     const [headerData, setHeaderData] = useState(null);
     const [footerData, setFooterData] = useState(null);
     const [pageData, setPageData] = useState(null);
@@ -82,6 +86,18 @@ export default function Galeria() {
         return () => ctrl.abort();
     }, [language]);
 
+    useEffect(() => {
+        if (!loading) {
+            const elapsed = Date.now() - startTime;
+            const remaining = Math.max(4000 - elapsed, 3000);
+            const timer = setTimeout(() => {
+                setIsExiting(true);
+                setTimeout(() => setShowLoading(false), 500);
+            }, remaining);
+            return () => clearTimeout(timer);
+        }
+    }, [loading, startTime]);
+
     const page = pageData?.data;
     const header = headerData?.data;
     const footer = footerData?.data;
@@ -120,39 +136,7 @@ export default function Galeria() {
         }, 300);
     }
 
-    // Render condicional en base al estado de carga y datos traducidos
-    if (loading) {
-        return (
-            <div className="flex justify-center items-center h-screen flex-col">
-                <img
-                    src="/ae-icon.svg"
-                    alt="Logo"
-                    className="w-[55px] h-[55px]" // Tamaño de la imagen a 55px
-                />
-                <p className="mt-4 text-sm font-bold font-inter text-black">
-                    Cargando...
-                </p>
-
-                <style jsx>{`
-                    img {
-                        animation: scale-up-down 0.5s ease-in-out infinite;
-                    }
-
-                    @keyframes scale-up-down {
-                        0% {
-                            transform: scale(1);
-                        }
-                        50% {
-                            transform: scale(1.2);
-                        }
-                        100% {
-                            transform: scale(1);
-                        }
-                    }
-                `}</style>
-            </div>
-        );
-    }
+    if (showLoading) return <Loading isExiting={isExiting} />;
 
     return (
         <div className="bg-transparent bg-[url('/bg-texture.svg')]">
