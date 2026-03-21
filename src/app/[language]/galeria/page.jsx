@@ -155,12 +155,12 @@ export default function Galeria() {
     }
 
     return (
-        <div className="bg-white bg-[url('/bg-texture.svg')]">
+        <div className="bg-transparent bg-[url('/bg-texture.svg')]">
             <HeaderHome black={true} data={header} />
 
             <section className="max-w-6xl mx-auto px-4 pt-32 py-28 sm:pt-48 mb-10">
                 <div className="flex justify-center mb-4">
-                    <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black font-inter">
+                    <span className="p-2 px-4 rounded-none border border-black text-xs text-center text-black font-inter">
                         {page.Gallery.info.preTitle}
                     </span>
                 </div>
@@ -209,11 +209,11 @@ export default function Galeria() {
                         <img
                             src={selectedImage}
                             alt="Imagen ampliada"
-                            className="max-w-full max-h-[80vh] object-contain rounded-3xl shadow-xl shadow-gray-600"
+                            className="max-w-full max-h-[80vh] object-contain rounded-none shadow-none"
                         />
 
                         <button
-                            className="absolute top-4 right-4 m-5 text-white bg-black rounded-full p-2 hover:bg-opacity-60"
+                            className="absolute top-4 right-4 m-5 text-white bg-black rounded-none border border-transparent p-2 hover:bg-gray-800 transition-colors"
                             onClick={closeModal}
                         >
                             <svg

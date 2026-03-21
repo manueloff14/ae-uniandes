@@ -6,6 +6,8 @@ import HeaderHome from "@/components/routes/HeaderHome";
 import Footer from "@/components/routes/Footer";
 import { useParams } from "next/navigation";
 import IdentidadSection from "@/components/routes/home/sections/IdentidadSection";
+import HeroSection from "@/components/routes/HeroSection";
+import { ExternalLink } from "lucide-react";
 
 export default function Home() {
     const { language } = useParams();
@@ -48,7 +50,7 @@ export default function Home() {
 
                 if (!headerRes.ok || !pageRes.ok || !footerRes.ok) {
                     throw new Error(
-                        `HTTP: header ${headerRes.status}, page ${pageRes.status}, footer ${footerRes.status}`
+                        `HTTP: header ${headerRes.status}, page ${pageRes.status}, footer ${footerRes.status}`,
                     );
                 }
 
@@ -144,9 +146,15 @@ export default function Home() {
             <HeaderHome black={true} data={header} />
 
             <main>
-                <section className="pt-28 pb-16 px-4 sm:py-28 sm:px-8 md:py-32 md:px-16 lg:py-40 lg:px-28">
+                <HeroSection 
+                    image="https://rational-canvas-1f9094ba41.media.strapiapp.com/image_1_ce30fc1286.jpg"
+                    title="Acerca de AE"
+                    subtitle="Conoce nuestra historia, misión y la comunidad global que nos respalda."
+                />
+
+                <section className="pb-16 px-4 sm:px-8 md:px-16 lg:px-28 lg:py-20">
                     <div className="flex justify-center mb-4">
-                        <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black font-inter">
+                        <span className="p-2 px-4 rounded-none border border-black text-xs text-center text-black font-inter">
                             {page.coordinadores.info.preTitle}
                         </span>
                     </div>
@@ -158,9 +166,7 @@ export default function Home() {
                     </p>
 
                     {/* Contenedor de integrantes */}
-                    <div
-                        className={`grid gap-8 grid-cols-1 sm:grid-cols-2 lg:${coordinadoresGrid}`}
-                    >
+                    <div className="flex flex-wrap justify-center gap-8 sm:gap-12 lg:gap-16">
                         {page?.coordinadores?.person?.map((member) => (
                             <div
                                 key={member.id ?? member.name}
@@ -169,7 +175,7 @@ export default function Home() {
                                 <img
                                     src={member.foto.url}
                                     alt={`Integrante ${member.name}`}
-                                    className="w-[280px] h-[280px] rounded-3xl object-cover mb-4"
+                                    className="w-[280px] h-[280px] rounded-none object-cover mb-4"
                                 />
                                 <h3 className="text-xl font-semibold text-black font-inter">
                                     {member.name}
@@ -188,9 +194,7 @@ export default function Home() {
                     </p>
 
                     {/* Contenedor de voluntarios */}
-                    <div
-                        className={`grid gap-8 font-inter grid-cols-1 sm:${voluntariosGrid}`}
-                    >
+                    <div className="flex flex-wrap justify-center font-inter gap-8 sm:gap-12 lg:gap-16">
                         {page?.volundarios?.person?.map((member) => (
                             <div
                                 key={member.id ?? member.name}
@@ -199,7 +203,7 @@ export default function Home() {
                                 <img
                                     src={member.foto.url}
                                     alt={`Integrante ${member.name}`}
-                                    className="w-[280px] h-[280px] rounded-3xl object-cover mb-4"
+                                    className="w-[280px] h-[280px] rounded-none object-cover mb-4"
                                 />
                                 <h3 className="text-xl font-semibold text-black font-inter">
                                     {member.name}
@@ -213,7 +217,7 @@ export default function Home() {
 
                 <section className="pt-10 pb-16 px-4 sm:py-28 sm:px-8 md:py-32 md:px-16 lg:pb-40 lg:pt-28 lg:px-28">
                     <div className="flex justify-center mb-4">
-                        <span className="p-2 px-4 rounded-full border text-xs text-center text-black font-inter">
+                        <span className="p-2 px-4 rounded-none border border-black text-xs text-center text-black font-inter">
                             {page.impact.info.preTitle}
                         </span>
                     </div>
@@ -225,59 +229,73 @@ export default function Home() {
                     </p>
                 </section>
 
-                <section className="bg-white mb-36">
-                    <div className="max-w-6xl mx-auto px-4 py-12">
-                        <div className="flex flex-col md:flex-row items-center rounded-[2.5rem] overflow-hidden shadow-md bg-gray-100">
-                            {/* Imagen con gradiente */}
-                            <div className="relative w-full md:w-1/2 h-64 md:h-auto">
+                <section className="bg-[#c9d6d9] mb-36 py-12">
+                    <div className="max-w-6xl mx-auto px-4">
+                        <div className="flex flex-col md:flex-row items-stretch rounded-none overflow-hidden bg-white">
+                            {/* Imagen de la comunidad con texto superpuesto estilo Hero */}
+                            <div className="w-full md:w-1/2 relative min-h-[350px] md:min-h-[500px] flex items-end justify-start p-8 md:p-12">
                                 <img
                                     src={page.global[0].portada.url}
                                     alt="Foto grupal de la comunidad"
-                                    className="w-full h-full object-cover object-center"
+                                    className="w-full h-full object-cover absolute inset-0 z-0"
                                 />
-                                {/* Capa de gradiente: móvil hacia arriba, tablet/PC hacia la derecha */}
-                                <div className="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-transparent to-gray-100" />
+                                {/* Solo opacidad */}
+                                <div className="absolute inset-0 bg-black/50 z-10"></div>
+                                
+                                {/* Contenido directamente sobre la imagen alineado a la esquina inferior izquierda */}
+                                <div className="relative z-20 flex flex-col items-start text-left">
+                                    <img
+                                        className="w-[160px] md:w-[200px] mb-6 brightness-0 invert"
+                                        src={page.global[0].logoAEGlobal.url}
+                                        alt="Logo EA"
+                                    />
+                                    <h2 className="text-white text-2xl md:text-3xl font-inter font-bold leading-tight max-w-sm">
+                                        {page.global[0].text}
+                                    </h2>
+                                </div>
                             </div>
 
-                            {/* Contenido textual */}
-                            <div className="w-full md:w-1/2 p-8 flex flex-col items-start gap-2 md:text-left">
-                                <img
-                                    className="w-[150px]"
-                                    src={page.global[0].logoAEGlobal.url}
-                                    alt="Logo EA"
+                            {/* Contenido elegante de la derecha */}
+                            <div className="relative w-full md:w-1/2 flex flex-col items-center justify-center text-center p-10 sm:p-14">
+                                {/* Patrón de puntos decorativo en el fondo */}
+                                <div 
+                                    className="absolute inset-0 opacity-[0.05] pointer-events-none" 
+                                    style={{ backgroundImage: "radial-gradient(#000 1.5px, transparent 1.5px)", backgroundSize: "24px 24px" }}
+                                ></div>
+                                
+                                {/* Marca de agua decorativa */}
+                                <img 
+                                    src={page.global[0].logoAEGlobal.url} 
+                                    alt="" 
+                                    className="absolute -right-8 -bottom-16 w-64 md:w-80 opacity-[0.03] rotate-[15deg] pointer-events-none grayscale" 
                                 />
-                                <p className="text-gray-600 mt-2 text-lg md:text-xl font-inter">
-                                    {page.global[0].text}
-                                </p>
-                                <a
-                                    href={page.global[0].buttonAction.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="cursor-pointer p-4 px-5 flex items-center gap-2 bg-gradient-to-r from-[#06869b] via-[#11809D] to-[#1B607A] mt-4 text-sm font-inter font-bold rounded-full hover:scale-110 transition-all duration-200"
-                                >
-                                   {page.global[0].buttonAction.text}
-                                    <svg
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="w-5 h-5"
+
+                                <div className="relative z-10 flex flex-col items-center gap-8">
+                                    <span className="p-2 px-4 rounded-none border border-black text-xs text-center text-black font-inter uppercase tracking-widest font-bold">
+                                        Conéctate
+                                    </span>
+
+                                    <p className="text-gray-600 text-base md:text-lg max-w-md font-inter leading-relaxed">
+                                        Formamos parte de una extensa red internacional de estudiantes, investigadores y profesionales trabajando juntos para encontrar las mejores formas de resolver los problemas más apremiantes del mundo.
+                                    </p>
+
+                                    <a
+                                        href={page.global[0].buttonAction.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="cursor-pointer px-8 py-4 flex items-center justify-center gap-3 bg-gradient-to-r from-[#06869b] via-[#11809D] to-[#1B607A] text-white text-base font-inter font-bold rounded-none hover:scale-105 transition-transform duration-300 shadow-xl shadow-[#11809D]/20"
                                     >
-                                        <path
-                                            d="M7 17L17 7M17 7H8M17 7V16"
-                                            stroke="currentColor"
-                                            strokeWidth="2"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                        />
-                                    </svg>
-                                </a>
+                                        {page.global[0].buttonAction.text}
+                                        <ExternalLink className="w-5 h-5" />
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </section>
             </main>
 
-            <Footer data={{header, footer}} />
+            <Footer data={{ header, footer }} />
         </div>
     );
 }

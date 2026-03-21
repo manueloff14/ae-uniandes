@@ -30,7 +30,7 @@ export default function IdentidadSection({ data }) {
                     {data.ourIdentity.identity.map((item, index) => (
                         <li
                             key={index}
-                            className="relative h-[250px] bg-[#1E1E1E] rounded-[2.5rem] shadow-2xl overflow-hidden transition-all duration-200 hover:shadow-3xl hover:shadow-black hover:scale-105 cursor-pointer"
+                            className="relative h-[250px] bg-[#1E1E1E] rounded-none overflow-hidden transition-all duration-200 hover:scale-105 cursor-pointer"
                             onClick={() => handleItemClick(item)}
                         >
                             <img
@@ -38,7 +38,7 @@ export default function IdentidadSection({ data }) {
                                 alt={item.title}
                                 className="w-full h-full object-cover"
                             />
-                            <div className="absolute bottom-4 left-4 right-4 border-2 border-transparent bg-gradient-to-r from-[#06869B] via-[#11809D] to-[#1B607A] rounded-full flex items-center justify-center p-4 shadow-2xl shadow-black">
+                            <div className="absolute bottom-4 left-4 right-4 border-2 border-transparent bg-gradient-to-r from-[#06869B] via-[#11809D] to-[#1B607A] rounded-none flex items-center justify-center p-4">
                                 <span className="text-white font-semibold text-base text-center">
                                     {item.title}
                                 </span>
@@ -64,7 +64,7 @@ export default function IdentidadSection({ data }) {
 
                     {/* Modal flotante con animación de entrada y salida */}
                     <div
-                        className={`text-center relative bg-[#f1f1f1] shadow-xl shadow-black rounded-3xl p-8 max-w-lg w-full mx-4 z-50 transform transition-all duration-300 ease-out ${
+                        className={`text-center relative bg-[#f1f1f1] rounded-none p-8 max-w-lg w-full mx-4 z-50 transform transition-all duration-300 ease-out ${
                             modalAnimation
                                 ? "opacity-100 scale-100"
                                 : "opacity-0 scale-95"

@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Menu } from "lucide-react";
+import { useRouter, usePathname } from "next/navigation";
+import { Menu, ExternalLink, X, ChevronDown, ChevronLeft } from "lucide-react";
 
 export default function HeaderHome({ black, data }) {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -25,6 +25,7 @@ export default function HeaderHome({ black, data }) {
     }, []);
 
     const router = useRouter();
+    const pathname = usePathname();
 
     // Efecto para detectar scroll y aplicar estilos
     useEffect(() => {
@@ -35,6 +36,12 @@ export default function HeaderHome({ black, data }) {
         handleScroll(); // Para chequear al cargar
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
+
+    // Bloquear scroll del body cuando el menú móvil está abierto
+    useEffect(() => {
+        document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
+        return () => { document.body.style.overflow = ""; };
+    }, [isMobileMenuOpen]);
 
     // Función para cambiar de idioma y redirigir
     const handleLanguageChange = (langCode) => {
@@ -47,7 +54,7 @@ export default function HeaderHome({ black, data }) {
         // Crea una expresión regular para encontrar el primer segmento de la URL que corresponde al código de idioma
         const updatedUrl = currentUrl.replace(
             /(^https?:\/\/[^\/]+\/)([a-z]{2})/,
-            `$1${langCode}`
+            `$1${langCode}`,
         );
 
         // Redirige a la nueva URL con el idioma cambiado
@@ -118,20 +125,21 @@ export default function HeaderHome({ black, data }) {
 
     return (
         <header
-            className={`fixed w-full flex items-center justify-between px-6 lg:px-16 py-2 z-[100] transition-all duration-300 ${
-                isScrolled ? "bg-white shadow-md" : "bg-transparent"
-            }`}
+            className={`fixed w-full flex items-center justify-between px-5 md:px-8 lg:px-72 py-4 z-[100] transition-all duration-300 bg-[#f4eee8]`}
         >
             {/* LOGO */}
-            <div className="flex flex-grow basis-0 justify-start">
-                <a href={`/${currentLanguage}`} className="inline-flex items-center">
+            <div className="flex mr-auto justify-start">
+                <a
+                    href={`/${currentLanguage}`}
+                    className="inline-flex items-center"
+                >
                     <img
                         src={
                             black
                                 ? "/ae-logo-black.svg"
                                 : !isScrolled
-                                    ? "/ae-logo.svg"
-                                    : "/ae-logo-black.svg"
+                                  ? "/ae-logo-black.svg"
+                                  : "/ae-logo-black.svg"
                         }
                         className="w-[160px] lg:w-[200px]"
                         alt="AE Logo"
@@ -140,26 +148,37 @@ export default function HeaderHome({ black, data }) {
             </div>
 
             {/* MENÚ NAVEGACIÓN (Desktop) */}
-            <nav className="hidden xl:flex items-center space-x-4">
-                {data?.links.map((item, idx) => item.text !== "Inicio" && (
-                    <a
-                        key={idx}
-                        href={`/${currentLanguage}${item.url}`}
-                        className="px-4 py-2 text-xs xl:text-sm font-semibold text-black border rounded-full bg-white hover:bg-gray-100 font-inter"
-                    >
-                        {item.text}
-                    </a>
-                ))}
+            <nav className="hidden xl:flex items-center space-x-0">
+                {data?.links.map(
+                    (item, idx) => {
+                        if (item.text === "Inicio") return null;
+                        const href = `/${currentLanguage}${item.url}`;
+                        const active = pathname === href || pathname.startsWith(href + "/");
+                        return (
+                            <Link
+                                key={idx}
+                                href={href}
+                                className={`px-4 py-2 text-xs xl:text-sm font-semibold rounded-none font-inter transition-all ${
+                                    active
+                                        ? "text-[#06869B] underline underline-offset-4"
+                                        : "text-black hover:text-[#06869B]"
+                                }`}
+                            >
+                                {item.text}
+                            </Link>
+                        );
+                    }
+                )}
             </nav>
 
             {/* BOTÓN DE ACCIÓN (Desktop) */}
-            <div className="hidden xl:flex items-center justify-end space-x-4 flex-grow basis-0">
+            <div className="hidden xl:flex items-center justify-end space-x-4 ml-4">
                 <div className="relative group">
-                    <div className="cursor-pointer flex items-center gap-2 px-5 py-2 text-xs xl:text-sm font-semibold text-white border-2 border-[#06869B] bg-[#06869B] rounded-full transition-all font-inter hover:bg-white hover:text-[#06869B]">
+                    <div className="cursor-pointer flex items-center gap-2 px-5 py-2 text-xs xl:text-sm font-semibold text-white border-2 border-[#06869B] bg-[#06869B] rounded-none transition-all font-inter hover:bg-white hover:text-[#06869B]">
                         {data?.buttonAction?.text || "¡Unirme!"}
                     </div>
                     {data?.buttonAction?.children && (
-                        <div className="absolute right-0 top-full p-2 mt-2 w-56 bg-white border rounded-2xl shadow-lg invisible opacity-0 group-hover:visible group-hover:opacity-100 hover:visible hover:opacity-100 transition-all duration-300">
+                        <div className="absolute right-0 top-full p-2 mt-2 w-56 bg-[#f4eee8] border rounded-none shadow-lg invisible opacity-0 group-hover:visible group-hover:opacity-100 hover:visible hover:opacity-100 transition-all duration-300 shadow-black shadow-sm">
                             {data?.buttonAction?.children.map((item, idx) => (
                                 <a
                                     key={idx}
@@ -169,10 +188,22 @@ export default function HeaderHome({ black, data }) {
                                             ? `/${currentLanguage}${item.url}`
                                             : item.url
                                     }`}
-                                    target={item.url.includes("fellowship") ? "_self" : "_blank"}
-                                    className="rounded-xl block px-4 py-2 text-sm text-black hover:bg-gray-100"
+                                    target={
+                                        item.url.includes("fellowship")
+                                            ? "_self"
+                                            : "_blank"
+                                    }
+                                    className="rounded-none block px-4 py-2 text-sm text-black hover:bg-gray-100"
                                 >
-                                    {item.text}
+                                    <div className="flex items-center justify-between gap-4">
+                                        <span>{item.text}</span>
+                                        {item.url.startsWith("http") && (
+                                            <ExternalLink
+                                                size={14}
+                                                className="ml-2 text-gray-500"
+                                            />
+                                        )}
+                                    </div>
                                 </a>
                             ))}
                         </div>
@@ -182,33 +213,28 @@ export default function HeaderHome({ black, data }) {
                 {/* Selector de idioma (Desktop) */}
                 <div className="hidden">
                     <button
-                        className="cursor-pointer flex items-center gap-2 bg-white border p-[5px] px-3 pl-2 rounded-full"
+                        className="cursor-pointer flex items-center gap-2 bg-white border p-[5px] px-3 pl-2 rounded-none"
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     >
                         <img
                             src={currentLangData.flag}
                             alt={currentLangData.code}
-                            className="w-7 h-7 rounded-full object-cover"
+                            className="w-7 h-7 rounded-none object-cover"
                         />
                         <span className="text-black font-inter text-xs">
                             {currentLangData.code.toUpperCase()}
                         </span>
-                        <img
-                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAqklEQVR4nO3ZQQrCQBBE0e8JDdJDFvHsLgwKQW8QQQmM4MLsq5t6ILhM8SeQKJhJacATuAEDSR2AB/DunxUYSWr5GZJ6zKlffIkx8WfMCziTUHiMqHAZUeEyosJlRLmMKpdR5TKqSpUZd17OBoqMmSky5EoyJY5W27nZJxLxCBUuocIlVLiECpdQ4RIqmh8ARbQKJY5V/gydK4zY3CuM+B6t7UeCS/9uVtUHEhTs/ZXHkMQAAAAASUVORK5CYII="
-                            alt="forward--v1"
-                            className={`w-[10px] transition-transform duration-300 ${
-                                isDropdownOpen
-                                    ? "rotate-[270deg]"
-                                    : "rotate-[90deg]"
-                            }`}
+                        <ChevronDown
+                            size={10}
+                            className={`transition-transform duration-300 ${isDropdownOpen ? "rotate-[180deg]" : "rotate-0"}`}
                         />
                     </button>
                     {isDropdownOpen && (
-                        <div className="absolute right-0 top-full p-2 mt-4 w-56 bg-white border rounded-2xl shadow-lg transition-all duration-300">
+                        <div className="absolute right-0 top-full p-2 mt-4 w-56 bg-white border rounded-none shadow-lg transition-all duration-300">
                             {languageOptions.map((lang, idx) => (
                                 <div
                                     key={idx}
-                                    className="rounded-xl flex items-center gap-2 px-4 py-2 text-sm text-black hover:bg-gray-100 cursor-pointer"
+                                    className="rounded-none flex items-center gap-2 px-4 py-2 text-sm text-black hover:bg-gray-100 cursor-pointer"
                                     onClick={() =>
                                         handleLanguageChange(lang.code)
                                     }
@@ -216,7 +242,7 @@ export default function HeaderHome({ black, data }) {
                                     <img
                                         src={lang.flag}
                                         alt={lang.code}
-                                        className="w-6 h-6 rounded-full object-cover"
+                                        className="w-6 h-6 rounded-none object-cover"
                                     />
                                     <span>{lang.label}</span>
                                 </div>
@@ -233,182 +259,146 @@ export default function HeaderHome({ black, data }) {
                     onClick={toggleMobileMenu}
                     className="focus:outline-none"
                 >
-                    <Menu size={24} color={black ? "black" : isScrolled ? "black" : "white"} />
+                    <div className="relative w-6 h-6">
+                        <Menu
+                            size={24}
+                            color="black"
+                            className={`absolute inset-0 transition-all duration-300 ${isMobileMenuOpen ? "opacity-0 rotate-90 scale-75" : "opacity-100 rotate-0 scale-100"}`}
+                        />
+                        <X
+                            size={24}
+                            color="black"
+                            className={`absolute inset-0 transition-all duration-300 ${isMobileMenuOpen ? "opacity-100 rotate-0 scale-100" : "opacity-0 -rotate-90 scale-75"}`}
+                        />
+                    </div>
                 </button>
             </div>
 
-            {/* MENÚ MÓVIL */}
+            {/* MENÚ MÓVIL — overlay */}
             <div
-                className={`fixed inset-0 z-[99] bg-black bg-opacity-50 transition-opacity duration-300 ${
+                className={`fixed inset-0 z-[98] bg-black transition-opacity duration-300 ${
                     isMobileMenuOpen
-                        ? "opacity-100 visible"
-                        : "opacity-0 invisible"
+                        ? "opacity-30 visible"
+                        : "opacity-0 invisible pointer-events-none"
                 }`}
+                style={{ top: "var(--header-height)" }}
                 onClick={closeMobileMenu}
+            />
+
+            {/* MENÚ MÓVIL — drawer */}
+            <div
+                className={`fixed right-0 z-[99] bg-[#f4eee8] transition-transform duration-300 ease-in-out flex flex-col overflow-y-auto ${
+                    isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
+                }`}
+                style={{
+                    top: "var(--header-height)",
+                    height: "calc(100dvh - var(--header-height))",
+                    width: "100vw",
+                }}
             >
+                {/* TRACK deslizante: contiene los 2 paneles lado a lado */}
                 <div
-                    className={`absolute top-0 right-0 h-full w-64 bg-white shadow-xl transition-transform duration-300 ${
-                        isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
-                    } flex flex-col justify-between overflow-y-auto`}
-                    onClick={(e) => e.stopPropagation()}
+                    className="flex flex-1 transition-transform duration-300 ease-in-out"
+                    style={{
+                        width: "200%",
+                        transform: isJoinMenuOpen ? "translateX(-50%)" : "translateX(0)",
+                        minHeight: "100%",
+                    }}
                 >
-                    {/* CABECERA DEL MENÚ */}
-                    <div className="flex justify-end p-4">
-                        <button
-                            onClick={closeMobileMenu}
-                            className="text-black"
-                        >
-                            <svg
-                                className="w-6 h-6"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <line
-                                    x1="18"
-                                    y1="6"
-                                    x2="6"
-                                    y2="18"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                />
-                                <line
-                                    x1="6"
-                                    y1="6"
-                                    x2="18"
-                                    y2="18"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                />
-                            </svg>
-                        </button>
-                    </div>
-
-                    {/* CONTENIDO DEL MENÚ MÓVIL */}
-                    <div className="flex-1 p-6 pt-2">
-                        {!isJoinMenuOpen ? (
-                            <div className="flex flex-col space-y-4 lg:space-y-2">
-                                {data?.links.map((item, idx) => (
-                                    <a
+                    {/* ── PANEL 1: Menú principal ── */}
+                    <div className="w-1/2 flex flex-col" style={{ minWidth: "50%" }}>
+                        <nav className="flex-1 px-6 pt-8 pb-4 flex flex-col">
+                            {data?.links.map((item, idx) => {
+                                const href = `/${currentLanguage}${item.url}`;
+                                const active = pathname === href || pathname.startsWith(href + "/");
+                                return (
+                                    <Link
                                         key={idx}
-                                        href={`/${currentLanguage}${item.url}`}
+                                        href={href}
                                         onClick={closeMobileMenu}
-                                        className="block text-black py-2 px-4 rounded hover:bg-gray-100 font-inter lg:text-xs"
+                                        className={`flex items-center justify-between py-4 border-b border-gray-200 font-inter font-semibold text-base transition-colors duration-150 ${
+                                            active ? "text-[#06869B]" : "text-black hover:text-[#06869B]"
+                                        }`}
                                     >
-                                        {item.text}
-                                    </a>
-                                ))}
+                                        <span>{item.text}</span>
+                                        <ChevronLeft size={16} className={`rotate-180 ${active ? "text-[#06869B]" : "text-gray-400"}`} />
+                                    </Link>
+                                );
+                            })}
 
-                                {/* Selector de idioma en menú móvil */}
-                                <div className="mt-6">
-                                    <button
-                                        onClick={() =>
-                                            setIsMobileLanguageOpen(
-                                                !isMobileLanguageOpen
-                                            )
-                                        }
-                                        className="w-full flex justify-between items-center px-4 py-2 text-black font-inter lg:text-xs font-bold hover:bg-gray-100 rounded-xl"
-                                    >
-                                        Idioma
-                                        <svg
-                                            className={`w-4 h-4 transition-transform ${
-                                                isMobileLanguageOpen
-                                                    ? "rotate-180"
-                                                    : "rotate-0"
-                                            }`}
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth={2}
-                                                d="M19 9l-7 7-7-7"
-                                            />
-                                        </svg>
-                                    </button>
-                                    {isMobileLanguageOpen && (
-                                        <div className="flex flex-wrap gap-2 px-0 w-full pt-2">
-                                            {languageOptions.map(
-                                                (lang, idx) => (
-                                                    <button
-                                                        key={idx}
-                                                        onClick={() => {
-                                                            handleLanguageChange(
-                                                                lang.code
-                                                            );
-                                                            closeMobileMenu();
-                                                        }}
-                                                        className={`w-full flex items-center gap-2 py-2 px-2 rounded-2xl hover:bg-gray-100 ${
-                                                            currentLanguage ===
-                                                            lang.code
-                                                                ? "bg-gray-200"
-                                                                : ""
-                                                        }`}
-                                                    >
-                                                        <img
-                                                            src={lang.flag}
-                                                            alt={lang.code}
-                                                            className="w-6 h-6 lg:w-[15px] lg:h-[15px] rounded-full object-cover"
-                                                        />
-                                                        <span className="text-black font-inter text-sm lg:text-xs">
-                                                            {lang.label}
-                                                        </span>
-                                                    </button>
-                                                )
-                                            )}
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        ) : (
-                            <div className="flex flex-col space-y-4">
+                            {/* Selector de idioma */}
+                            <div className="mt-4">
                                 <button
-                                    onClick={backToMainMenu}
-                                    className="flex items-center text-black text-sm lg:text-xs mb-4"
+                                    onClick={() => setIsMobileLanguageOpen(!isMobileLanguageOpen)}
+                                    className="w-full flex justify-between items-center py-4 border-b border-gray-200 text-black font-inter font-semibold text-base"
                                 >
-                                    <svg
-                                        className="w-4 h-4 mr-2"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        viewBox="0 0 24 24"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    >
-                                        <polyline points="15 18 9 12 15 6" />
-                                    </svg>
+                                    <span className="flex items-center gap-2">
+                                        <img src={currentLangData.flag} alt={currentLangData.code} className="w-5 h-5 object-cover" />
+                                        Idioma
+                                    </span>
+                                    <ChevronDown size={16} className={`text-gray-400 transition-transform ${isMobileLanguageOpen ? "rotate-180" : "rotate-0"}`} />
                                 </button>
-                                {data?.buttonAction?.children &&
-                                    data?.buttonAction?.children.map((item, idx) => (
-                                        <a
-                                            key={idx}
-                                            /* miramos si empieza por http lo dejamos normal, pero si no, ponemos el lenguaje */
-                                            href={item.url.startsWith("http") ? item.url : `/${currentLanguage}/${item.url}`}
-                                            onClick={closeMobileMenu}
-                                            className="block text-black py-2 px-4 rounded lg:text-xs hover:bg-gray-100 font-inter"
-                                        >
-                                            {item.text}
-                                        </a>
-                                    ))}
+                                {isMobileLanguageOpen && (
+                                    <div className="flex flex-col pt-2 pb-2">
+                                        {languageOptions.map((lang, idx) => (
+                                            <button
+                                                key={idx}
+                                                onClick={() => { handleLanguageChange(lang.code); closeMobileMenu(); }}
+                                                className={`flex items-center gap-3 py-2 px-4 text-sm font-inter text-black hover:bg-black/5 transition-colors ${currentLanguage === lang.code ? "bg-black/10 font-semibold" : ""}`}
+                                            >
+                                                <img src={lang.flag} alt={lang.code} className="w-5 h-5 object-cover" />
+                                                <span>{lang.label}</span>
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
-                        )}
-                    </div>
+                        </nav>
 
-                    {/* BOTÓN ¡Unirme! MÓVIL */}
-                    {!isJoinMenuOpen && (
-                        <div className="p-6">
+                        {/* Botón ¡Unirme! */}
+                        <div className="px-6 pb-8 pt-4">
                             <button
                                 onClick={openJoinMenu}
-                                className="block w-full text-center text-white bg-[#06869B] px-5 py-3 lg:px-2 lg:text-xs rounded-full font-inter font-semibold hover:bg-[#056b7c] transition-all"
+                                className="w-full text-center text-white bg-gradient-to-r from-[#06869B] via-[#11809D] to-[#1B607A] px-5 py-4 font-inter font-semibold text-base hover:opacity-90 transition-all duration-200"
                             >
                                 {data?.buttonAction?.text || "¡Unirme!"}
                             </button>
                         </div>
-                    )}
+                    </div>
+
+                    {/* ── PANEL 2: Submenú Unirme ── */}
+                    <div className="w-1/2 flex flex-col" style={{ minWidth: "50%" }}>
+                        <nav className="flex-1 px-6 pt-8 pb-4 flex flex-col">
+                            {/* Botón Volver al mismo nivel que los links */}
+                            <button
+                                onClick={backToMainMenu}
+                                className="flex items-center gap-2 py-4 border-b border-gray-200 text-black font-inter font-semibold text-base hover:text-[#06869B] transition-colors"
+                            >
+                                <ChevronLeft size={16} className="text-gray-400" />
+                                Volver
+                            </button>
+
+                            {data?.buttonAction?.children?.map((item, idx) => (
+                                <a
+                                    key={idx}
+                                    href={
+                                        item.url.startsWith("http")
+                                            ? item.url
+                                            : `/${currentLanguage}/${item.url}`
+                                    }
+                                    onClick={closeMobileMenu}
+                                    className="flex items-center justify-between py-4 border-b border-gray-200 text-black font-inter font-semibold text-base hover:text-[#06869B] transition-colors"
+                                >
+                                    <span>{item.text}</span>
+                                    {item.url.startsWith("http") ? (
+                                        <ExternalLink size={14} className="text-gray-400" />
+                                    ) : (
+                                        <ChevronLeft size={16} className="rotate-180 text-gray-400" />
+                                    )}
+                                </a>
+                            ))}
+                        </nav>
+                    </div>
                 </div>
             </div>
         </header>

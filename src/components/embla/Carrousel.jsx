@@ -25,7 +25,7 @@ const EmblaCarousel = ({ slides, options }) => {
         <section className="embla mx-auto max-w-5xl px-2 sm:px-6">
             {/* Viewport */}
             <div
-                className="embla__viewport overflow-hidden rounded-3xl shadow-lg"
+                className="embla__viewport overflow-hidden rounded-none shadow-none"
                 ref={emblaRef}
             >
                 {/* Track */}
@@ -48,7 +48,7 @@ const EmblaCarousel = ({ slides, options }) => {
                                     <img
                                         src={item.image.url}
                                         alt={item.title}
-                                        className="h-[350px] sm:h-[500px] w-full rounded-3xl object-cover"
+                                        className="h-[350px] sm:h-[500px] w-full rounded-none object-cover"
                                         loading="lazy"
                                         draggable={false}
                                     />
@@ -82,13 +82,13 @@ const EmblaCarousel = ({ slides, options }) => {
                     <PrevButton
                         onClick={onPrevButtonClick}
                         disabled={prevBtnDisabled}
-                        className="rounded-full border border-black/10 bg-white/80 px-3 py-2 shadow hover:bg-white disabled:opacity-50"
+                        className="rounded-none border border-black/10 bg-white/80 px-3 py-2 shadow-none hover:bg-white disabled:opacity-50"
                         aria-label="Anterior"
                     />
                     <NextButton
                         onClick={onNextButtonClick}
                         disabled={nextBtnDisabled}
-                        className="rounded-full border border-black/10 bg-white/80 px-3 py-2 shadow hover:bg-white disabled:opacity-50"
+                        className="rounded-none border border-black/10 bg-white/80 px-3 py-2 shadow-none hover:bg-white disabled:opacity-50"
                         aria-label="Siguiente"
                     />
                 </div>

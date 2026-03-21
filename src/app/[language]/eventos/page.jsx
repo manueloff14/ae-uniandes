@@ -4,6 +4,8 @@ import { useRef, useEffect, useState } from "react";
 import HeaderHome from "@/components/routes/HeaderHome";
 import Footer from "@/components/routes/Footer";
 import { useParams } from "next/navigation";
+import HeroSection from "@/components/routes/HeroSection";
+import { ExternalLink } from "lucide-react";
 
 export default function Eventos() {
     // Referencias al contenedor scrollable (una para vigentes y otra para pasados)
@@ -160,35 +162,13 @@ export default function Eventos() {
         <div>
             <HeaderHome data={header} black={false} />
 
-            {/* Sección Hero (primera sección) */}
-            <section className="relative w-full min-h-screen flex flex-col justify-center text-center">
-                {/* Fondo e imagen */}
-                <div className="absolute inset-0 z-[-20] overflow-hidden">
-                    <img
-                        className="w-full h-full object-cover"
-                        src={page.heroSection.portada.url}
-                        alt="Fondo Uniandes"
-                    />
-                    <div className="absolute inset-0 bg-[#0000003a] backdrop-blur-[10px] z-[-10]" />
-                </div>
-
-                {/* Overlay adicional */}
-                <div className="absolute inset-0 bg-[#00000044] backdrop-blur-[2px]" />
-
-                {/* Figuras decorativas */}
-                <div className="absolute top-[180px] left-1/2 transform -translate-x-1/2 w-full max-w-2xl h-64 bg-gradient-to-r from-[#a7a7a7] to-[#a1a1a1] opacity-20 rounded-full blur-3xl" />
-                <div className="absolute top-0 left-0 transform -translate-x-1/2 w-full max-w-2xl h-64 bg-gradient-to-r from-[#000000] via-[#000000] to-[#1B607A] opacity-20 rounded-full blur-3xl" />
-
-                {/* Contenido principal */}
-                <div className="relative z-10 px-6 md:px-12 lg:px-20 xl:px-56 pt-32 pb-32">
-                    <h1 className="font-bold font-inter mb-5 text-4xl sm:text-5xl md:text-6xl lg:text-7xl w-[90%] mx-auto text-white">
-                        {page.heroSection.title.title}
-                    </h1>
-                    <p className="mb-8 text-base md:text-lg mx-auto w-[80%] md:w-[60%] lg:w-[40%] text-gray-200 font-inter">
-                        {page.heroSection.subtitle}
-                    </p>
-                </div>
-            </section>
+            <main>
+                {/* Sección Hero */}
+                <HeroSection
+                    image={page.heroSection.portada.url}
+                    title={page.heroSection.title.title}
+                    subtitle={page.heroSection.subtitle}
+                />
 
             <div className="max-w-[90rem] mx-auto px-6 md:px-28 pt-16 py-20">
                 <h2 className="text-black text-xl font-bold font-inter">
@@ -196,48 +176,51 @@ export default function Eventos() {
                 </h2>
 
                 <div className="flex flex-col lg:flex-row items-start gap-6 py-6">
-                    <div className="w-full">
+                    <div className="w-full border-none p-2 bg-transparent">
                         <iframe
                             src={page.EventsInfo.linkEmbedLumma}
                             width="100%"
                             height="600"
                             frameBorder="0"
-                            className="rounded-lg shadow-lg"
+                            className="rounded-none shadow-none"
                             title="Calendario de Eventos"
                             allowFullScreen
                         />
                     </div>
-                    <div className="flex flex-col items-start w-full lg:w-[600px]">
+                    <div className="flex flex-col items-start w-full lg:w-[600px] border-none bg-transparent p-6 gap-6">
                         <a
                             href={page.EventsInfo.linkLumma}
                             target="_blank"
                             rel="noopener noreferrer"
+                            className="w-full"
                         >
                             <img
                                 src={page.EventsInfo.imageLumma.url}
-                                className="w-full rounded-2xl border border-gray-400"
-                                alt=""
+                                className="w-full rounded-none border-none"
+                                alt="Imagen Luma"
                             />
                         </a>
-                        <div className="mt-4">
-                            <h2 className="text-xl font-bold font-inter text-black">
+                        <div className="w-full flex flex-col gap-4">
+                            <h2 className="text-2xl font-bold font-inter text-black">
                                 {page.EventsInfo.title || "Eventos"}
                             </h2>
-                            <p className="text-sm font-inter text-black mt-2 mb-2">
+                            <p className="text-base font-inter text-gray-700">
                                 {page.EventsInfo.description}
                             </p>
                             <a
                                 href={page.EventsInfo.linkLumma}
                                 target="_blank"
+                                rel="noopener noreferrer"
+                                className="cursor-pointer w-full flex items-center justify-center gap-3 bg-gradient-to-r from-[#06869b] via-[#11809D] to-[#1B607A] text-white text-base font-inter font-bold px-4 py-4 rounded-none hover:scale-105 transition-transform duration-300 shadow-xl shadow-[#11809D]/20 mt-2"
                             >
-                                <button className="w-full bg-gradient-to-r from-[#6EC2CC] to-[#CDD0EF] text-[#1f1f1f] font-bold px-4 py-3 rounded-2xl mt-4">
-                                    Ver calendario
-                                </button>
+                                Ver calendario
+                                <ExternalLink className="w-5 h-5" />
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
+            </main>
 
             {/* Estilos específicos para este componente */}
             <style jsx>{`

@@ -5,6 +5,8 @@ import HeaderHome from "@/components/routes/HeaderHome";
 import Footer from "@/components/routes/Footer";
 import { useParams } from "next/navigation";
 import PreguntasFrecuentes from "@/components/routes/home/sections/FAQ";
+import HeroSection from "@/components/routes/HeroSection";
+import { ExternalLink } from "lucide-react";
 
 export default function Fellowship() {
     // Referencias al contenedor scrollable (una para vigentes y otra para pasados)
@@ -203,43 +205,15 @@ export default function Fellowship() {
         <div>
             <HeaderHome data={header} />
 
-            {/* Sección Hero (primera sección) */}
-            <section className="relative w-full min-h-screen flex flex-col justify-center text-center">
-                {/* Fondo e imagen */}
-                <div className="absolute inset-0 z-[-20] overflow-hidden">
-                    <img
-                        className="w-full h-full object-cover"
-                        src={page.heroSection.portada.url}
-                        /* src={translatedData.hero.imageLink} */
-                        alt="Fondo Uniandes"
-                    />
-                    <div className="absolute inset-0 bg-[#0000003a] backdrop-blur-[10px] z-[-10]" />
-                </div>
+            <main>
+                {/* Sección Hero */}
+                <HeroSection
+                    image={page.heroSection.portada.url}
+                    title={page.heroSection.title.title}
+                    subtitle={page.heroSection.subtitle}
+                />
 
-                {/* Overlay adicional */}
-                <div className="absolute inset-0 bg-[#00000044] backdrop-blur-[2px]" />
-
-                {/* Figuras decorativas */}
-                <div className="absolute top-[180px] left-1/2 transform -translate-x-1/2 w-full max-w-2xl h-64 bg-gradient-to-r from-[#a7a7a7] to-[#a1a1a1] opacity-20 rounded-full blur-3xl" />
-                <div className="absolute top-0 left-0 transform -translate-x-1/2 w-full max-w-2xl h-64 bg-gradient-to-r from-[#000000] via-[#000000] to-[#1B607A] opacity-20 rounded-full blur-3xl" />
-
-                {/* Contenido principal */}
-                <div className="relative z-10 px-6 md:px-12 lg:px-20 xl:px-56 pt-32 pb-32">
-                    <h1 className="font-bold font-inter mb-5 text-4xl sm:text-5xl md:text-6xl lg:text-7xl w-[90%] mx-auto text-white">
-                        {page.heroSection.title.title}
-                        {/* {translatedData.hero.title} */}
-                    </h1>
-                    <p className="mb-8 text-base md:text-lg mx-auto w-[80%] md:w-[60%] lg:w-[40%] text-gray-200 font-inter">
-                        {page.heroSection.subtitle}
-                        {/* Maximiza tu impacto en siete semanas de lecturas,
-                        debates y mentoría práctica para aplicar evidencia y
-                        colaborar con líderes del cambio.
-                        {/* {translatedData.hero.description} */}
-                    </p>
-                </div>
-            </section>
-
-            <div className="max-w-6xl mx-auto px-6 md:px-28 py-16 pb-20 font-inter">
+                <div className="max-w-6xl mx-auto px-6 md:px-28 py-16 pb-20 font-inter">
                 <article
                     className="prose max-w-none"
                     dangerouslySetInnerHTML={{ __html: page.content }}
@@ -248,9 +222,10 @@ export default function Fellowship() {
 
             {page.buttonApply.link ? (
                 <div className="flex flex-col items-center justify-center">
-                    <a href={page.buttonApply.link}>
-                        <button className="bg-[#1B607A] text-white py-2 px-4 rounded-full text-center font-inter font-bold">
+                    <a href={page.buttonApply.link} target="_blank" rel="noopener noreferrer">
+                        <button className="flex items-center justify-center gap-3 bg-gradient-to-r from-[#06869b] via-[#11809D] to-[#1B607A] text-white text-base font-inter font-bold px-8 py-4 rounded-none hover:scale-105 transition-transform duration-300 shadow-xl shadow-[#11809D]/20">
                             {page.buttonApply.text}
+                            <ExternalLink className="w-5 h-5" />
                         </button>
                     </a>
                     <span className="text-black font-inter text-xs mt-6">
@@ -265,9 +240,9 @@ export default function Fellowship() {
                     </span>
                 </div>
             ) : (
-                <div className="flex flex-col items-center justify-center">
+                <div className="flex flex-col items-center justify-center mt-10">
                     <div>
-                        <button className="cursor-not-allowed bg-[#1B607A] text-white py-2 px-4 rounded-full text-center font-inter font-bold">
+                        <button className="cursor-not-allowed bg-gray-400 text-white py-4 px-8 rounded-none text-center font-inter font-bold">
                             ¡POR EL MOMENTO NO ESTÁ DISPONIBLE!
                         </button>
                     </div>
@@ -301,6 +276,7 @@ export default function Fellowship() {
                 }
             `}</style>
 
+            </main>
             <Footer data={{ header, footer }} />
         </div>
     );

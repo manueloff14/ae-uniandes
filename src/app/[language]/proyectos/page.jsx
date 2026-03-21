@@ -4,6 +4,8 @@ import { useRef, useState, useEffect } from "react";
 import HeaderHome from "@/components/routes/HeaderHome";
 import Footer from "@/components/routes/Footer";
 import { useParams } from "next/navigation";
+import HeroSection from "@/components/routes/HeroSection";
+import { ExternalLink } from "lucide-react";
 
 export default function Proyectos() {
     // Referencia al contenedor scrollable (solo una, porque es una sola sección)
@@ -142,38 +144,14 @@ export default function Proyectos() {
         <div>
             <HeaderHome data={header} />
 
-            <section className="relative w-full min-h-screen flex flex-col justify-center text-center">
-                {/* Fondo e imagen */}
-                <div className="absolute inset-0 z-[-20] overflow-hidden">
-                    <img
-                        className="w-full h-full object-cover"
-                        src={page.heroSection.portada.url}
-                        alt="Fondo Uniandes"
-                    />
-                    <div className="absolute inset-0 bg-[#0000003a] backdrop-blur-[10px] z-[-10]" />
-                </div>
+            <main>
+                <HeroSection
+                    image={page.heroSection.portada.url}
+                    title={page.heroSection.title.title}
+                    subtitle={page.heroSection.subtitle}
+                />
 
-                {/* Overlay adicional para oscurecer y aplicar un blur suave */}
-                <div className="absolute inset-0 bg-[#00000044] backdrop-blur-[2px]" />
-
-                {/* Figuras decorativas */}
-                <div className="absolute top-[180px] left-1/2 transform -translate-x-1/2 w-full max-w-2xl h-64 bg-gradient-to-r from-[#a7a7a7] to-[#a1a1a1] opacity-20 rounded-full blur-3xl" />
-                <div className="absolute top-0 left-0 transform -translate-x-1/2 w-full max-w-2xl h-64 bg-gradient-to-r from-[#000000] via-[#000000] to-[#1B607A] opacity-20 rounded-full blur-3xl" />
-
-                {/* Contenido principal */}
-                <div className="relative z-10 px-6 md:px-12 lg:px-20 xl:px-56 pt-32 pb-32">
-                    <h1 className="font-bold font-inter mb-5 text-4xl sm:text-5xl md:text-6xl lg:text-7xl w-[90%] mx-auto text-white">
-                        {page.heroSection.title.title}
-                    </h1>
-                    <p className="mb-8 text-base md:text-lg mx-auto w-[80%] md:w-[60%] lg:w-[40%] text-gray-200 font-inter">
-                        {page.heroSection.subtitle}
-                    </p>
-                </div>
-            </section>
-
-            {/* <pre className="text-black text-sm">{JSON.stringify(page, null, 2)}</pre> */}
-
-            {/* Sección de Proyectos (una sola) */}
+                {/* Sección de Proyectos (una sola) */}
             <section className="max-w-6xl mx-auto px-6 md:px-28 pt-20 pb-20">
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-black text-xl font-bold font-inter">
@@ -183,10 +161,10 @@ export default function Proyectos() {
                         <button
                             onClick={scrollLeft}
                             title="Regresar"
-                            className="bg-white p-2 rounded-full shadow focus:outline-none"
+                            className="bg-white p-2 border border-black rounded-none focus:outline-none hover:bg-gray-100 transition-colors"
                         >
                             <svg
-                                className="w-5 h-5 text-gray-700"
+                                className="w-5 h-5 text-black"
                                 fill="none"
                                 stroke="currentColor"
                                 strokeWidth="2"
@@ -200,7 +178,7 @@ export default function Proyectos() {
                         <button
                             onClick={scrollRight}
                             title="Avanzar"
-                            className="bg-white p-2 rounded-full shadow focus:outline-none"
+                            className="bg-white p-2 border border-black rounded-none focus:outline-none hover:bg-gray-100 transition-colors"
                         >
                             <svg
                                 className="w-5 h-5 text-gray-700"
@@ -226,10 +204,10 @@ export default function Proyectos() {
                     {page.Projects.project.map((project, i) => (
                         <div
                             key={i}
-                            className="relative min-w-[290px] max-w-[290px] bg-[#f1f1f1] rounded-3xl shadow flex-shrink-0"
+                            className="relative min-w-[290px] max-w-[290px] bg-[#f1f1f1] rounded-none border border-gray-200 flex-shrink-0"
                         >
                             {/* Imagen */}
-                            <div className="w-full h-64 overflow-hidden rounded-t-3xl">
+                            <div className="w-full h-64 overflow-hidden rounded-none">
                                 <img
                                     src={project.image.url}
                                     alt="Foto evento"
@@ -251,63 +229,77 @@ export default function Proyectos() {
                 </div>
             </section>
 
-            <section className="bg-white mb-36">
-                <div className="flex justify-center mb-4">
-                    <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black font-inter">
-                        {page.sendProject.info.preTitle}
-                    </span>
-                </div>
-                <h2 className="text-3xl font-bold text-center text-black mb-2 font-inter">
-                    {page.sendProject.info.title}
-                </h2>
-                <p className="text-center text-gray-700 mb-12 font-inter">
-                    {page.sendProject.info.description}
-                </p>
-                <div className="max-w-6xl mx-auto px-4 py-12">
-                    <div className="flex flex-col md:flex-row items-center rounded-[2.5rem] overflow-hidden shadow-md bg-gray-100">
-                        {/* Imagen con gradiente */}
-                        <div className="relative w-full md:w-1/2 h-64 md:h-auto">
+            <section className="bg-transparent mb-36 pt-12">
+                <div className="max-w-6xl mx-auto px-4">
+                    <div className="flex flex-col md:flex-row items-stretch rounded-none overflow-hidden bg-white shadow-none">
+                        
+                        {/* COLUMNA IZQUIERDA: Imagen con texto superpuesto */}
+                        <div className="w-full md:w-1/2 relative min-h-[350px] md:min-h-[500px] flex items-end justify-start p-8 md:p-12">
                             <img
                                 src={page.sendProject.image.url}
-                                alt="Foto grupal de la comunidad"
-                                className="w-full h-full object-cover object-center"
+                                alt="Imagen del proyecto"
+                                className="w-full h-full object-cover absolute inset-0 z-0"
                             />
-                            {/* Capa de gradiente: móvil hacia arriba, tablet/PC hacia la derecha */}
-                            <div className="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-transparent to-gray-100" />
+                            {/* Filtro oscuro para contraste */}
+                            <div className="absolute inset-0 bg-black/50 z-10"></div>
+                            
+                            {/* Contenido alineado abajo a la izquierda */}
+                            <div className="relative z-20 flex flex-col items-start text-left">
+                                <img
+                                    className="w-[140px] md:w-[180px] mb-6 brightness-0 invert"
+                                    src="/ae-logo-black.svg"
+                                    alt="Logo AE"
+                                />
+                                <h2 className="text-white text-2xl md:text-3xl font-inter font-bold leading-tight max-w-sm">
+                                    {page.sendProject.titleCard}
+                                </h2>
+                            </div>
                         </div>
 
-                        {/* Contenido textual */}
-                        <div className="w-full md:w-1/2 p-8 flex flex-col items-start gap-2 md:text-left">
-                            <h2 className="text-gray-900 mt-2 text-2xl font-bold font-inter">
-                                {page.sendProject.titleCard}
-                            </h2>
-                            <a
-                                href={
-                                    page.sendProject.button.link
-                                }
-                                target="_black"
-                                className="cursor-pointer p-4 px-5 flex items-center gap-2 bg-gradient-to-r from-[#06869b] via-[#11809D] to-[#1B607A] mt-4 text-sm font-inter font-bold rounded-full hover:scale-110 transition-all duration-200"
-                            >
-                                {page.sendProject.button.text}
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="w-5 h-5"
+                        {/* COLUMNA DERECHA: Contenido elegante */}
+                        <div className="relative w-full md:w-1/2 flex flex-col items-center justify-center text-center p-10 sm:p-14">
+                            {/* Patrón de puntos decorativo en el fondo */}
+                            <div 
+                                className="absolute inset-0 opacity-[0.05] pointer-events-none" 
+                                style={{ backgroundImage: "radial-gradient(#000 1.5px, transparent 1.5px)", backgroundSize: "24px 24px" }}
+                            ></div>
+                            
+                            {/* Marca de agua decorativa */}
+                            <img 
+                                src="/ae-icon.svg" 
+                                alt="" 
+                                className="absolute -right-8 -bottom-16 w-64 md:w-80 opacity-[0.03] rotate-[15deg] pointer-events-none grayscale" 
+                            />
+
+                            <div className="relative z-10 flex flex-col items-center gap-6 md:gap-8 w-full max-w-md">
+                                <span className="p-2 px-4 rounded-none border border-black text-xs text-center text-black font-inter uppercase tracking-widest font-bold">
+                                    {page.sendProject.info.preTitle}
+                                </span>
+                                
+                                <h2 className="text-black text-2xl md:text-4xl font-inter font-bold leading-tight">
+                                    {page.sendProject.info.title}
+                                </h2>
+
+                                <p className="text-gray-600 text-base md:text-lg font-inter leading-relaxed">
+                                    {page.sendProject.info.description}
+                                </p>
+
+                                <a
+                                    href={page.sendProject.button.link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="cursor-pointer px-8 py-4 flex items-center justify-center gap-3 bg-gradient-to-r from-[#06869b] via-[#11809D] to-[#1B607A] text-white text-base font-inter font-bold rounded-none hover:scale-105 transition-transform duration-300 shadow-xl shadow-[#11809D]/20 mt-2"
                                 >
-                                    <path
-                                        d="M7 17L17 7M17 7H8M17 7V16"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    />
-                                </svg>
-                            </a>
+                                    {page.sendProject.button.text}
+                                    <ExternalLink className="w-5 h-5" />
+                                </a>
+                            </div>
                         </div>
+
                     </div>
                 </div>
             </section>
+            </main>
 
             {/* Estilos específicos para este componente */}
             <style jsx>{`

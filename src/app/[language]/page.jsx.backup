@@ -4,11 +4,8 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import HeaderHome from "@/components/routes/HeaderHome";
 import Footer from "@/components/routes/Footer";
-import Loading from "@/components/routes/Loading";
 import Link from "next/link";
 import PreguntasFrecuentes from "@/components/routes/home/sections/FAQ";
-import { ExternalLink, BookOpen } from "lucide-react";
-import HeroSection from "@/components/routes/HeroSection";
 
 /** Helper: elige una URL de imagen de Strapi sin repetir chains */
 function pickStrapiImageUrl(media, fallback = "") {
@@ -28,9 +25,6 @@ export default function Home() {
     const { language } = useParams();
 
     const [loading, setLoading] = useState(true);
-    const [startTime] = useState(Date.now());
-    const [showLoading, setShowLoading] = useState(true);
-    const [isExiting, setIsExiting] = useState(false);
     const [headerData, setHeaderData] = useState(null);
     const [footerData, setFooterData] = useState(null);
     const [homeData, setHomeData] = useState(null);
@@ -111,19 +105,6 @@ export default function Home() {
         return () => ctrl.abort();
     }, [language]);
 
-    useEffect(() => {
-        if (!loading) {
-            const elapsed = Date.now() - startTime;
-            const remaining = Math.max(4000 - elapsed, 3000);
-            const timer = setTimeout(() => {
-                setIsExiting(true);
-                // Esperar a que termine la animación de opacidad (500ms) antes de desmontar
-                setTimeout(() => setShowLoading(false), 500);
-            }, remaining);
-            return () => clearTimeout(timer);
-        }
-    }, [loading, startTime]);
-
     function HighlightEfText({ text }) {
         return (
             <>
@@ -190,61 +171,127 @@ export default function Home() {
     const header = headerData?.data;
     const footer = footerData?.data;
 
-    if (showLoading) return <Loading isExiting={isExiting} />;
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-screen flex-col">
+                <img
+                    src="/ae-icon.svg"
+                    alt="Logo"
+                    className="w-[55px] h-[55px]"
+                />
+                <p className="mt-4 text-sm font-bold font-inter text-black">
+                    Cargando...
+                </p>
+                <style jsx>{`
+                    img {
+                        animation: scale-up-down 0.5s ease-in-out infinite;
+                    }
+                    @keyframes scale-up-down {
+                        0% {
+                            transform: scale(1);
+                        }
+                        50% {
+                            transform: scale(1.2);
+                        }
+                        100% {
+                            transform: scale(1);
+                        }
+                    }
+                `}</style>
+            </div>
+        );
+    }
 
     return (
         <div>
             {headerData && <HeaderHome data={header} />}
 
             <main>
-                <HeroSection
-                    image="https://www.uniandes.edu.co/sites/default/files/news2/ml_uniandes_.jpg"
-                    preTitle={home.HeroSection.preTitle}
-                    title={home.HeroSection.title.title}
-                    subtitle={home.HeroSection.subtitle}
-                    buttonText={home.HeroSection.button.text}
-                    buttonLink={home.HeroSection.button.link}
-                />
+                <section className="relative w-full min-h-screen flex flex-col justify-center text-center">
+                    {/* Fondo e imagen */}
+                    <div className="absolute inset-0 z-[-20] overflow-hidden">
+                        <img
+                            className="w-full h-full object-cover"
+                            src={home.HeroSection.portada.url}
+                            alt="Fondo Uniandes"
+                        />
+                        <div className="absolute inset-0 bg-[#0000003a] backdrop-blur-[10px] z-[-10]" />
+                    </div>
+
+                    {/* Overlay adicional para oscurecer y aplicar un blur suave */}
+                    <div className="absolute inset-0 bg-[#0000006b] backdrop-blur-[2px]" />
+
+                    {/* Figuras decorativas */}
+                    <div className="absolute top-[180px] left-1/2 transform -translate-x-1/2 w-full max-w-2xl h-64 bg-gradient-to-r from-[#a7a7a7] to-[#a1a1a1] opacity-20 rounded-full blur-3xl" />
+                    <div className="absolute top-0 left-0 transform -translate-x-1/2 w-full max-w-2xl h-64 bg-gradient-to-r from-[#000000] via-[#000000] to-[#1B607A] opacity-20 rounded-full blur-3xl" />
+
+                    {/* Contenido principal */}
+                    <div className="relative z-10 px-6 md:px-12 lg:px-20 xl:px-56 pt-32 pb-32">
+                        <span className="inline-block text-xs p-2 px-4 mb-5 rounded-full border border-white text-white  font-inter">
+                            {home.HeroSection.preTitle}
+                        </span>
+
+                        <h1 className="relative font-bold mb-5 text-4xl sm:text-5xl md:text-6xl lg:text-7xl w-[90%] mx-auto text-white">
+                            <HighlightEfText
+                                text={home.HeroSection.title.title}
+                            />
+                            <div className="absolute top-0 left-24 transform -translate-x-1/2 w-full h-64 bg-gradient-to-r from-transparent via-transparent to-[white] opacity-20 rounded-full blur-3xl" />
+                        </h1>
+
+                        <p className="mb-8 text-base md:text-lg mx-auto w-[80%] md:w-[60%] lg:w-[40%] text-gray-100 font-inter">
+                            {home.HeroSection.subtitle}
+                        </p>
+
+                        <div className="flex items-center justify-center gap-2">
+                            <a
+                                target="_blank"
+                                href={`${home.HeroSection.button.link}`}
+                                className="flex items-center gap-2 text-sm font-bold mt-6 bg-gradient-to-r from-[#06869B] via-[#11809D] to-[#1B607A] text-white px-6 py-3 rounded-full whitespace-nowrap hover:bg-red-600 hover:shadow-2xl shadow-black hover:scale-105 transition-all duration-200  font-inter"
+                            >
+                                <span>{home.HeroSection.button.text}</span>
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="w-5 h-5"
+                                >
+                                    <path
+                                        d="M7 17L17 7M17 7H8M17 7V16"
+                                        stroke="#ffffff"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </section>
 
                 <section className="max-w-6xl mx-auto px-6 md:px-28 pt-28 pb-16">
-                    <div className="w-full flex flex-col">
-                        {/* Título Estilo Editorial Principal */}
-                        <h2 className="text-xl md:text-3xl font-bold font-inter text-black mb-6 tracking-tight">
-                            {(() => {
-                                const text =
-                                    home.whyAE?.question ||
-                                    "What is effective altruism?";
-                                return text.replace(
-                                    /'ae uni\S*/gi,
-                                    "'AE Uniandes'",
-                                );
-                            })()}
-                        </h2>
-
-                        {/* Línea horizontal (Separador Superior) */}
-                        <hr className="border-t-[1.5px] border-black w-full mb-10" />
-
-                        <div className="flex flex-col md:flex-row items-stretch gap-8 md:gap-0">
-                            {/* Columna Izquierda: Filosofía/Respuesta */}
-                            <div className="md:w-1/2 md:pr-12 flex flex-col justify-center">
-                                <p className="text-base text-black font-semibold font-inter leading-relaxed">
-                                    {home.whyAE.answer}
-                                </p>
-                            </div>
-
-                            {/* Separador Vertical Fijo (Desktop) */}
-                            <div className="hidden md:block w-[1.5px] bg-black"></div>
-
-                            {/* Columna Derecha: Imagen/Placeholder */}
-                            <div className="md:w-1/2 md:pl-12 flex flex-col justify-center relative w-full mt-8 md:mt-0">
-                                <div className="w-full aspect-[4/3] min-[1100px]:aspect-[5/2] overflow-hidden bg-black/5">
-                                    <img
-                                        src={home.whyAE.image.url}
-                                        alt="Contexto AE Uniandes"
-                                        className="w-full h-full object-cover transition-all duration-500"
-                                    />
-                                </div>
-                            </div>
+                    <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-8 bg-[#f1f1f1] p-4 rounded-3xl">
+                        {/* Imagen de placeholder */}
+                        <div className="h-[250px] w-full md:w-1/2">
+                            <img
+                                src={home.whyAE.image.url}
+                                alt="Placeholder"
+                                className="w-full h-full object-cover rounded-3xl shadow-lg"
+                            />
+                        </div>
+                        {/* Contenido: pregunta y respuesta */}
+                        <div className="md:w-1/2 pr-4">
+                            <h2 className="text-2xl font-bold  font-inter text-black mb-4">
+                                {(() => {
+                                    const text = home.whyAE.question;
+                                    return text.replace(
+                                        /'ae uni\S*/gi,
+                                        "'AE Uniandes'",
+                                    );
+                                })()}
+                            </h2>
+                            <p className="text-sm text-gray-800  font-inter">
+                                {home.whyAE.answer}
+                            </p>
                         </div>
                     </div>
                 </section>
@@ -252,7 +299,7 @@ export default function Home() {
                 <section className="py-16">
                     <div className="max-w-6xl mx-auto px-6 md:px-28">
                         <div className="flex justify-center mb-4">
-                            <span className="p-2 px-4 rounded-none border border-black text-xs text-center text-black  font-inter">
+                            <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black  font-inter">
                                 {home.importantVideo.info.preTitle}
                             </span>
                         </div>
@@ -271,7 +318,7 @@ export default function Home() {
                             {reproducir ? (
                                 // Video de YouTube
                                 <iframe
-                                    className="w-full h-full rounded-none"
+                                    className="w-full h-full rounded-3xl"
                                     src={home.importantVideo.videoLink}
                                     title="YouTube video"
                                     allow="autoplay; encrypted-media"
@@ -283,14 +330,27 @@ export default function Home() {
                                     <img
                                         src={home.importantVideo.portada.url}
                                         alt="Carátula del video"
-                                        className="w-full h-full object-cover rounded-none"
+                                        className="w-full h-full object-cover rounded-3xl"
                                     />
                                     {/* Botón de reproducción */}
                                     <button className="absolute inset-0 flex items-center justify-center bg-black/50 text-white text-lg font-bold rounded-3xl">
-                                        <img
-                                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAABFklEQVR4nO3ZsW3CQBjF8Q8hoIEuLU0GyAJswBCskAIGyAop06ZMmwW8AAzgmtYdjWXFf4TgpEgpUODu7HfcbwI/yfa9+z6zLMuy34ANMDZ1nJXA0hII4nwDz6aIv2rgHZiZeBBnD6yAgSngugJ4sQSCnPwAn8CT9RX/UwGvwNDEgzg7YGF9wu1a4AuYm3gQ5wC8ARP1IPSiHeBfN+2AMOK3A8KK1w6IowjeDoinAT6CtQPiq4K0A7qz89oO6FbrrR3kIPfbqr9alfrH3qTw+y3UD0T5ilJfSuM0eAAnQAj5Gl+qX6wO6lfdNoXhw1Z9HFSpD+iaoKeyD48wxN6rrxXq6KeyD6mt3soUlqFrYNT1c2RZ9uCOorLyFKJbgmwAAAAASUVORK5CYII="
-                                            alt="play--v1"
-                                        />
+                                        <svg
+                                            width="80"
+                                            height="80"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            className="bg-gradient-to-r from-[#06869B] via-[#11809D] to-[#1B607A] flex items-center justify-center rounded-full p-3 hover:scale-[1.3] transition-all duration-200"
+                                        >
+                                            <path
+                                                d="M8 5L19 12L8 19V5Z"
+                                                fill="white"
+                                                stroke="white"
+                                                strokeWidth="2"
+                                                strokeLinejoin="round"
+                                                strokeLinecap="round"
+                                            />
+                                        </svg>
                                     </button>
                                 </div>
                             )}
@@ -301,7 +361,7 @@ export default function Home() {
                 <section className="py-16">
                     <div className="max-w-6xl mx-auto px-6 md:px-28">
                         <div className="flex justify-center mb-4">
-                            <span className="p-2 px-4 rounded-none border border-black text-xs text-center text-black  font-inter">
+                            <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black  font-inter">
                                 {home.importantEvents.info.preTitle}
                             </span>
                         </div>
@@ -316,7 +376,7 @@ export default function Home() {
                             width="100%"
                             height="600"
                             frameBorder="0"
-                            className="rounded-none shadow-lg"
+                            className="rounded-xl shadow-lg"
                             title="Calendario de Eventos"
                             allowFullScreen
                         />
@@ -326,7 +386,7 @@ export default function Home() {
                 <section className="py-16">
                     <div className="max-w-6xl mx-auto px-6 md:px-28">
                         <div className="flex justify-center mb-4">
-                            <span className="p-2 px-4 rounded-none border border-black text-xs text-center text-black  font-inter">
+                            <span className="p-2 px-4 rounded-full border border-black text-xs text-center text-black  font-inter">
                                 {home.books.info.preTitle}
                             </span>
                         </div>
@@ -341,7 +401,7 @@ export default function Home() {
                             {home.books.book.map((libro, index) => (
                                 <div
                                     key={index}
-                                    className="relative group rounded-none overflow-hidden"
+                                    className="relative group rounded-3xl overflow-hidden shadow-lg"
                                 >
                                     <img
                                         src={libro.portada.url}
@@ -369,9 +429,8 @@ export default function Home() {
                                 href={home.books.buttonAction.link}
                                 target="_blank"
                             >
-                                <button className="flex items-center gap-2 font-inter text-black bg-white p-3 px-6 rounded-none text-sm font-bold transition-all duration-300 border border-transparent hover:bg-[#06869B] hover:text-white hover:border-[#06869B] active:scale-95">
+                                <button className=" font-inter text-black bg-white p-3 px-6 rounded-full text-sm font-bold transition-all duration-300 hover:bg-gray-200 active:scale-95 shadow-md">
                                     {home.books.buttonAction.text}
-                                    <BookOpen size={18} />
                                 </button>
                             </Link>
                         </div>
